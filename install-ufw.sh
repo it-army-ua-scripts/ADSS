@@ -1,3 +1,4 @@
+#!/bin/bash
 
 install_ufw(){
     echo -e "${GREEN}Встановлюємо UFW фаєрвол${NC}"
@@ -13,6 +14,9 @@ install_ufw(){
                 echo "Фаєрвол UFW налаштовано і активовано"
             ;;
             fedora)
+                echo "Деактивовуємо стандартний фаєрвол Firewalld"
+                sudo systemctl stop firewalld
+                sudo systemctl disable firewalld
                 sudo dnf install ufw -y && sudo ufw disable
                 echo "Фаєрвол UFW встановлено і деактивовано"
                 sudo ufw default allow outgoing
@@ -23,6 +27,9 @@ install_ufw(){
             ;;
 
             centos)
+                echo "Деактивовуємо стандартний фаєрвол Firewalld"
+                sudo systemctl stop firewalld
+                sudo systemctl disable firewalld
                 sudo dnf install epel-release -y && sudo dnf install ufw -y && sudo ufw disable
                 echo "Фаєрвол UFW встановлено і деактивовано"
                 sudo ufw default allow outgoing
