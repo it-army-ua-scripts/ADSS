@@ -13,6 +13,9 @@ get_distribution() {
 lsb_dist=$( get_distribution )
 lsb_dist="$(echo "$lsb_dist" | tr '[:upper:]' '[:lower:]')"
 
+GREEN='\033[0;32m'
+NC='\033[0m'
+
 install_ufw(){
     echo -e "${GREEN}Встановлюємо UFW фаєрвол${NC}"
 
