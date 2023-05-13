@@ -6,33 +6,27 @@ if [ $? -ne 0 ] ; then
 fi
 
 export SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m'
+export WORKING_DIR="/opt/itarmy/"
+export GREEN='\033[0;32m'
+export RED='\033[0;31m'
+export NC='\033[0m'
 
 if [ "$1" = "--auto-install" ] ; then
 
-    source "${SCRIPT_DIR}/utils/docker.sh"
-    source "${SCRIPT_DIR}/utils/fail2ban.sh"
-    source "${SCRIPT_DIR}/utils/ufw.sh"
+    declare -a UTILS;
 
-    install_docker
-    sleep 1
+    UTILS=('docker' 'tools' 'fail2ban' 'ufw' 'mhddos' 'db1000n' 'distress')
 
-    install_fail2ban
-    sleep 1
-
-    install_ufw
-    sleep 1
-
-    exit 0
+    for i in "${!UTILS[@]}"; do
+        source "${SCRIPT_DIR}/utils/${UTILS[i]}.sh"
+        install_"${UTILS[i]}"
+    done
 
 else
     echo -ne "
 Оберіть пункт меню
 ${GREEN}1)${NC} Оптимізація для DDOS
-${GREEN}2)${NC} Меню 2
+${GREEN}2)${NC} Ввести Юзер ІД (Для збору та використання для лідерборда особистої статистики) наданний ботом https://t.me/itarmy_stat_bot
 ${GREEN}3)${NC} Меню 3
 "
 read menu_item
@@ -41,6 +35,10 @@ case "$menu_item" in
             1)
                 source "${SCRIPT_DIR}/menu/port-extending.sh"
                 extend_ports
+            ;;
+            2)
+                source "${SCRIPT_DIR}/menu/user-id.sh"
+                set_user_id
             ;;
             *)
                 echo -e ${GREEN}"Невірна опція."${NC}
