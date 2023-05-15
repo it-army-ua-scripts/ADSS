@@ -2,9 +2,6 @@
 
 source "${SCRIPT_DIR}/utils/os-definition.sh"
 
-GREEN='\033[0;32m'
-NC='\033[0m'
-
 install_fail2ban() {
     echo -e "${GREEN}Встановлюємо Fail2ban${NC}"
 
@@ -42,6 +39,6 @@ backend = %(sshd_backend)s
 maxretry = 3
 bantime = 600' >> /etc/fail2ban/jail.local"
 
-    sudo service fail2ban restart
+    sudo /bin/systemctl restart fail2ban.service
     echo -e "${GREEN}Fail2ban успішно встановлено${NC}"
 }

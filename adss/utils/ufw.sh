@@ -2,9 +2,6 @@
 
 source "${SCRIPT_DIR}/utils/os-definition.sh"
 
-GREEN='\033[0;32m'
-NC='\033[0m'
-
 install_ufw(){
     echo -e "${GREEN}Встановлюємо UFW фаєрвол${NC}"
 
@@ -44,5 +41,7 @@ install_ufw(){
                 echo "Фаєрвол UFW налаштовано і активовано"
             ;;
     esac
+
+    sudo /bin/systemctl restart ufw.service
 }
 
