@@ -7,3 +7,9 @@ vpn_percents=20
 threads=8000
 proxies=
 [/mhddos]
+[distress]
+user_id=
+use_my_ip=0
+use_tor=0
+concurrency=4096
+[/distress]
