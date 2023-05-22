@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "${SCRIPT_DIR}/utils/os-definition.sh"
+source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_ufw(){
     echo -e "${GREEN}Встановлюємо UFW фаєрвол${NC}"

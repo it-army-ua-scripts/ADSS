@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "${SCRIPT_DIR}/utils/os-definition.sh"
+source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
     echo -e "${GREEN}Встановлюємо Fail2ban${NC}"

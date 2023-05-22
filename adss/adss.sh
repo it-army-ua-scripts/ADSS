@@ -26,8 +26,7 @@ else
     echo -ne "
 Оберіть пункт меню
 ${GREEN}1)${NC} Оптимізація для DDOS
-${GREEN}2)${NC} Ввести Юзер ІД (Для збору та використання для лідерборда особистої статистики) наданний ботом https://t.me/itarmy_stat_bot
-${GREEN}3)${NC} Меню 3
+${GREEN}2)${NC} Налаштування MHDDOS
 "
 read menu_item
 
@@ -37,11 +36,8 @@ case "$menu_item" in
                 extend_ports
             ;;
             2)
-                source "${SCRIPT_DIR}/menu/user-id.sh"
-                set_user_id
-            ;;
-            *)
-                echo -e ${GREEN}"Невірна опція."${NC}
+                source "${SCRIPT_DIR}/menu/mhddos-params.sh"
+                initiate
             ;;
 esac
 fi

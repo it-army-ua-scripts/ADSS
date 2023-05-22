@@ -1,0 +1,9 @@
+[mhddos]
+user_id=
+lang=ua
+copies=auto
+vpn=false
+vpn_percents=20
+threads=8000
+proxies=
+[/mhddos]
