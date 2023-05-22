@@ -27,6 +27,7 @@ else
 Оберіть пункт меню
 ${GREEN}1)${NC} Оптимізація для DDOS
 ${GREEN}2)${NC} Налаштування MHDDOS
+${GREEN}3)${NC} Налаштування DISTRESS
 "
 read menu_item
 
@@ -37,6 +38,10 @@ case "$menu_item" in
             ;;
             2)
                 source "${SCRIPT_DIR}/menu/mhddos-params.sh"
+                initiate
+            ;;
+            3)
+                source "${SCRIPT_DIR}/menu/distress-params.sh"
                 initiate
             ;;
 esac
