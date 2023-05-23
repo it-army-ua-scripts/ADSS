@@ -32,7 +32,7 @@ install_mhddos() {
 	  sudo curl -Lo mhddos_proxy_linux "$package"
     sudo chmod +x mhddos_proxy_linux
     regenerate_service_file
-    sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service
+    sudo ln -sf  $SCRIPT_DIR/services/mhddos.service /etc/systemd/system/mhddos.service
 
     echo -e "${GREEN}MHDDOS успішно встановлено${NC}"
 }
