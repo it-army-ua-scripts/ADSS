@@ -10,7 +10,7 @@ initiate() {
       user_id=" "
     fi
 
-    params[user_id]=$user_id
+    params[user-id]=$user_id
     read -p "Мова (ua | en | es | de | pl | it): " lang
 
     languages=("ua" "en" "es" "de" "pl" "it")
@@ -50,9 +50,9 @@ initiate() {
         read -p "VPN percents (1-100): " vpn_percents
       done
 
-      params[vpn_percents]=$vpn_percents
+      params[vpn-percents]=$vpn_percents
     else
-      params[vpn_percents]=" "
+      params[vpn-percents]=" "
     fi
 
 
@@ -65,8 +65,6 @@ initiate() {
     done
 
     params[threads]=$threads
-
-
 
     read -p "Проксі (шлях до файлу або веб-ресурсу): " proxies
     proxies=$(echo $proxies  | sed 's/\//\\\//g')

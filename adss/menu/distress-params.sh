@@ -10,7 +10,7 @@ initiate() {
       user_id=" "
     fi
 
-    params[user_id]=$user_id
+    params[user-id]=$user_id
     
 
     read -p "Відсоткове співвідношення використання власноъ IP адреси (0-100): " use_my_ip
@@ -21,7 +21,7 @@ initiate() {
         read -p "Відсоткове співвідношення використання власноъ IP адреси (0-100): " use_my_ip
       done
 
-    params[use_my_ip]=$use_my_ip
+    params[use-my-ip]=$use_my_ip
 
 
     read -p "Кількість підключень Tor (0-100): " use_tor
@@ -32,7 +32,7 @@ initiate() {
         read -p "Кількість підключень Tor (0-100): " use_tor
       done
 
-    params[use_tor]=$use_tor
+    params[use-tor]=$use_tor
 
 
     read -p "Кількість створювачів завдань (4096): " concurrency
