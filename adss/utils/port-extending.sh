@@ -5,6 +5,11 @@ extend_ports() {
     port_range_string="net.ipv4.ip_local_port_range=16384 65535"
     specified_file="/etc/sysctl.conf"
 
+    if ! [[ -f "$specified_file" ]]; then
+      echo -e "${RED}Не можливо виконати дію${NC}"
+      exit 1
+    fi
+
     if [[ $(grep -L "$port_range_string" "$specified_file")  ]]; then
         echo -e "${GREEN}Розширюємо порти${NC}"
         sudo bash -c "echo '$port_range_string' >> $specified_file"
