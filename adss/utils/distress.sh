@@ -2,8 +2,6 @@
 
 install_distress() {
 
-    sudo mkdir -p $WORKING_DIR
-
     cd $WORKING_DIR
     echo -e "${GREEN}Встановлюємо Distress${NC}"
 
