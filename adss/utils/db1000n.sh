@@ -2,8 +2,6 @@
 
 install_db1000n() {
 
-    sudo mkdir -p $WORKING_DIR
-
     cd $WORKING_DIR
     echo -e "${GREEN}Встановлюємо DB1000N${NC}"
 

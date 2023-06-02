@@ -117,7 +117,26 @@ else
                     fi
                   ;;
                   5)
-                      echo "Скоро буде"
+                      services=("mhddos" "distress" "db1000n")
+                      service=""
+
+                      for element in "${services[@]}"
+                      do
+                        if systemctl is-active --quiet "$element.service"; then
+                          service="$element"
+                          break
+                        fi
+                      done
+                      if [[ -n "$service" ]]; then
+                        while true; do
+                          clear
+                          echo -e "${GREEN}Запущено $service${NC}"
+                          journalctl -u "$service.service" | tail -20
+                          sleep 5
+                        done
+                      else
+                        echo -e "${RED}Немає запущених процесів${NC}"
+                      fi
                   ;;
         esac
   }
