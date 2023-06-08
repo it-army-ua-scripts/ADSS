@@ -1,7 +1,6 @@
 #!/bin/bash
 
 install_db1000n() {
-
     cd $WORKING_DIR
     echo -e "${GREEN}Встановлюємо DB1000N${NC}"
 
@@ -38,56 +37,53 @@ install_db1000n() {
     echo -e "${GREEN}DB1000N успішно встановлено${NC}"
 }
 
-configure() {
+configure_db1000n() {
     declare -A params;
-    declare langs;
+    echo -e "${GREEN}Залиште пустим якщо хочите видалити пераметри${NC}"
 
-    read -p "Юзер ІД: " user_id
-
-    if [[ -z "$user_id" ]]; then
-      user_id=" "
-    fi
+    read -e -p "Юзер ІД: " -i "$(get_db1000n_variable 'user-id')" user_id
 
     params[user-id]=$user_id
 
-    read -p "Автооновлення (1 | 0): " enable_self_update
+    read -e -p "Автооновлення (1 | 0): " -i "$(get_db1000n_variable 'enable-self-update')" enable_self_update
 
-    while [[ "$enable_self_update" != "1" && "$enable_self_update" != "0" ]]
-    do
-      echo "Будь ласка введіть правильні значення"
-      read -p "Автооновлення (1 | 0): " enable_self_update
-    done
+    if [[ -n "$enable_self_update" ]];then
+        while [[ "$enable_self_update" != "1" && "$enable_self_update" != "0" ]]
+        do
+          echo "Будь ласка введіть правильні значення"
+          read -e -p "Автооновлення (1 | 0): " -i "$(get_db1000n_variable 'enable-self-update')" enable_self_update
+        done
+    fi
 
     params[enable-self-update]=$enable_self_update
 
-    read -p "Проксі (шлях до файлу або веб-ресурсу): " proxies
+    read -e -p "Проксі (шлях до файлу або веб-ресурсу): " -i "$(get_db1000n_variable 'proxy')" proxies
     proxies=$(echo $proxies  | sed 's/\//\\\//g')
 
-    if [[ -z "$proxies" ]]; then
-      proxies=" "
+    params[proxy]=$proxies
+
+    read -e -p "Масштабування (1 | 0): "  -i "$(get_db1000n_variable 'scale')" scale
+    if [[ -n "$scale" ]];then
+      while [[ "$scale" != "1" && "$scale" != "0" ]]
+      do
+        echo "Будь ласка введіть правильні значення"
+       read -e -p "Масштабування (1 | 0): "  -i "$(get_db1000n_variable 'scale')" scale
+      done
     fi
-
-    params[proxies]=$proxies
-
-    read -p "Масштабування (1 | 0): " scale
-
-   while [[ "$scale" != "1" && "$scale" != "0" ]]
-    do
-      echo "Будь ласка введіть правильні значення"
-      read -p "Масштабування (1 | 0): " scale
-    done
 
     params[scale]=$scale
 
     for i in "${!params[@]}"; do
     	  value="${params[$i]}"
-
-    	  if [[ -n "$value" ]]; then
-    	    write_variable "$i" "$value"
-    	  fi
+        write_db1000n_variable "$i" "$value"
     done
     regenerate_service_file
     echo -e "${GREEN}Успішно виконано${NC}"
+}
+
+db1000n_is_installed() {
+  systemctl is-active --quiet db1000n
+  echo $?
 }
 
 regenerate_service_file() {
@@ -114,49 +110,53 @@ regenerate_service_file() {
   sudo systemctl daemon-reload
 }
 
-get_variable() {
+get_db1000n_variable() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
   variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
   echo "$variable"
 }
 
-write_variable() {
+write_db1000n_variable() {
   sed -i "/\[db1000n\]/,/\[\/db1000n\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
 }
 
-run() {
+db1000n_run() {
   sudo systemctl stop mhddos.service
   sudo systemctl stop distress.service
   sudo systemctl start db1000n.service
 }
 
-stop() {
+db1000n_stop() {
   sudo systemctl stop db1000n.service
 }
 
-get_status() {
+db1000n_get_status() {
   sudo systemctl status db1000n.service
 }
 
-initiate() {
-   menu=(
-        "Запустити"
-        "Зупинити"
-        "Статус"
-        )
-  init "$menu"
-  menu_result="$?"
-  case "$menu_result" in
-    0)
-        run
-        get_status
-    ;;
-    1)
-        stop
-        get_status
-    ;;
-    2)
-        get_status
-    ;;
-  esac
+initiate_db1000n() {
+  if [[ ! $(db1000n_is_installed) ]]; then
+    echo -e "${RED}db1000n не встановлений, будь ласка встановіть і спробуйте знову${NC}"
+  else
+    menu=(
+            "Запустити"
+            "Зупинити"
+            "Статус"
+            )
+      init "$menu"
+      menu_result="$?"
+      case "$menu_result" in
+        0)
+            db1000n_run
+            db1000n_get_status
+        ;;
+        1)
+            db1000n_stop
+            db1000n_get_status
+        ;;
+        2)
+            db1000n_get_status
+        ;;
+      esac
+  fi
 }
