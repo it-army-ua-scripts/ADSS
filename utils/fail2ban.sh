@@ -29,13 +29,8 @@ install_fail2ban() {
     esac
 }
 
-fail2ban_is_installed() {
-  systemctl is-active --quiet fail2ban
-  echo $?
-}
-
 configure_fail2ban(){
-  if [[ ! $(fail2ban_is_installed) ]]; then
+  if [[ ! -e "/etc/fail2ban" ]]; then
     echo -e "${RED}Fail2ban не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local

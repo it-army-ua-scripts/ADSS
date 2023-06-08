@@ -34,11 +34,6 @@ install_mhddos() {
     echo -e "${GREEN}MHDDOS успішно встановлено${NC}"
 }
 
-mhddos_is_installed() {
-  systemctl is-active --quiet mhddos
-  echo $?
-}
-
 configure_mhddos() {
 
     declare -A params
@@ -172,7 +167,7 @@ mhddos_get_status() {
   sudo systemctl status mhddos.service
 }
 initiate_mhddos() {
-  if [[ ! $(mhddos_is_installed) ]]; then
+  if [[ ! -e "/etc/systemd/system/mhddos.service" ]]; then
     echo -e "${RED}MHDDOS не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     menu=(

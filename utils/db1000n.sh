@@ -81,11 +81,6 @@ configure_db1000n() {
     echo -e "${GREEN}Успішно виконано${NC}"
 }
 
-db1000n_is_installed() {
-  systemctl is-active --quiet db1000n
-  echo $?
-}
-
 regenerate_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
 
@@ -135,7 +130,7 @@ db1000n_get_status() {
 }
 
 initiate_db1000n() {
-  if [[ ! $(db1000n_is_installed) ]]; then
+  if [[ ! -e "/etc/systemd/system/db1000n.service" ]]; then
     echo -e "${RED}db1000n не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     menu=(

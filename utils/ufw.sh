@@ -34,13 +34,8 @@ install_ufw(){
     esac
 }
 
-ufw_is_installed() {
-  systemctl is-active --quiet ufw
-  echo $?
-}
-
 configure_ufw(){
-  if [[ ! $(ufw_is_installed) ]]; then
+  if [[ ! $(systemctl is-active --quiet ufw 2>/dev/null) ]]; then
     echo -e "${RED}Ufw не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     sudo ufw default deny incoming

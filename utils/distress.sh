@@ -107,11 +107,6 @@ regenerate_service_file() {
   sudo systemctl daemon-reload
 }
 
-distress_is_installed() {
-  systemctl is-active --quiet distress
-  echo $?
-}
-
 get_distress_variable() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
   variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
@@ -137,7 +132,7 @@ distress_get_status() {
 }
 
 initiate_distress() {
-  if [[ ! $(distress_is_installed) ]]; then
+  if [[ ! -e "/etc/systemd/system/distress.service" ]]; then
     echo -e "${RED}Distress не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     menu=(
