@@ -34,57 +34,49 @@ install_distress() {
     echo -e "${GREEN}Distress успішно встановлено${NC}"
 }
 
-configure() {
+configure_distress() {
     declare -A params;
-    declare langs;
 
-    read -p "Юзер ІД: " user_id
-
-    if [[ -z "$user_id" ]]; then
-      user_id=" "
-    fi
+    echo -e "${GREEN}Залиште пустим якщо хочите видалити пераметри${NC}"
+    read -e -p "Юзер ІД: " -i "$(get_distress_variable 'user-id')" user_id
 
     params[user-id]=$user_id
 
-
-    read -p "Відсоткове співвідношення використання власної IP адреси (0-100): " use_my_ip
-
-      while (( $use_my_ip < 0 || $use_my_ip > 100 ))
+    read -e -p "Відсоткове співвідношення використання власної IP адреси (0-100): " -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+    if [[ -n "$use_my_ip" ]];then
+      while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
         echo "Будь ласка введіть правильні значення"
-        read -p "Відсоткове співвідношення використання власної IP адреси (0-100): " use_my_ip
+        read -e -p "Відсоткове співвідношення використання власної IP адреси (0-100): " -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
+    fi
 
     params[use-my-ip]=$use_my_ip
 
-
-    read -p "Кількість підключень Tor (0-100): " use_tor
-
-      while (( $use_tor < 0 || $use_tor > 100 ))
+    read -e -p "Кількість підключень Tor (0-100): "  -i "$(get_distress_variable 'use-tor')" use_tor
+    if [[ -n "$use_tor" ]];then
+      while [[ $use_tor -lt 0 || $use_tor -gt 100 ]]
       do
         echo "Будь ласка введіть правильні значення"
-        read -p "Кількість підключень Tor (0-100): " use_tor
+        read -e -p "Кількість підключень Tor (0-100): " -i "$(get_distress_variable 'use-tor')" use_tor
       done
-
+    fi
     params[use-tor]=$use_tor
 
-
-    read -p "Кількість створювачів завдань (4096): " concurrency
-
-    while ! [[ $concurrency =~ ^[0-9]+$ ]]
-    do
-      echo "Будь ласка введіть правильні значення"
-      read -p "Кількість створювачів завдань (4096): " concurrency
-    done
+    read -e -p "Кількість створювачів завдань (4096): "  -i "$(get_distress_variable 'concurrency')" concurrency
+    if [[ -n "$concurrency" ]];then
+      while [[ ! $concurrency =~ ^[0-9]+$ ]]
+      do
+        echo "Будь ласка введіть правильні значення"
+        read -e -p "Кількість створювачів завдань (4096): " -i "$(get_distress_variable 'concurrency')" concurrency
+      done
+    fi
 
     params[concurrency]=$concurrency
 
     for i in "${!params[@]}"; do
     	  value="${params[$i]}"
-
-    	  if [[ -n "$value" ]]; then
-    	    write_variable "$i" "$value"
-    	  fi
+    	  write_distress_variable "$i" "$value"
     done
     regenerate_service_file
     echo -e "${GREEN}Успішно виконано${NC}"
@@ -115,49 +107,58 @@ regenerate_service_file() {
   sudo systemctl daemon-reload
 }
 
-get_variable() {
+distress_is_installed() {
+  systemctl is-active --quiet distress
+  echo $?
+}
+
+get_distress_variable() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
   variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
   echo "$variable"
 }
 
-write_variable() {
+write_distress_variable() {
   sed -i "/\[distress\]/,/\[\/distress\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
 }
 
-run() {
+distress_run() {
   sudo systemctl stop mhddos.service
   sudo systemctl stop db1000n.service
   sudo systemctl start distress.service
 }
 
-stop() {
+distress_stop() {
   sudo systemctl stop distress.service
 }
 
-get_status() {
+distress_get_status() {
   sudo systemctl status distress.service
 }
 
-initiate() {
-   menu=(
-        "Запустити"
-        "Зупинити"
-        "Статус"
-        )
-  init "$menu"
-  menu_result="$?"
-  case "$menu_result" in
-    0)
-        run
-        get_status
-    ;;
-    1)
-        stop
-        get_status
-    ;;
-    2)
-        get_status
-    ;;
-  esac
+initiate_distress() {
+  if [[ ! $(distress_is_installed) ]]; then
+    echo -e "${RED}Distress не встановлений, будь ласка встановіть і спробуйте знову${NC}"
+  else
+    menu=(
+            "Запустити"
+            "Зупинити"
+            "Статус"
+            )
+      init "$menu"
+      menu_result="$?"
+      case "$menu_result" in
+        0)
+            distress_run
+            distress_get_status
+        ;;
+        1)
+            distress_stop
+            distress_get_status
+        ;;
+        2)
+            distress_get_status
+        ;;
+      esac
+  fi
 }

@@ -16,25 +16,31 @@ export SCRIPT_DIR="$(
 )"
 export WORKING_DIR="/opt/itarmy/"
 export GREEN='\033[0;32m'
+export GRAY='\033[0;37m'
 export RED='\033[0;31m'
 export NC='\033[0m'
 
-install_utils() {
-   declare -a UTILS;
+UTILS=('fail2ban' 'ufw' 'mhddos' 'db1000n' 'distress' 'port-extending' 'docker')
 
-    UTILS=('docker' 'tools' 'fail2ban' 'ufw' 'mhddos' 'db1000n' 'distress')
-
-    for i in "${!UTILS[@]}"; do
-        source "${SCRIPT_DIR}/utils/${UTILS[i]}.sh"
-        install_"${UTILS[i]}"
-    done
-}
+for i in "${!UTILS[@]}"; do
+    source "${SCRIPT_DIR}/utils/${UTILS[i]}.sh"
+done
 
 if [ "$1" = "--auto-install" ] ; then
-   install_utils
+   install_fail2ban
+   install_ufw
+   install_db1000n
+   install_distress
+   install_mhddos
+   mhddos_run
+   mhddos_auto_enable
+
+   extend_ports
 else
   main_menu_init() {
     menu=(
+          "Встановити докер"
+          "Встановлення захисту"
           "Розширення портів"
           "Налаштування безпеки"
           "Установка ддос інструментів"
@@ -44,14 +50,21 @@ else
           )
       source "${SCRIPT_DIR}/menu/menu.sh"
       init "$menu"
+
       result="$?"
 
         case "$result" in
                     0)
-                        source "${SCRIPT_DIR}/utils/port-extending.sh"
-                        extend_ports
+                       install_docker
                     ;;
                     1)
+                        install_fail2ban
+                        install_ufw
+                    ;;
+                    2)
+                       extend_ports
+                    ;;
+                    3)
                       menu=(
                             "Налаштування фаєвола"
                             "Налаштування захисту від брутфорса"
@@ -62,11 +75,9 @@ else
 
                       case "$menu_result" in
                         0)
-                            source "${SCRIPT_DIR}/utils/ufw.sh"
                             configure_ufw
                         ;;
                         1)
-                            source "${SCRIPT_DIR}/utils/fail2ban.sh"
                             configure_fail2ban
                         ;;
                         2)
@@ -74,7 +85,7 @@ else
                         ;;
                       esac
                       ;;
-                    2)
+                    4)
                       echo -ne "
 Юзер ІД ${RED}(Для збору та використання для лідерборда особистої статистики)${NC}:
 "
@@ -84,9 +95,11 @@ else
                         sed -i "s/user-id=.*/user-id=$user_id/g" ${SCRIPT_DIR}/services/EnvironmentFile
                       fi
 
-                      install_utils
+                      install_mhddos
+                      install_db1000n
+                      install_distress
                     ;;
-                    3 | 4)
+                    5 | 6)
                        menu=(
                             "Мхддос"
                             "DB1000N"
@@ -95,28 +108,29 @@ else
                             )
                       init "$menu"
                       menu_result="$?"
-
+                      service=""
                       case "$menu_result" in
                         0)
-                            source "${SCRIPT_DIR}/utils/mhddos.sh"
+                          service="mhddos"
                         ;;
                         1)
-                           source "${SCRIPT_DIR}/utils/db1000n.sh"
+                          service="db1000n"
                         ;;
                         2)
-                           source "${SCRIPT_DIR}/utils/distress.sh"
+                          service="distress"
                         ;;
                         3)
                           main_menu_init
                         ;;
                       esac
-                    if [[ "$result" == "3" ]]; then
-                      configure
-                    elif [[ "$result" == "4" ]]; then
-                      initiate
+
+                    if [[ "$result" == "5" ]]; then
+                      configure_"$service"
+                    elif [[ "$result" == "6" ]]; then
+                      initiate_"$service"
                     fi
                   ;;
-                  5)
+                  7)
                       services=("mhddos" "distress" "db1000n")
                       service=""
 
@@ -139,6 +153,11 @@ else
                       fi
                   ;;
         esac
+
+        echo -e "${GRAY}Нажміть любу клавішу щоб продовжити${NC}"
+        read -s -n 1 key
+
+        main_menu_init
   }
   main_menu_init
 fi

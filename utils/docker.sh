@@ -15,6 +15,8 @@ install_docker() {
                   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
                 sudo apt-get update -y
                 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                sudo systemctl start docker
+                echo -e "${GREEN}Докер успішно встановлено${NC}"
             ;;
             ubuntu)
                 sudo mkdir -m 0755 -p /etc/apt/keyrings
@@ -24,6 +26,8 @@ install_docker() {
                   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
                 sudo apt-get update -y
                 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                sudo systemctl start docker
+                echo -e "${GREEN}Докер успішно встановлено${NC}"
             ;;
             fedora)
                 sudo dnf install -y dnf-plugins-core
@@ -31,6 +35,8 @@ install_docker() {
                     --add-repo \
                     https://download.docker.com/linux/fedora/docker-ce.repo
                 sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+                sudo systemctl start docker
+                echo -e "${GREEN}Докер успішно встановлено${NC}"
             ;;
 
             centos)
@@ -39,10 +45,11 @@ install_docker() {
                     --add-repo \
                     https://download.docker.com/linux/centos/docker-ce.repo
                 sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                sudo systemctl start docker
+                echo -e "${GREEN}Докер успішно встановлено${NC}"
+            ;;
+            *)
+                echo -e "${RED}Docker - операційну систему не знайдено${NC}"
             ;;
     esac
-
-
-    sudo systemctl start docker
-    echo -e "${GREEN}Докер успішно встановлено${NC}"
 }
