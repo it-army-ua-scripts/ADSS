@@ -23,28 +23,27 @@ if [ -r /etc/os-release ]; then
         esac
 
         if [[ ! -z "$PACKAGE_MANAGER" ]]; then
-          if [[ -d "$WORKING_DIR" ]]; then
-            echo -e "${GREEN}Програма вже встановлена${NC}"
-          else
-	  TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git')
+	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git')
 
-	toUpdate=true
-	for i in "${!TOOLS[@]}"; do
-	  if ! which ${TOOLS[i]} >/dev/null; then
-	    if [[ "$toUpdate" == true ]];then
-	     sudo "$PACKAGE_MANAGER" update -y
-	     toUpdate=false
-	    fi
-	    sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
-	  fi
-	done
-	  
-            sudo mkdir -p "$WORKING_DIR"
-            sudo chown $(whoami) "$WORKING_DIR"
+          toUpdate=true
+          for i in "${!TOOLS[@]}"; do
+            if ! which ${TOOLS[i]} >/dev/null; then
+              if [[ "$toUpdate" == true ]];then
+               sudo "$PACKAGE_MANAGER" update -y
+               toUpdate=false
+              fi
+              sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
+            fi
+          done
+	          if [[ -d "$WORKING_DIR" ]]; then
+              sudo rm -rf "$WORKING_DIR"
+              sudo mkdir -p "$WORKING_DIR"
+              sudo chown $(whoami) "$WORKING_DIR"
+            fi
+
             git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
 
-            sudo ln -sf  "$WORKING_DIR/adss/bin/adss" /usr/local/bin/adss
-          fi
+            sudo ln -sf  "$WORKING_DIR/bin/adss" /usr/local/bin/adss
         else
           echo -e "${RED}Менеджер пакетів не знайдено${NC}"
         fi
