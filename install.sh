@@ -26,6 +26,19 @@ if [ -r /etc/os-release ]; then
           if [[ -d "$WORKING_DIR" ]]; then
             echo -e "${GREEN}Програма вже встановлена${NC}"
           else
+	  TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git')
+
+	toUpdate=true
+	for i in "${!TOOLS[@]}"; do
+	  if ! which ${TOOLS[i]} >/dev/null; then
+	    if [[ "$toUpdate" == true ]];then
+	     sudo "$PACKAGE_MANAGER" update -y
+	     toUpdate=false
+	    fi
+	    sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
+	  fi
+	done
+	  
             sudo mkdir -p "$WORKING_DIR"
             sudo chown $(whoami) "$WORKING_DIR"
             git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
@@ -33,7 +46,7 @@ if [ -r /etc/os-release ]; then
             sudo ln -sf  "$WORKING_DIR/adss/bin/adss" /usr/local/bin/adss
           fi
         else
-          echo -e "${RED}Неможливо визначити пакунок${NC}"
+          echo -e "${RED}Менеджер пакетів не знайдено${NC}"
         fi
 else
   echo -e "${RED}Неможливо визначити операційну систему${NC}"
