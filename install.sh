@@ -35,11 +35,9 @@ if [ -r /etc/os-release ]; then
               sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
             fi
           done
-	          if [[ -d "$WORKING_DIR" ]]; then
-              sudo rm -rf "$WORKING_DIR"
-              sudo mkdir -p "$WORKING_DIR"
-              sudo chown $(whoami) "$WORKING_DIR"
-            fi
+	          sudo rm -rf "$WORKING_DIR"
+            sudo mkdir -p "$WORKING_DIR"
+            sudo chown $(whoami) "$WORKING_DIR"
 
             git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
 
