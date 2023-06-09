@@ -38,16 +38,16 @@ if [ -r /etc/os-release ]; then
           if [[ -d "$WORKING_DIR" ]];then
               tmp_folder="/tmp"
               sudo mkdir -p "$tmp_folder"
-              sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
-              sudo mv "$WORKING_DIR/db1000n" "$tmp_folder"
-              sudo mv "$WORKING_DIR/distress" "$tmp_folder"
-              sudo mv "$WORKING_DIR/mhddos_proxy_linux" "$tmp_folder"
+              sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder" &>/dev/null
+              sudo mv "$WORKING_DIR/db1000n" "$tmp_folder" &>/dev/null
+              sudo mv "$WORKING_DIR/distress" "$tmp_folder" &>/dev/null
+              sudo mv "$WORKING_DIR/mhddos_proxy_linux" "$tmp_folder" &>/dev/null
               sudo rm -rf "$WORKING_DIR"
               sudo mkdir -p "$WORKING_DIR"
               sudo chown $(whoami) "$WORKING_DIR"
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
-              sudo mv -f "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services"
-              sudo mv -f "$tmp_folder/*" "$WORKING_DIR"
+              sudo mv -f "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" &>/dev/null
+              sudo cp "$tmp_folder/*" "$WORKING_DIR" &>/dev/null
               sudo rm -rf "$tmp_folder"
 
               SERVICES=('mhddos' 'distress' 'db1000n')
