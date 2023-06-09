@@ -35,10 +35,15 @@ if [ -r /etc/os-release ]; then
               sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
             fi
           done
-	          sudo rm -rf "$WORKING_DIR"
-            sudo mkdir -p "$WORKING_DIR"
-            sudo chown $(whoami) "$WORKING_DIR"
-
+	          if [[ -d "$WORKING_DIR" ]];then
+	              SERVICES=('mhddos' 'db1000n' 'distress')
+	              for service in "${!SERVICES[@]}"; do
+	                sudo find . ! -path ""$WORKING_DIR"/services/$service.service" -delete &>/dev/null
+	              done
+	          else
+	             sudo mkdir -p "$WORKING_DIR"
+               sudo chown $(whoami) "$WORKING_DIR"
+	          fi
             git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
 
             sudo ln -sf  "$WORKING_DIR/bin/adss" /usr/local/bin/adss
