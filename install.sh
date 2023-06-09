@@ -36,13 +36,12 @@ if [ -r /etc/os-release ]; then
             fi
           done
           if [[ -d "$WORKING_DIR" ]];then
-              tmp_folder="/tmp"
+              tmp_folder="/tmp/itarmy"
               sudo mkdir -p "$tmp_folder"
-              MOVEMENTS=("$WORKING_DIR/services/EnvironmentFile" "$WORKING_DIR/db1000n" "$WORKING_DIR/distress" "$WORKING_DIR/mhddos_proxy_linux")
-              for MOVE in "${!MOVEMENTS[@]}"; do
-                echo "${MOVEMENTS[MOVE]}"
-                sudo mv "${MOVEMENTS[MOVE]}" "$tmp_folder"
-              done
+              sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
+              sudo mv "$WORKING_DIR/db1000n" "$tmp_folder"
+              sudo mv "$WORKING_DIR/distress" "$tmp_folder"
+              sudo mv "$WORKING_DIR/mhddos_proxy_linux" "$tmp_folder"
 
               sudo rm -rf "$WORKING_DIR"
               sudo mkdir -p "$WORKING_DIR"
