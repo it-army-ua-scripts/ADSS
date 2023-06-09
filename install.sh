@@ -40,16 +40,17 @@ if [ -r /etc/os-release ]; then
 
               sudo mkdir -p "$tmp_folder"
               sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
-              sudo mv "$WORKING_DIR/db1000n" "$tmp_folder"
-              sudo mv "$WORKING_DIR/distress" "$tmp_folder"
-              sudo mv "$WORKING_DIR/mhddos_proxy_linux" "$tmp_folder"
+              MOVES=("db1000n" "distress" "mhddos_proxy_linux")
+              for MOVE in "${!MOVES[@]}"; do
+               sudo mv "$WORKING_DIR/${MOVES[MOVE]}" "$tmp_folder" 2>/dev/null
+              done
 
               sudo rm -rf "$WORKING_DIR"
               sudo mkdir -p "$WORKING_DIR"
               sudo chown $(whoami) "$WORKING_DIR"
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
-              sudo cp "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services"
-              sudo cp "$tmp_folder"/* "$WORKING_DIR"
+              sudo cp "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" 2>/dev/null
+              sudo cp "$tmp_folder"/* "$WORKING_DIR" 2>/dev/null
               sudo rm -rf "$tmp_folder"
 
               SERVICES=('mhddos' 'distress' 'db1000n')
