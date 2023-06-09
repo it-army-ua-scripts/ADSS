@@ -54,7 +54,7 @@ if [ -r /etc/os-release ]; then
               SERVICES=('mhddos' 'distress' 'db1000n')
               for SERVICE in "${!SERVICES[@]}"; do
                 source "${WORKING_DIR}/utils/${SERVICES[SERVICE]}.sh"
-                export SCRIPT_DIR="${WORKING_DIR}"
+                export SCRIPT_DIR="${WORKING_DIR}/"
                 regenerate_service_file
               done
           else
