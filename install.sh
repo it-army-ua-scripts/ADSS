@@ -36,8 +36,16 @@ if [ -r /etc/os-release ]; then
             fi
           done
           if [[ -d "$WORKING_DIR" ]];then
-              sudo find . ! -path "$WORKING_DIR/services/EnvironmentFile" -delete &>/dev/null
+              tmp_folder="/tmp"
+              sudo mkdir -p "$tmp_folder"
+              sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
+              sudo rm -rf $WORKING_DIR
+              sudo mkdir -p "$WORKING_DIR"
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+              sudo mv -f "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services"
+              sudo rm -rf "$tmp_folder"
+#              sudo find . ! -path "$WORKING_DIR/services/EnvironmentFile" -delete &>/dev/null
+
               SERVICES=('mhddos' 'distress' 'db1000n')
               for SERVICE in "${!SERVICES[@]}"; do
                 source "${WORKING_DIR}/utils/${SERVICES[SERVICE]}.sh"
