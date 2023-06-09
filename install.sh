@@ -36,15 +36,18 @@ if [ -r /etc/os-release ]; then
             fi
           done
 	          if [[ -d "$WORKING_DIR" ]];then
-	              SERVICES=('mhddos' 'db1000n' 'distress')
-	              for service in "${!SERVICES[@]}"; do
-	                sudo find . ! -path ""$WORKING_DIR"/services/$service.service" -delete &>/dev/null
-	              done
+	              sudo find . ! -path ""$WORKING_DIR"/services/EnvironmentFile" -delete &>/dev/null
+	              git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+	              SERVICES=('mhddos' 'distress' 'db1000n')
+                for SERVICE in "${!SERVICES[@]}"; do
+                  source "${WORKING_DIR}/utils/${SERVICES[SERVICE]}.sh"
+                  regenerate_service_file
+                done
 	          else
 	             sudo mkdir -p "$WORKING_DIR"
                sudo chown $(whoami) "$WORKING_DIR"
+               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
 	          fi
-            git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
 
             sudo ln -sf  "$WORKING_DIR/bin/adss" /usr/local/bin/adss
         else
