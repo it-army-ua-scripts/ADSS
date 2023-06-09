@@ -37,6 +37,7 @@ if [ -r /etc/os-release ]; then
           done
           if [[ -d "$WORKING_DIR" ]];then
               tmp_folder="/tmp/itarmy"
+              echo "$tmp_folder"
               sudo mkdir -p "$tmp_folder"
               sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
               sudo mv "$WORKING_DIR/db1000n" "$tmp_folder"
