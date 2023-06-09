@@ -50,8 +50,9 @@ if [ -r /etc/os-release ]; then
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
                ls "$tmp_folder"
               sudo cp "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services"
+               ls "$tmp_folder"
               sudo cp "$tmp_folder/*" "$WORKING_DIR"
-
+               ls "$tmp_folder"
               sudo rm -rf "$tmp_folder"
 
               SERVICES=('mhddos' 'distress' 'db1000n')
