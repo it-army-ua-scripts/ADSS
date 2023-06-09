@@ -40,7 +40,8 @@ if [ -r /etc/os-release ]; then
               sudo mkdir -p "$tmp_folder"
               MOVEMENTS=("$WORKING_DIR/services/EnvironmentFile" "$WORKING_DIR/db1000n" "$WORKING_DIR/distress" "$WORKING_DIR/mhddos_proxy_linux")
               for MOVE in "${!MOVEMENTS[@]}"; do
-                sudo mv "${MOVEMENTS[MOVE]}" "$tmp_folder" 2>/dev/null
+                echo "${MOVEMENTS[MOVE]}"
+                sudo mv "${MOVEMENTS[MOVE]}" "$tmp_folder"
               done
 
               sudo rm -rf "$WORKING_DIR"
