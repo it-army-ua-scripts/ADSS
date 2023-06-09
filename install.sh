@@ -39,7 +39,7 @@ if [ -r /etc/os-release ]; then
               tmp_folder="/tmp"
               sudo mkdir -p "$tmp_folder"
               sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
-              sudo rm -rf $WORKING_DIR
+              sudo rm -rf "$WORKING_DIR"
               sudo mkdir -p "$WORKING_DIR"
               sudo chown $(whoami) "$WORKING_DIR"
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
@@ -50,6 +50,7 @@ if [ -r /etc/os-release ]; then
               SERVICES=('mhddos' 'distress' 'db1000n')
               for SERVICE in "${!SERVICES[@]}"; do
                 source "${WORKING_DIR}utils/${SERVICES[SERVICE]}.sh"
+                export SCRIPT_DIR="${WORKING_DIR}"
                 regenerate_service_file
               done
           else
