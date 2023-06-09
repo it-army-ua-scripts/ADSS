@@ -37,7 +37,7 @@ if [ -r /etc/os-release ]; then
           done
           if [[ -d "$WORKING_DIR" ]];then
               tmp_folder="/tmp/itarmy"
-              echo "$tmp_folder"
+
               sudo mkdir -p "$tmp_folder"
               sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
               sudo mv "$WORKING_DIR/db1000n" "$tmp_folder"
@@ -51,6 +51,7 @@ if [ -r /etc/os-release ]; then
               sudo cp "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services"
               sudo cp "$tmp_folder/*" "$WORKING_DIR"
               ls "$tmp_folder"
+              echo aaa
               sudo rm -rf "$tmp_folder"
 
               SERVICES=('mhddos' 'distress' 'db1000n')
