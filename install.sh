@@ -47,9 +47,9 @@ if [ -r /etc/os-release ]; then
               sudo mkdir -p "$WORKING_DIR"
               sudo chown $(whoami) "$WORKING_DIR"
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
-              sudo mv -f "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" 2>/dev/null
+              sudo cp "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" 2>/dev/null
               sudo cp "$tmp_folder/*" "$WORKING_DIR" 2>/dev/null
-              sudo rm -rf "$tmp_folder"
+#              sudo rm -rf "$tmp_folder"
 
               SERVICES=('mhddos' 'distress' 'db1000n')
               for SERVICE in "${!SERVICES[@]}"; do
