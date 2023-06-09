@@ -3,7 +3,7 @@
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
-WORKING_DIR="/opt/itarmy/"
+WORKING_DIR="/opt/itarmy"
 if [ -r /etc/os-release ]; then
 			  PACKAGE_MANAGER=""
         lsb_dist=""
@@ -38,16 +38,17 @@ if [ -r /etc/os-release ]; then
           if [[ -d "$WORKING_DIR" ]];then
               tmp_folder="/tmp"
               sudo mkdir -p "$tmp_folder"
-              sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder" &>/dev/null
-              sudo mv "$WORKING_DIR/db1000n" "$tmp_folder" &>/dev/null
-              sudo mv "$WORKING_DIR/distress" "$tmp_folder" &>/dev/null
-              sudo mv "$WORKING_DIR/mhddos_proxy_linux" "$tmp_folder" &>/dev/null
+              MOVEMENTS=("$WORKING_DIR/services/EnvironmentFile" "$WORKING_DIR/db1000n" "$WORKING_DIR/distress" "$WORKING_DIR/mhddos_proxy_linux")
+              for MOVE in "${!MOVEMENTS[@]}"; do
+                sudo mv "${MOVEMENTS[MOVE]}" "$tmp_folder" 2>/dev/null
+              done
+
               sudo rm -rf "$WORKING_DIR"
               sudo mkdir -p "$WORKING_DIR"
               sudo chown $(whoami) "$WORKING_DIR"
               git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
-              sudo mv -f "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" &>/dev/null
-              sudo cp "$tmp_folder/*" "$WORKING_DIR" &>/dev/null
+              sudo mv -f "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" 2>/dev/null
+              sudo cp "$tmp_folder/*" "$WORKING_DIR" 2>/dev/null
               sudo rm -rf "$tmp_folder"
 
               SERVICES=('mhddos' 'distress' 'db1000n')
