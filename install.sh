@@ -36,7 +36,7 @@ if [ -r /etc/os-release ]; then
             fi
           done
           if [[ -d "$WORKING_DIR" ]];then
-              git pull --all
+              cd $WORKING_DIR && git pull --all
               SERVICES=('mhddos' 'distress' 'db1000n')
               for SERVICE in "${!SERVICES[@]}"; do
                 source "${WORKING_DIR}/utils/${SERVICES[SERVICE]}.sh"
