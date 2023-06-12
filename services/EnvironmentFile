@@ -3,7 +3,7 @@ user-id=
 lang=ua
 copies=auto
 vpn=false
-vpn-percents=20
+vpn-percents=30
 threads=8000
 proxies=
 [/mhddos]
