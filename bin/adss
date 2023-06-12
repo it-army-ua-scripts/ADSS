@@ -31,7 +31,7 @@ source_files_in_directory() {
             fi
         done
     else
-        echo "Папку '$directory' не знайдена."
+        echo "Папку '$directory' не знайдено."
     fi
 }
 source_files_in_directory "$SCRIPT_DIR/utils"
