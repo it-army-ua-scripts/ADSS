@@ -31,11 +31,12 @@ source_files_in_directory() {
             fi
         done
     else
-        echo "Папку '$directory' не знайдено."
+        echo -e "${RED}Папку '$directory' не знайдено.${NC}"
     fi
 }
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
+
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban
    install_ufw
