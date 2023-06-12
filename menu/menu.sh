@@ -8,7 +8,7 @@ init() {
 
       for i in "${!menu[@]}"; do
           if [ $i -eq $selected_index ]; then
-              echo -e "${GRAY}>> ${menu[$i]}${NC}"
+              echo -e "${GREEN}>> ${menu[$i]}${NC}"
           else
               echo "   ${menu[$i]}"
           fi
