@@ -14,18 +14,28 @@ export SCRIPT_DIR="$(
   )/.." >/dev/null \
   && pwd
 )"
-export WORKING_DIR="/opt/itarmy/"
 export GREEN='\033[0;32m'
 export GRAY='\033[0;37m'
 export RED='\033[0;31m'
 export NC='\033[0m'
 
-UTILS=('fail2ban' 'ufw' 'mhddos' 'db1000n' 'distress' 'port-extending' 'docker')
+source_files_in_directory() {
+    local directory="$1"
 
-for i in "${!UTILS[@]}"; do
-    source "${SCRIPT_DIR}/utils/${UTILS[i]}.sh"
-done
+    if [[ -d "$directory" ]]; then
+        local files=("$directory"/*)
 
+        for file in "${files[@]}"; do
+            if [[ -f "$file" ]]; then
+                source "$file"
+            fi
+        done
+    else
+        echo "Папку '$directory' не знайдена."
+    fi
+}
+source_files_in_directory "$SCRIPT_DIR/utils"
+source_files_in_directory "$SCRIPT_DIR/menu"
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban
    install_ufw
@@ -40,118 +50,28 @@ else
   main_menu_init() {
     menu=(
           "Встановити докер"
-          "Встановлення захисту"
           "Розширення портів"
           "Налаштування безпеки"
-          "Установка ддос інструментів"
-          "Налаштування ддос інструментів"
-          "Запуск|Зупинка|Статус ддос інструментів"
-          "Статус атаки"
+          "ДДОС"
           )
-      source "${SCRIPT_DIR}/menu/menu.sh"
       init "$menu"
 
       result="$?"
 
         case "$result" in
-                    0)
-                       install_docker
-                    ;;
-                    1)
-                        install_fail2ban
-                        install_ufw
-                    ;;
-                    2)
-                       extend_ports
-                    ;;
-                    3)
-                      menu=(
-                            "Налаштування фаєвола"
-                            "Налаштування захисту від брутфорса"
-                            "Повернутись назад"
-                            )
-                      init "$menu"
-                      menu_result="$?"
+          0)
+             install_docker
+          ;;
+          1)
+            extend_ports
+          ;;
+          2)
+              step1
+          ;;
 
-                      case "$menu_result" in
-                        0)
-                            configure_ufw
-                        ;;
-                        1)
-                            configure_fail2ban
-                        ;;
-                        2)
-                            main_menu_init
-                        ;;
-                      esac
-                      ;;
-                    4)
-                      echo -ne "
-Юзер ІД ${RED}(Для збору та використання для лідерборда особистої статистики)${NC}:
-"
-                      read user_id
-
-                      if [[ "$user_id" ]]; then
-                        sed -i "s/user-id=.*/user-id=$user_id/g" ${SCRIPT_DIR}/services/EnvironmentFile
-                      fi
-
-                      install_mhddos
-                      install_db1000n
-                      install_distress
-                    ;;
-                    5 | 6)
-                       menu=(
-                            "Мхддос"
-                            "DB1000N"
-                            "Distress"
-                            "Повернутись назад"
-                            )
-                      init "$menu"
-                      menu_result="$?"
-                      service=""
-                      case "$menu_result" in
-                        0)
-                          service="mhddos"
-                        ;;
-                        1)
-                          service="db1000n"
-                        ;;
-                        2)
-                          service="distress"
-                        ;;
-                        3)
-                          main_menu_init
-                        ;;
-                      esac
-
-                    if [[ "$result" == "5" ]]; then
-                      configure_"$service"
-                    elif [[ "$result" == "6" ]]; then
-                      initiate_"$service"
-                    fi
-                  ;;
-                  7)
-                      services=("mhddos" "distress" "db1000n")
-                      service=""
-
-                      for element in "${services[@]}"
-                      do
-                        if systemctl is-active --quiet "$element.service"; then
-                          service="$element"
-                          break
-                        fi
-                      done
-                      if [[ -n "$service" ]]; then
-                        while true; do
-                          clear
-                          echo -e "${GREEN}Запущено $service${NC}"
-                          journalctl -u "$service.service" | tail -20
-                          sleep 5
-                        done
-                      else
-                        echo -e "${RED}Немає запущених процесів${NC}"
-                      fi
-                  ;;
+          3)
+              step3
+          ;;
         esac
 
         echo -e "${GRAY}Нажміть любу клавішу щоб продовжити${NC}"

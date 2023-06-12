@@ -3,21 +3,23 @@
 source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
-    echo -e "${GREEN}Встановлюємо Fail2ban${NC}"
 
     case $(get_distribution) in
             debian | ubuntu)
+                echo -e "${GREEN}Встановлюємо Fail2ban${NC}"
                 sudo apt-get update -y
                 sudo apt-get install -y fail2ban
                 echo -e "${GREEN}Fail2ban успішно встановлено${NC}"
             ;;
             fedora)
+                echo -e "${GREEN}Встановлюємо Fail2ban${NC}"
                 sudo dnf update -y
                 sudo dnf upgrade -y
                 sudo dnf install -y fail2ban
                 echo -e "${GREEN}Fail2ban успішно встановлено${NC}"
             ;;
             centos)
+                echo -e "${GREEN}Встановлюємо Fail2ban${NC}"
                 sudo yum update -y
                 sudo yum install -y epel-release
                 sudo yum install -y fail2ban

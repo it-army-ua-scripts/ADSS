@@ -2,7 +2,7 @@
 
 install_distress() {
 
-    cd $WORKING_DIR
+    cd $SCRIPT_DIR
     echo -e "${GREEN}Встановлюємо Distress${NC}"
 
     OSARCH=$(uname -m)
@@ -37,7 +37,7 @@ install_distress() {
 configure_distress() {
     declare -A params;
 
-    echo -e "${GREEN}Залиште пустим якщо хочите видалити пераметри${NC}"
+    echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
     read -e -p "Юзер ІД: " -i "$(get_distress_variable 'user-id')" user_id
 
     params[user-id]=$user_id
@@ -136,9 +136,11 @@ initiate_distress() {
     echo -e "${RED}Distress не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     menu=(
-            "Запустити"
-            "Зупинити"
-            "Статус"
+            "Запуск Distress"
+            "Зупинка Distress"
+            "Налаштування Distress"
+            "Статус Distress"
+            "Повернутись назад"
             )
       init "$menu"
       menu_result="$?"
@@ -152,7 +154,13 @@ initiate_distress() {
             distress_get_status
         ;;
         2)
+            configure_distress
+        ;;
+        3)
             distress_get_status
+        ;;
+        4)
+            step4
         ;;
       esac
   fi
