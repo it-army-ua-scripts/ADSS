@@ -36,23 +36,7 @@ if [ -r /etc/os-release ]; then
             fi
           done
           if [[ -d "$WORKING_DIR" ]];then
-              tmp_folder="/tmp/itarmy"
-
-              sudo mkdir -p "$tmp_folder"
-              sudo mv "$WORKING_DIR/services/EnvironmentFile" "$tmp_folder"
-              MOVES=("db1000n" "distress" "mhddos_proxy_linux")
-              for MOVE in "${!MOVES[@]}"; do
-               sudo mv "$WORKING_DIR/${MOVES[MOVE]}" "$tmp_folder" 2>/dev/null
-              done
-
-              sudo rm -rf "$WORKING_DIR"
-              sudo mkdir -p "$WORKING_DIR"
-              sudo chown $(whoami) "$WORKING_DIR"
-              git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
-              sudo mv "$tmp_folder/EnvironmentFile" "$WORKING_DIR/services" 2>/dev/null
-              sudo mv "$tmp_folder"/* "$WORKING_DIR" 2>/dev/null
-              sudo rm -rf "$tmp_folder"
-
+              git pull --all
               SERVICES=('mhddos' 'distress' 'db1000n')
               for SERVICE in "${!SERVICES[@]}"; do
                 source "${WORKING_DIR}/utils/${SERVICES[SERVICE]}.sh"
