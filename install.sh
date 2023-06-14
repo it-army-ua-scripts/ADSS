@@ -43,12 +43,6 @@ if [ -r /etc/os-release ]; then
               git pull --all && \
               sudo rm -rf "$service_dir" && \
               sudo mv "$service_dir_tmp" "$service_dir"
-              SERVICES=('mhddos' 'distress' 'db1000n')
-              for SERVICE in "${!SERVICES[@]}"; do
-                source "${WORKING_DIR}/utils/${SERVICES[SERVICE]}.sh"
-                export SCRIPT_DIR="${WORKING_DIR}/"
-                regenerate_service_file
-              done
           else
              sudo mkdir -p "$WORKING_DIR"
              sudo chown $(whoami) "$WORKING_DIR"
