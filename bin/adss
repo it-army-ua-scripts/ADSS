@@ -49,6 +49,8 @@ if [ "$1" = "--auto-install" ] ; then
    mhddos_auto_enable
 
    extend_ports
+elif [ "$1" = "--restore" ] ; then
+  cd $SCRIPT_DIR && git checkout .
 else
   main_menu_init() {
     menu=(
