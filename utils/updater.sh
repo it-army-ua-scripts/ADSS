@@ -18,7 +18,7 @@ prepare_for_update() {
   echo -e "${GREEN}Перевіряємо наявленість оновлень${NC}"
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']}
-  remote_version=$(curl -s URL_файлу)
+  remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
   need_update=$(echo "$current_version < $remote_version" | bc -l)
   if [[ $need_update -eq 1  ]];then
       update_adss
