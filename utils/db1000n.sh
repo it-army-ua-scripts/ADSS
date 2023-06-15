@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install_db1000n() {
-    cd $WORKING_DIR
+    cd $SCRIPT_DIR
     echo -e "${GREEN}Встановлюємо DB1000N${NC}"
 
     OSARCH=$(uname -m)
@@ -39,7 +39,7 @@ install_db1000n() {
 
 configure_db1000n() {
     declare -A params;
-    echo -e "${GREEN}Залиште пустим якщо хочите видалити пераметри${NC}"
+    echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
 
     read -e -p "Юзер ІД: " -i "$(get_db1000n_variable 'user-id')" user_id
 
@@ -79,11 +79,6 @@ configure_db1000n() {
     done
     regenerate_service_file
     echo -e "${GREEN}Успішно виконано${NC}"
-}
-
-db1000n_is_installed() {
-  systemctl is-active --quiet db1000n
-  echo $?
 }
 
 regenerate_service_file() {
@@ -135,13 +130,15 @@ db1000n_get_status() {
 }
 
 initiate_db1000n() {
-  if [[ ! $(db1000n_is_installed) ]]; then
+  if [[ ! -e "/etc/systemd/system/db1000n.service" ]]; then
     echo -e "${RED}db1000n не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     menu=(
-            "Запустити"
-            "Зупинити"
-            "Статус"
+            "Запуск DB1000N"
+            "Зупинка DB1000N"
+            "Налаштування DB1000N"
+            "Статус DB1000N"
+            "Повернутись назад"
             )
       init "$menu"
       menu_result="$?"
@@ -155,7 +152,13 @@ initiate_db1000n() {
             db1000n_get_status
         ;;
         2)
+            configure_db1000n
+        ;;
+        3)
             db1000n_get_status
+        ;;
+        4)
+            step4
         ;;
       esac
   fi

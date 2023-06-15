@@ -2,7 +2,7 @@
 
 install_mhddos() {
 
-    cd $WORKING_DIR
+    cd $SCRIPT_DIR
     echo -e "${GREEN}Встановлюємо MHDDOS${NC}"
 	
     OSARCH=$(uname -m)
@@ -34,15 +34,10 @@ install_mhddos() {
     echo -e "${GREEN}MHDDOS успішно встановлено${NC}"
 }
 
-mhddos_is_installed() {
-  systemctl is-active --quiet mhddos
-  echo $?
-}
-
 configure_mhddos() {
 
     declare -A params
-    echo -e "${GREEN}Залиште пустим якщо хочите видалити пераметри${NC}"
+    echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
     read -e -p "Юзер ІД: " -i "$(get_mhddos_variable 'user-id')" user_id
 
     params[user-id]=$user_id
@@ -172,13 +167,15 @@ mhddos_get_status() {
   sudo systemctl status mhddos.service
 }
 initiate_mhddos() {
-  if [[ ! $(mhddos_is_installed) ]]; then
+  if [[ ! -e "/etc/systemd/system/mhddos.service" ]]; then
     echo -e "${RED}MHDDOS не встановлений, будь ласка встановіть і спробуйте знову${NC}"
   else
     menu=(
-            "Запустити"
-            "Зупинити"
-            "Статус"
+            "Запуск MHDDOS"
+            "Зупинка MHDDOS"
+            "Налаштування MHDDOS"
+            "Статус MHDDOS"
+            "Повернутись назад"
             )
       init "$menu"
       menu_result="$?"
@@ -192,7 +189,13 @@ initiate_mhddos() {
             mhddos_get_status
         ;;
         2)
+            configure_mhddos
+        ;;
+        3)
             mhddos_get_status
+        ;;
+        4)
+            step4
         ;;
       esac
   fi

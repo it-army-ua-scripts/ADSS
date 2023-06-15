@@ -12,9 +12,9 @@ extend_ports() {
           sudo sysctl -p
           echo -e "${GREEN}Порти успішно розширено${NC}"
       else
-          echo -e "${GREEN}Необхідна дія вже виконана${NC}"
+          echo -e "${GREEN}[Port extending] Необхідна дія вже виконана${NC}"
       fi
     else
-      echo -e "${RED}Не можливо виконати дію${NC}"
+      echo -e "${RED}[Port extending] Не можливо виконати дію${NC}"
     fi
 }
