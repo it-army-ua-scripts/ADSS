@@ -35,12 +35,14 @@ write_version() {
 
 update_adss() {
   echo -e "${GREEN}Оновляємо ADSS${NC}"
-  service_dir="${SCRIPT_DIR}/services"
-  service_dir_tmp="${SCRIPT_DIR}/services_tmp"
   cd $SCRIPT_DIR && \
-  sudo mv "$service_dir" "$service_dir_tmp" && \
-  git pull --all && \
-  sudo rm -rf "$service_dir" && \
-  sudo mv "$service_dir_tmp" "$service_dir"
+  git checkout services/db1000n.service distress.service mhddos.service && \
+  git pull --all
+
+  SERVICES=('mhddos' 'distress' 'db1000n')
+  for SERVICE in "${!SERVICES[@]}"; do
+    source "${SCRIPT_DIR}/utils/${SERVICES[SERVICE]}.sh"
+    regenerate_service_file
+  done
   echo -e "${GREEN}ADSS успішно оновлено${NC}"
 }
