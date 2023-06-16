@@ -36,13 +36,9 @@ if [ -r /etc/os-release ]; then
             fi
           done
           if [[ -d "$WORKING_DIR" ]];then
-              service_dir="${WORKING_DIR}/services"
-              service_dir_tmp="${WORKING_DIR}/services_tmp"
-              cd $WORKING_DIR && \
-              sudo mv "$service_dir" "$service_dir_tmp" && \
-              git pull --all && \
-              sudo rm -rf "$service_dir" && \
-              sudo mv "$service_dir_tmp" "$service_dir"
+             source "${WORKING_DIR}/utils/updater.sh"
+             export SCRIPT_DIR="${WORKING_DIR}/"
+             update_adss
           else
              sudo mkdir -p "$WORKING_DIR"
              sudo chown $(whoami) "$WORKING_DIR"
