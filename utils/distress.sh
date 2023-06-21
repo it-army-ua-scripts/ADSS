@@ -27,7 +27,7 @@ install_distress() {
 
         sudo curl -Lo distress "$package"
         sudo chmod +x distress
-        regenerate_service_file
+        regenerate_distress_service_file
         sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service
     }
     install > /dev/null 2>&1
@@ -79,7 +79,7 @@ configure_distress() {
     	  value="${params[$i]}"
     	  write_distress_variable "$i" "$value"
     done
-    regenerate_service_file
+    regenerate_distress_service_file
     confirm_dialog "Успішно виконано"
 }
 
@@ -93,7 +93,7 @@ write_distress_variable() {
   sed -i "/\[distress\]/,/\[\/distress\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
 }
 
-regenerate_service_file() {
+regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=/opt/itarmy/distress"

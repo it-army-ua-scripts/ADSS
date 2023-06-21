@@ -79,7 +79,7 @@ configure_db1000n() {
     	  value="${params[$i]}"
         write_db1000n_variable "$i" "$value"
     done
-    regenerate_service_file
+    regenerate_db1000n_service_file
     confirm_dialog "Успішно виконано"
 }
 
@@ -93,7 +93,7 @@ write_db1000n_variable() {
   sed -i "/\[db1000n\]/,/\[\/db1000n\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
 }
 
-regenerate_service_file() {
+regenerate_db1000n_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=/opt/itarmy/db1000n"
