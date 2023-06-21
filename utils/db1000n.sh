@@ -83,6 +83,16 @@ configure_db1000n() {
     confirm_dialog "Успішно виконано"
 }
 
+get_db1000n_variable() {
+  lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
+  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
+}
+
+write_db1000n_variable() {
+  sed -i "/\[db1000n\]/,/\[\/db1000n\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
+}
+
 regenerate_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
 
@@ -102,19 +112,9 @@ regenerate_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" ${SCRIPT_DIR}/services/db1000n.service
+  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/db1000n.service
 
   sudo systemctl daemon-reload
-}
-
-get_db1000n_variable() {
-  lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
-  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
-  echo "$variable"
-}
-
-write_db1000n_variable() {
-  sed -i "/\[db1000n\]/,/\[\/db1000n\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
 }
 
 db1000n_run() {

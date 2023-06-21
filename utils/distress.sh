@@ -83,6 +83,15 @@ configure_distress() {
     confirm_dialog "Успішно виконано"
 }
 
+get_distress_variable() {
+  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
+  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
+}
+
+write_distress_variable() {
+  sed -i "/\[distress\]/,/\[\/distress\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
+}
 
 regenerate_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
@@ -103,19 +112,9 @@ regenerate_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" ${SCRIPT_DIR}/services/distress.service
+  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/distress.service
 
   sudo systemctl daemon-reload
-}
-
-get_distress_variable() {
-  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
-  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
-  echo "$variable"
-}
-
-write_distress_variable() {
-  sed -i "/\[distress\]/,/\[\/distress\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
 }
 
 distress_run() {
