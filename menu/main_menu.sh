@@ -2,7 +2,7 @@
 
 main_menu() {
     while true; do
-      selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "Головне меню" \
+      selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "Головне меню" \
         --menu "Виберіть опцію:" 0 0 0 \
         1 "Встановити докер" \
         2 "Розширення портів" \
