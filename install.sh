@@ -23,7 +23,7 @@ if [ -r /etc/os-release ]; then
         esac
 
         if [[ ! -z "$PACKAGE_MANAGER" ]]; then
-	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git')
+	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git', 'dialog')
 
           toUpdate=true
           for i in "${!TOOLS[@]}"; do
