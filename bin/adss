@@ -37,6 +37,7 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
+validate_os
 check_updates
 
 if [ "$1" = "--auto-install" ] ; then
@@ -47,42 +48,10 @@ if [ "$1" = "--auto-install" ] ; then
    install_mhddos
    mhddos_run
    mhddos_auto_enable
-
    extend_ports
+   main_menu
 elif [ "$1" = "--restore" ] ; then
   cd $SCRIPT_DIR && git checkout .
 else
-  main_menu_init() {
-    menu=(
-          "Встановити докер"
-          "Розширення портів"
-          "Налаштування безпеки"
-          "ДДОС"
-          )
-      init "$menu"
-
-      result="$?"
-
-        case "$result" in
-          0)
-             install_docker
-          ;;
-          1)
-            extend_ports
-          ;;
-          2)
-              step1
-          ;;
-
-          3)
-              step3
-          ;;
-        esac
-
-        echo -e "${GRAY}Нажміть любу клавішу щоб продовжити${NC}"
-        read -s -n 1 key
-
-        main_menu_init
-  }
-  main_menu_init
+    main_menu
 fi

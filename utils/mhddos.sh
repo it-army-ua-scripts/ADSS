@@ -2,40 +2,41 @@
 
 install_mhddos() {
 
-    cd $SCRIPT_DIR
-    echo -e "${GREEN}Встановлюємо MHDDOS${NC}"
-	
-    OSARCH=$(uname -m)
-    package=''
-    case "$OSARCH" in
-      aarch64*)
-        package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux_arm64
-      ;;
+    adss_dialog "Встановлюємо MHDDOS"
 
-      x86_64*)
-        package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
-      ;;
+	  install() {
+        cd $SCRIPT_DIR
+        OSARCH=$(uname -m)
+        package=''
+        case "$OSARCH" in
+          aarch64*)
+            package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux_arm64
+          ;;
 
-      i386* | i686*)
-        echo "Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності";
-        exit 1
-      ;;
+          x86_64*)
+            package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
+          ;;
 
-      *)
-        echo "Неможливо визначити розрядность операційної системи";
-        exit 1
-      ;;
-    esac
+          i386* | i686*)
+            confirm_dialog "Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"
+          ;;
 
-	  sudo curl -Lo mhddos_proxy_linux "$package"
-    sudo chmod +x mhddos_proxy_linux
-    regenerate_service_file
-    sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service
-    echo -e "${GREEN}MHDDOS успішно встановлено${NC}"
+          *)
+            confirm_dialog "Неможливо визначити розрядность операційної системи"
+          ;;
+        esac
+
+        sudo curl -Lo mhddos_proxy_linux "$package"
+        sudo chmod +x mhddos_proxy_linux
+        regenerate_service_file
+        sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service
+	  }
+    install > /dev/null 2>&1
+    confirm_dialog "MHDDOS успішно встановлено"
 }
 
 configure_mhddos() {
-
+    clear
     declare -A params
     echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
     read -e -p "Юзер ІД: " -i "$(get_mhddos_variable 'user-id')" user_id
@@ -112,7 +113,7 @@ configure_mhddos() {
     	  write_mhddos_variable "$i" "$value"
     done
     regenerate_service_file
-    echo -e "${GREEN}Успішно виконано${NC}"
+    confirm_dialog "Успішно виконано"
 }
 
 get_mhddos_variable() {
@@ -164,40 +165,52 @@ mhddos_stop() {
 }
 
 mhddos_get_status() {
+  clear
   sudo systemctl status mhddos.service
+  echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+  read -s -n 1 key
+  initiate_mhddos
 }
 initiate_mhddos() {
   if [[ ! -e "/etc/systemd/system/mhddos.service" ]]; then
-    echo -e "${RED}MHDDOS не встановлений, будь ласка встановіть і спробуйте знову${NC}"
+    confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    menu=(
-            "Запуск MHDDOS"
-            "Зупинка MHDDOS"
-            "Налаштування MHDDOS"
-            "Статус MHDDOS"
-            "Повернутись назад"
-            )
-      init "$menu"
-      menu_result="$?"
-      case "$menu_result" in
-        0)
-            mhddos_run
-            mhddos_get_status
-        ;;
+    while true; do
+      selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "MHDDOS" \
+        --menu "Виберіть опцію:" 0 0 0 \
+        1 "Запуск MHDDOS" \
+        2 "Зупинка MHDDOS" \
+        3 "Налаштування MHDDOS" \
+        4 "Статус MHDDOS" \
+        5 "Повернутись назад")
+
+      exit_status=$?
+      case $exit_status in
+          255 | 1)
+               clear
+               echo "Exiting..."
+               exit 0
+          ;;
+      esac
+      case $selection in
         1)
-            mhddos_stop
-            mhddos_get_status
+          mhddos_run
+          mhddos_get_status
         ;;
         2)
-            configure_mhddos
+          mhddos_stop
+          mhddos_get_status
         ;;
         3)
-            mhddos_get_status
+          configure_mhddos
         ;;
         4)
-            step4
+          mhddos_get_status
+        ;;
+        5)
+          ddos_tool_managment
         ;;
       esac
+    done
   fi
-
 }
