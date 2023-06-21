@@ -140,7 +140,7 @@ initiate_db1000n() {
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
   else
       while true; do
-            selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "DB1000N" \
+            selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "DB1000N" \
               --menu "Виберіть опцію:" 0 0 0 \
               1 "Запуск DB1000N" \
               2 "Зупинка DB1000N" \

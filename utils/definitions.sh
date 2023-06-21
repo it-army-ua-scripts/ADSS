@@ -22,7 +22,7 @@ validate_os() {
   done
 
   if [[ os_exists -eq 0 ]]; then
-    dialog --keep-tite --msgbox 'Операційну систему не знайдено. Доступні ubuntu, fedora, debian, centos' 0 0
+    dialog --ascii-lines --keep-tite --msgbox 'Операційну систему не знайдено. Доступні ubuntu, fedora, debian, centos' 0 0
     clear
     exit 0
   fi

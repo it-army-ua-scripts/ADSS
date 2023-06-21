@@ -141,7 +141,7 @@ initiate_distress() {
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
   else
     while true; do
-          selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "DISTRESS" \
+          selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "DISTRESS" \
             --menu "Виберіть опцію:" 0 0 0 \
             1 "Запуск Distress" \
             2 "Зупинка Distress" \

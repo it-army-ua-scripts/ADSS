@@ -2,7 +2,7 @@
 
 ddos_tool_managment(){
   while true; do
-    selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "Управління ддос інструментами" \
+    selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "Управління ддос інструментами" \
       --menu "Виберіть опцію:" 0 0 0 \
       1 "Статус атаки" \
       2 "Зупинити атаку" \

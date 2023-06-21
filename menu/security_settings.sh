@@ -2,7 +2,7 @@
 
 security_settings() {
   while true; do
-    selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "Налаштування безпеки" \
+    selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "Налаштування безпеки" \
       --menu "Виберіть опцію:" 0 0 0 \
       1 "Встановлення захисту" \
       2 "Налаштування захисту" \

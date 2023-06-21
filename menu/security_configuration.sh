@@ -2,7 +2,7 @@
 
 security_configuration() {
   while true; do
-    selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "Налаштування захисту" \
+    selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "Налаштування захисту" \
       --menu "Виберіть опцію:" 0 0 0 \
       1 "Налаштування фаєвола" \
       2 "Налаштування захисту від брутфорса" \

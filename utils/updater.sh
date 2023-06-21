@@ -36,7 +36,9 @@ write_version() {
 update_adss() {
   echo -e "${GREEN}Оновляємо ADSS${NC}"
   cd $SCRIPT_DIR && \
-  git checkout services/db1000n.service distress.service mhddos.service && \
+  git checkout services/db1000n.service && \
+  git checkout services/distress.service && \
+  git checkout services/mhddos.service && \
   git pull --all
 
   SERVICES=('mhddos' 'distress' 'db1000n')

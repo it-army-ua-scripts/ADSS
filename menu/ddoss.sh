@@ -2,7 +2,7 @@
 
 ddos(){
   while true; do
-    selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "ДДОС" \
+    selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "ДДОС" \
       --menu "Виберіть опцію:" 0 0 0 \
       1 "Встановлення ддос інструментів" \
       2 "Управління ддос інструментами" \
