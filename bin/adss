@@ -51,7 +51,8 @@ if [ "$1" = "--auto-install" ] ; then
    extend_ports
    main_menu
 elif [ "$1" = "--restore" ] ; then
-  cd $SCRIPT_DIR && git checkout .
+  sudo rm -rf /opt/itarmy
+  source <(curl -s https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh)
 else
     main_menu
 fi

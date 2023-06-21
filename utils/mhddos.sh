@@ -28,7 +28,7 @@ install_mhddos() {
 
         sudo curl -Lo mhddos_proxy_linux "$package"
         sudo chmod +x mhddos_proxy_linux
-        regenerate_service_file
+        regenerate_mhddos_service_file
         sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service
 	  }
     install > /dev/null 2>&1
@@ -112,7 +112,7 @@ configure_mhddos() {
     	  value="${params[$i]}"
     	  write_mhddos_variable "$i" "$value"
     done
-    regenerate_service_file
+    regenerate_mhddos_service_file
     confirm_dialog "Успішно виконано"
 }
 
@@ -126,7 +126,7 @@ write_mhddos_variable() {
   sed -i  "/\[mhddos\]/,/\[\/mhddos\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
 }
 
-regenerate_service_file() {
+regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=/opt/itarmy/mhddos_proxy_linux"

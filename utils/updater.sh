@@ -44,7 +44,7 @@ update_adss() {
   SERVICES=('mhddos' 'distress' 'db1000n')
   for SERVICE in "${!SERVICES[@]}"; do
     source "${SCRIPT_DIR}/utils/${SERVICES[SERVICE]}.sh"
-    regenerate_service_file
+    regenerate_"${SERVICES[SERVICE]}"_service_file
   done
   echo -e "${GREEN}ADSS успішно оновлено${NC}"
 }
