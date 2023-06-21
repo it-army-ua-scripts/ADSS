@@ -1,20 +1,21 @@
 #!/bin/bash
 
 extend_ports() {
-
     port_range_string="net.ipv4.ip_local_port_range=16384 65535"
     specified_file="/etc/sysctl.conf"
 
     if [[ -f "$specified_file" ]]; then
        if [[ $(grep -L "$port_range_string" "$specified_file")  ]]; then
-          echo -e "${GREEN}Розширюємо порти${NC}"
-          sudo bash -c "echo '$port_range_string' >> $specified_file"
-          sudo sysctl -p
-          echo -e "${GREEN}Порти успішно розширено${NC}"
+          extend() {
+            sudo bash -c "echo '$port_range_string' >> $specified_file"
+            sudo sysctl -p
+          }
+          extend  > /dev/null 2>&1
+          confirm_dialog "Порти успішно розширено"
       else
-          echo -e "${GREEN}[Port extending] Необхідна дія вже виконана${NC}"
+         confirm_dialog "Наразі всі порти розширено"
       fi
     else
-      echo -e "${RED}[Port extending] Не можливо виконати дію${NC}"
+      confirm_dialog "Не можливо виконати дію"
     fi
 }

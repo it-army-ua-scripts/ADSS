@@ -1,40 +1,41 @@
 #!/bin/bash
 
 install_distress() {
+    adss_dialog "Встановлюємо Distress"
 
-    cd $SCRIPT_DIR
-    echo -e "${GREEN}Встановлюємо Distress${NC}"
+    install() {
+        cd $SCRIPT_DIR
+        OSARCH=$(uname -m)
+        package=''
+        case "$OSARCH" in
+          aarch64*)
+            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
+          ;;
 
-    OSARCH=$(uname -m)
-    package=''
-    case "$OSARCH" in
-      aarch64*)
-        package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
-      ;;
-	  
-      x86_64*)
-        package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_x86_64-unknown-linux-musl
-      ;;
-	  
-      i386* | i686*)
-        package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_i686-unknown-linux-musl
-      ;;
-	  
-      *)
-        echo "Неможливо визначити розрядность операційної системи";
-        exit 1
-      ;;
-    esac
+          x86_64*)
+            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_x86_64-unknown-linux-musl
+          ;;
 
-	  sudo curl -Lo distress "$package"
-    sudo chmod +x distress
-    regenerate_service_file
-    sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service
+          i386* | i686*)
+            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_i686-unknown-linux-musl
+          ;;
 
-    echo -e "${GREEN}Distress успішно встановлено${NC}"
+          *)
+            confirm_dialog "Неможливо визначити розрядность операційної системи"
+          ;;
+        esac
+
+        sudo curl -Lo distress "$package"
+        sudo chmod +x distress
+        regenerate_service_file
+        sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service
+    }
+    install > /dev/null 2>&1
+    confirm_dialog "Distress успішно встановлено"
 }
 
 configure_distress() {
+    clear
     declare -A params;
 
     echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
@@ -79,7 +80,7 @@ configure_distress() {
     	  write_distress_variable "$i" "$value"
     done
     regenerate_service_file
-    echo -e "${GREEN}Успішно виконано${NC}"
+    confirm_dialog "Успішно виконано"
 }
 
 
@@ -128,40 +129,54 @@ distress_stop() {
 }
 
 distress_get_status() {
+  clear
   sudo systemctl status distress.service
+  echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+  read -s -n 1 key
+  initiate_distress
 }
 
 initiate_distress() {
   if [[ ! -e "/etc/systemd/system/distress.service" ]]; then
-    echo -e "${RED}Distress не встановлений, будь ласка встановіть і спробуйте знову${NC}"
+    confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    menu=(
-            "Запуск Distress"
-            "Зупинка Distress"
-            "Налаштування Distress"
-            "Статус Distress"
-            "Повернутись назад"
-            )
-      init "$menu"
-      menu_result="$?"
-      case "$menu_result" in
-        0)
-            distress_run
-            distress_get_status
-        ;;
-        1)
-            distress_stop
-            distress_get_status
-        ;;
-        2)
-            configure_distress
-        ;;
-        3)
-            distress_get_status
-        ;;
-        4)
-            step4
-        ;;
-      esac
+    while true; do
+          selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "DISTRESS" \
+            --menu "Виберіть опцію:" 0 0 0 \
+            1 "Запуск Distress" \
+            2 "Зупинка Distress" \
+            3 "Налаштування Distress" \
+            4 "Статус Distress" \
+            5 "Повернутись назад")
+
+          exit_status=$?
+          case $exit_status in
+              255 | 1)
+                   clear
+                   echo "Exiting..."
+                   exit 0
+              ;;
+          esac
+
+          case $selection in
+            1)
+              distress_run
+              distress_get_status
+            ;;
+            2)
+              distress_stop
+              distress_get_status
+            ;;
+            3)
+              configure_distress
+            ;;
+            4)
+              distress_get_status
+            ;;
+            5)
+              ddos_tool_managment
+            ;;
+          esac
+    done
   fi
 }
