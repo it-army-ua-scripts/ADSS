@@ -32,6 +32,7 @@ install_db1000n() {
             confirm_dialog "Неможливо визначити розрядность операційної системи"
         ;;
       esac
+      regenerate_db1000n_service_file
       sudo ln -sf  "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service
     }
     install > /dev/null 2>&1
