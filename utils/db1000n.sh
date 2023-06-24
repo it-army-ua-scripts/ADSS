@@ -65,12 +65,12 @@ configure_db1000n() {
 
     params[proxy]=$proxies
 
-    read -e -p "Масштабування (1 | 0): "  -i "$(get_db1000n_variable 'scale')" scale
+    read -e -p "Масштабування (1 | X): "  -i "$(get_db1000n_variable 'scale')" scale
     if [[ -n "$scale" ]];then
-      while [[ "$scale" != "1" && "$scale" != "0" ]]
+      while [[ ! $scale =~ ^[0-9]+$ && "$scale" != "1" ]]
       do
         echo "Будь ласка введіть правильні значення"
-       read -e -p "Масштабування (1 | 0): "  -i "$(get_db1000n_variable 'scale')" scale
+       read -e -p "Масштабування (1 | X): "  -i "$(get_db1000n_variable 'scale')" scale
       done
     fi
 
