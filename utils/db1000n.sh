@@ -128,6 +128,14 @@ db1000n_stop() {
   sudo systemctl stop db1000n.service
 }
 
+db1000n_enable() {
+  sudo systemctl enable db1000n.service
+}
+
+db1000n_disable() {
+  sudo systemctl disable db1000n.service
+}
+
 db1000n_get_status() {
   clear
   sudo systemctl status db1000n.service
@@ -145,9 +153,11 @@ initiate_db1000n() {
               --menu "Виберіть опцію:" 0 0 0 \
               1 "Запуск DB1000N" \
               2 "Зупинка DB1000N" \
-              3 "Налаштування DB1000N" \
-              4 "Статус DB1000N" \
-              5 "Повернутись назад")
+              3 "Увімкнути автозавантаження" \
+              4 "Вимкнути автозавантаження" \
+              5 "Налаштування DB1000N" \
+              6 "Статус DB1000N" \
+              7 "Повернутись назад")
 
             exit_status=$?
             case $exit_status in
@@ -168,12 +178,18 @@ initiate_db1000n() {
                 db1000n_get_status
               ;;
               3)
-                configure_db1000n
+                db1000n_enable
               ;;
               4)
-                db1000n_get_status
+                db1000n_disable
               ;;
               5)
+                configure_db1000n
+              ;;
+              6)
+                db1000n_get_status
+              ;;
+              7)
                 ddos_tool_managment
               ;;
             esac
