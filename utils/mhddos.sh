@@ -193,12 +193,21 @@ initiate_mhddos() {
           mhddos_get_status
         ;;
         3)
-          configure_mhddos
+          if sudo systemctl is-enabled mhddos >/dev/null; then
+            sudo systemctl disable mhddos >/dev/null
+            confirm_dialog "MHDDOS видалено з автозавантаження"
+          else
+            sudo systemctl enable mhddos >/dev/null
+            confirm_dialog "MHDDOS додано в автозавантаження"
+          fi
         ;;
         4)
-          mhddos_get_status
+          configure_mhddos
         ;;
         5)
+          mhddos_get_status
+        ;;
+        6)
           ddos_tool_managment
         ;;
       esac

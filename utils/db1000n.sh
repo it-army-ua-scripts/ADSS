@@ -128,14 +128,6 @@ db1000n_stop() {
   sudo systemctl stop db1000n.service
 }
 
-db1000n_enable() {
-  sudo systemctl enable db1000n.service
-}
-
-db1000n_disable() {
-  sudo systemctl disable db1000n.service
-}
-
 db1000n_get_status() {
   clear
   sudo systemctl status db1000n.service
@@ -169,18 +161,21 @@ initiate_db1000n() {
             db1000n_get_status
           ;;
           3)
-            db1000n_enable
-          ;;
-          4)
-            db1000n_disable
-          ;;
-          5)
-            configure_db1000n
+            if sudo systemctl is-enabled db1000n >/dev/null; then
+              sudo systemctl disable db1000n >/dev/null
+              confirm_dialog "DB1000N видалено з автозавантаження"
+            else
+              sudo systemctl enable db1000n >/dev/null
+              confirm_dialog "DB1000N додано в автозавантаження"
+            fi
           ;;
           6)
-            db1000n_get_status
+            configure_db1000n
           ;;
           7)
+            db1000n_get_status
+          ;;
+          8)
             ddos_tool_managment
           ;;
         esac

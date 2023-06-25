@@ -160,12 +160,21 @@ initiate_distress() {
           distress_get_status
         ;;
         3)
-          configure_distress
+          if sudo systemctl is-enabled distress >/dev/null; then
+            sudo systemctl disable distress >/dev/null
+            confirm_dialog "Distress видалено з автозавантаження"
+          else
+            sudo systemctl enable distress >/dev/null
+            confirm_dialog "Distress додано в автозавантаження"
+          fi
         ;;
         4)
-          distress_get_status
+          configure_distress
         ;;
         5)
+          distress_get_status
+        ;;
+        6)
           ddos_tool_managment
         ;;
       esac
