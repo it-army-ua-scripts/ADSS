@@ -5,7 +5,7 @@ install_mhddos() {
     adss_dialog "Встановлюємо MHDDOS"
 
 	  install() {
-        cd $SCRIPT_DIR
+        cd $TOOL_DIR
         OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
@@ -68,13 +68,12 @@ configure_mhddos() {
     read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
     if [[ -n "$vpn" ]];then
       while [[ $vpn != false && $vpn != true ]]
-        do
+      do
           echo "Будь ласка введіть правильні значення"
           read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
-        done
+      done
+      params[vpn]=$vpn
     fi
-
-    params[vpn]=$vpn
 
     if [[ $vpn == true ]]; then
       read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
@@ -90,7 +89,6 @@ configure_mhddos() {
     else
       params[vpn-percents]=" "
     fi
-
 
     read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
     if [[ -n "$threads" ]];then
@@ -176,23 +174,16 @@ initiate_mhddos() {
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
   else
     while true; do
-      selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "MHDDOS" \
-        --menu "Виберіть опцію:" 0 0 0 \
-        1 "Запуск MHDDOS" \
-        2 "Зупинка MHDDOS" \
-        3 "Налаштування MHDDOS" \
-        4 "Статус MHDDOS" \
-        5 "Повернутись назад")
+      menu_items=("Запуск MHDDOS" "Зупинка MHDDOS")
+      if [[ $(sudo systemctl is-enabled mhddos) ]]; then
+        enabled_disabled="Вимкнути автозавантаження"
+      else
+        enabled_disabled="Увімкнути автозавантаження"
+      fi
+      menu_items+=("$enabled_disabled" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
+      selected_choice=$(display_menu "MHDDOS" "${menu_items[@]}")
 
-      exit_status=$?
-      case $exit_status in
-          255 | 1)
-               clear
-               echo "Exiting..."
-               exit 0
-          ;;
-      esac
-      case $selection in
+      case $selected_choice in
         1)
           mhddos_run
           mhddos_get_status

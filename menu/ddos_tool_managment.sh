@@ -2,23 +2,10 @@
 
 ddos_tool_managment(){
   while true; do
-    selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "Управління ддос інструментами" \
-      --menu "Виберіть опцію:" 0 0 0 \
-      1 "Статус атаки" \
-      2 "Зупинити атаку" \
-      3 "MHDDOS" \
-      4 "DB1000N" \
-      5 "Distress" \
-      6 "Повернутись назад")
-    exit_status=$?
-    case $exit_status in
-        255 | 1)
-             clear
-             echo "Exiting..."
-             exit 0
-        ;;
-    esac
-    case $selection in
+    menu_items=("Статус атаки" "Зупинити атаку" "MHDDOS" "DB1000N" "Distress" "Повернутись назад")
+    selected_choice=$(display_menu "Управління ддос інструментами" "${menu_items[@]}")
+
+    case selected_choice in
       1)
            services=("mhddos" "distress" "db1000n")
             service=""

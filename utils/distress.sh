@@ -4,7 +4,7 @@ install_distress() {
     adss_dialog "Встановлюємо Distress"
 
     install() {
-        cd $SCRIPT_DIR
+        cd $TOOL_DIR
         OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
@@ -140,42 +140,35 @@ initiate_distress() {
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
   else
     while true; do
-          selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "DISTRESS" \
-            --menu "Виберіть опцію:" 0 0 0 \
-            1 "Запуск Distress" \
-            2 "Зупинка Distress" \
-            3 "Налаштування Distress" \
-            4 "Статус Distress" \
-            5 "Повернутись назад")
+      menu_items=("Запуск Distress" "Зупинка Distress")
 
-          exit_status=$?
-          case $exit_status in
-              255 | 1)
-                   clear
-                   echo "Exiting..."
-                   exit 0
-              ;;
-          esac
+      if [[ $(sudo systemctl is-enabled distress) ]]; then
+        enabled_disabled="Вимкнути автозавантаження"
+      else
+        enabled_disabled="Увімкнути автозавантаження"
+      fi
+      $menu_items+=("$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
+      selected_choice=$(display_menu "Distress" "${menu_items[@]}")
 
-          case $selection in
-            1)
-              distress_run
-              distress_get_status
-            ;;
-            2)
-              distress_stop
-              distress_get_status
-            ;;
-            3)
-              configure_distress
-            ;;
-            4)
-              distress_get_status
-            ;;
-            5)
-              ddos_tool_managment
-            ;;
-          esac
+      case $selected_choice in
+        1)
+          distress_run
+          distress_get_status
+        ;;
+        2)
+          distress_stop
+          distress_get_status
+        ;;
+        3)
+          configure_distress
+        ;;
+        4)
+          distress_get_status
+        ;;
+        5)
+          ddos_tool_managment
+        ;;
+      esac
     done
   fi
 }

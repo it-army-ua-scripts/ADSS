@@ -2,21 +2,10 @@
 
 main_menu() {
     while true; do
-      selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "Головне меню" \
-        --menu "Виберіть опцію:" 0 0 0 \
-        1 "Встановити докер" \
-        2 "Розширення портів" \
-        3 "Налаштування безпеки" \
-        4 "ДДОС")
-      exit_status=$?
-      case $exit_status in
-          255 | 1)
-               clear
-               echo "Exiting..."
-               exit 0
-          ;;
-      esac
-      case $selection in
+      menu_items=("Встановити докер" "Розширення портів" "Налаштування безпеки" "ДДОС")
+      selected_choice=$(display_menu "Головне меню" "${menu_items[@]}")
+
+      case "$selected_choice" in
         1)
           install_docker
         ;;
@@ -28,6 +17,11 @@ main_menu() {
         ;;
         4)
           ddos
+        ;;
+        *)
+           clear
+           echo "Exiting..."
+           exit 1
         ;;
       esac
     done

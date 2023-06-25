@@ -3,7 +3,7 @@
 install_db1000n() {
     adss_dialog "Встановлюємо DB1000N"
     install() {
-      cd $SCRIPT_DIR
+      cd $TOOL_DIR
       OSARCH=$(uname -m)
 
       case "$OSARCH" in
@@ -149,50 +149,41 @@ initiate_db1000n() {
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
   else
       while true; do
-            selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "DB1000N" \
-              --menu "Виберіть опцію:" 0 0 0 \
-              1 "Запуск DB1000N" \
-              2 "Зупинка DB1000N" \
-              3 "Увімкнути автозавантаження" \
-              4 "Вимкнути автозавантаження" \
-              5 "Налаштування DB1000N" \
-              6 "Статус DB1000N" \
-              7 "Повернутись назад")
+        menu_items=("Запуск DB1000N" "Зупинка DB1000N")
 
-            exit_status=$?
-            case $exit_status in
-                255 | 1)
-                     clear
-                     echo "Exiting..."
-                     exit 0
-                ;;
-            esac
+        if [[ $(sudo systemctl is-enabled db1000n) ]]; then
+          enabled_disabled="Вимкнути автозавантаження"
+        else
+          enabled_disabled="Увімкнути автозавантаження"
+        fi
+        menu_items+=("$enabled_disabled" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
+        selected_choice=$(display_menu "DB1000N" "${menu_items[@]}")
 
-            case $selection in
-              1)
-                db1000n_run
-                db1000n_get_status
-              ;;
-              2)
-                db1000n_stop
-                db1000n_get_status
-              ;;
-              3)
-                db1000n_enable
-              ;;
-              4)
-                db1000n_disable
-              ;;
-              5)
-                configure_db1000n
-              ;;
-              6)
-                db1000n_get_status
-              ;;
-              7)
-                ddos_tool_managment
-              ;;
-            esac
+        case $selected_choice in
+          1)
+            db1000n_run
+            db1000n_get_status
+          ;;
+          2)
+            db1000n_stop
+            db1000n_get_status
+          ;;
+          3)
+            db1000n_enable
+          ;;
+          4)
+            db1000n_disable
+          ;;
+          5)
+            configure_db1000n
+          ;;
+          6)
+            db1000n_get_status
+          ;;
+          7)
+            ddos_tool_managment
+          ;;
+        esac
       done
   fi
 }
