@@ -2,8 +2,8 @@
 
 main_menu() {
   menu_items=("Встановити докер" "Розширення портів" "Налаштування безпеки" "ДДОС")
-  selected_choice=$(display_menu "Головне меню" "${menu_items[@]}")
-  case "$selected_choice" in
+  display_menu "Головне меню" "${menu_items[@]}"
+  case $? in
     1)
       install_docker
       main_menu
@@ -17,11 +17,6 @@ main_menu() {
     ;;
     4)
       ddos
-    ;;
-    '')
-       clear
-       echo "Exiting..."
-       exit 0
     ;;
   esac
 }

@@ -182,9 +182,9 @@ initiate_mhddos() {
         enabled_disabled="Увімкнути автозавантаження"
       fi
       menu_items+=("$enabled_disabled" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
-      selected_choice=$(display_menu "MHDDOS" "${menu_items[@]}")
+      display_menu "MHDDOS" "${menu_items[@]}"
 
-      case $selected_choice in
+      case $? in
         1)
           mhddos_run
           mhddos_get_status

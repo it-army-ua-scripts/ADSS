@@ -148,9 +148,9 @@ initiate_db1000n() {
           enabled_disabled="Увімкнути автозавантаження"
         fi
         menu_items+=("$enabled_disabled" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
-        selected_choice=$(display_menu "DB1000N" "${menu_items[@]}")
+        display_menu "DB1000N" "${menu_items[@]}"
 
-        case $selected_choice in
+        case $? in
           1)
             db1000n_run
             db1000n_get_status

@@ -2,9 +2,9 @@
 
 security_settings() {
   menu_items=("Встановлення захисту" "Налаштування захисту" "Повернутись назад")
-  selected_choice=$(display_menu "Налаштування безпеки" "${menu_items[@]}")
+  display_menu "Налаштування безпеки" "${menu_items[@]}"
 
-  case $selected_choice in
+  case $? in
     1)
       install_ufw
       install_fail2ban

@@ -12,5 +12,10 @@ display_menu() {
     local selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "$title" \
             --menu "Виберіть опцію:" 0 0 0 "${dialog_args[@]}")
 
-    echo "$selection"
+    if [[ -z "$selection" ]]; then
+         clear
+         echo "Exiting..."
+         exit 0
+    fi
+    return "$selection"
 }

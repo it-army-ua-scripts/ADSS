@@ -10,7 +10,7 @@ check_enabled() {
       break
     fi
   done
-  echo "$stop_service"
+  return "$stop_service"
 }
 
 stop_services() {
@@ -24,16 +24,16 @@ stop_services() {
 ddos_tool_managment(){
     menu_items=("Статус атаки")
     enabled_tool=$(check_enabled)
-    if [[ "$enabled_tool" ]]; then
+    if [[ "$enabled_tool" == true ]]; then
       menu_items+=("Зупинити атаку")
     fi
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
-    selected_choice=$(display_menu "Управління ддос інструментами" "${menu_items[@]}")
-    if [[ "$enabled_tool" && "$selected_choice" == 2 ]]; then
+    display_menu "Управління ддос інструментами" "${menu_items[@]}"
+    if [[ "$enabled_tool" && "$?" == 2 ]]; then
        stop_services
        ddos_tool_managment
     fi
-    case $selected_choice in
+    case $? in
       1)
            services=("mhddos" "distress" "db1000n")
            service=""

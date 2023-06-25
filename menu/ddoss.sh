@@ -2,9 +2,9 @@
 
 ddos(){
     menu_items=("Встановлення ддос інструментів" "Управління ддос інструментами" "Повернутись назад")
-    selected_choice=$(display_menu "ДДОС" "${menu_items[@]}")
+    display_menu "ДДОС" "${menu_items[@]}"
 
-    case $selected_choice in
+    case $? in
       1)
         clear
         echo -ne "

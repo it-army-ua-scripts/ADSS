@@ -2,9 +2,9 @@
 
 security_configuration() {
   menu_items=("Налаштування фаєвола" "Налаштування захисту від брутфорса" "Повернутись назад")
-  selected_choice=$(display_menu "Налаштування захисту" "${menu_items[@]}")
+  display_menu "Налаштування захисту" "${menu_items[@]}"
 
-  case $selected_choice in
+  case $? in
     1)
       configure_ufw
       security_configuration
