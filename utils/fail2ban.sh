@@ -43,7 +43,7 @@ configure_fail2ban(){
   if [[ ! -e "/etc/fail2ban" ]]; then
     confirm_dialog "Fail2ban не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    confirm_dialog "Налаштовуємо Fail2ban"
+    adss_dialog "Налаштовуємо Fail2ban"
     configure() {
         sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
             sudo bash -c "echo '
