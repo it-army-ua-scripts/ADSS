@@ -5,7 +5,7 @@ ddos_tool_managment(){
     menu_items=("Статус атаки" "Зупинити атаку" "MHDDOS" "DB1000N" "Distress" "Повернутись назад")
     selected_choice=$(display_menu "Управління ддос інструментами" "${menu_items[@]}")
 
-    case selected_choice in
+    case $selected_choice in
       1)
            services=("mhddos" "distress" "db1000n")
             service=""
