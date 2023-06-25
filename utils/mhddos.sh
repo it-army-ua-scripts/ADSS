@@ -175,7 +175,7 @@ initiate_mhddos() {
   else
     while true; do
       menu_items=("Запуск MHDDOS" "Зупинка MHDDOS")
-      if [[ $(sudo systemctl is-enabled mhddos) ]]; then
+      if sudo systemctl is-enabled mhddos >/dev/null; then
         enabled_disabled="Вимкнути автозавантаження"
       else
         enabled_disabled="Увімкнути автозавантаження"

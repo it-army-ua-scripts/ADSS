@@ -142,7 +142,7 @@ initiate_distress() {
     while true; do
       menu_items=("Запуск Distress" "Зупинка Distress")
 
-      if [[ $(sudo systemctl is-enabled distress) ]]; then
+      if sudo systemctl is-enabled distress >/dev/null; then
         enabled_disabled="Вимкнути автозавантаження"
       else
         enabled_disabled="Увімкнути автозавантаження"

@@ -151,7 +151,7 @@ initiate_db1000n() {
       while true; do
         menu_items=("Запуск DB1000N" "Зупинка DB1000N")
 
-        if [[ $(sudo systemctl is-enabled db1000n) ]]; then
+        if sudo systemctl is-enabled db1000n >/dev/null; then
           enabled_disabled="Вимкнути автозавантаження"
         else
           enabled_disabled="Увімкнути автозавантаження"
