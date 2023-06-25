@@ -169,13 +169,13 @@ initiate_db1000n() {
               confirm_dialog "DB1000N додано в автозавантаження"
             fi
           ;;
-          6)
+          4)
             configure_db1000n
           ;;
-          7)
+          5)
             db1000n_get_status
           ;;
-          8)
+          6)
             ddos_tool_managment
           ;;
         esac
