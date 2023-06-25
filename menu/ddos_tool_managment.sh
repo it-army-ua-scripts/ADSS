@@ -1,14 +1,42 @@
 #!/bin/bash
 
-ddos_tool_managment(){
-  while true; do
-    menu_items=("Статус атаки" "Зупинити атаку" "MHDDOS" "DB1000N" "Distress" "Повернутись назад")
-    selected_choice=$(display_menu "Управління ддос інструментами" "${menu_items[@]}")
+check_enabled() {
+  services=("mhddos" "distress" "db1000n")
+  stop_service=false
+  for service in "${services[@]}"
+  do
+    if sudo systemctl is-active "$service" >/dev/nul; then
+      stop_service=true
+      break
+    fi
+  done
+  echo "$stop_service"
+}
 
+stop_services() {
+  adss_dialog "Зупиняємо атаку"
+  sudo systemctl stop distress.service
+  sudo systemctl stop db1000n.service
+  sudo systemctl stop mhddos.service
+  confirm_dialog "Атака зупинена"
+}
+
+ddos_tool_managment(){
+    menu_items=("Статус атаки")
+    enabled_tool=$(check_enabled)
+    if [[ "$enabled_tool" ]]; then
+      menu_items+=("Зупинити атаку")
+    fi
+    menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
+    selected_choice=$(display_menu "Управління ддос інструментами" "${menu_items[@]}")
+    if [[ "$enabled_tool" && "$selected_choice" == 2 ]]; then
+       stop_services
+       ddos_tool_managment
+    fi
     case $selected_choice in
       1)
            services=("mhddos" "distress" "db1000n")
-            service=""
+           service=""
 
             for element in "${services[@]}"
             do
@@ -33,13 +61,7 @@ ddos_tool_managment(){
             else
                confirm_dialog "Немає запущених процесів"
             fi
-      ;;
-      2)
-          adss_dialog "Зупиняємо атаку"
-          sudo systemctl stop distress.service
-          sudo systemctl stop db1000n.service
-          sudo systemctl stop mhddos.service
-          confirm_dialog "Атака зупинена"
+            ddos_tool_managment
       ;;
       3)
         initiate_mhddos
@@ -54,5 +76,4 @@ ddos_tool_managment(){
         ddos
       ;;
     esac
-  done
 }

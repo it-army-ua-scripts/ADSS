@@ -140,7 +140,6 @@ initiate_db1000n() {
   if [[ ! -e "/etc/systemd/system/db1000n.service" ]]; then
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
   else
-      while true; do
         menu_items=("Запуск DB1000N" "Зупинка DB1000N")
 
         if sudo systemctl is-enabled db1000n >/dev/null; then
@@ -168,9 +167,11 @@ initiate_db1000n() {
               sudo systemctl enable db1000n >/dev/null
               confirm_dialog "DB1000N додано в автозавантаження"
             fi
+            initiate_db1000n
           ;;
           4)
             configure_db1000n
+            initiate_db1000n
           ;;
           5)
             db1000n_get_status
@@ -179,6 +180,5 @@ initiate_db1000n() {
             ddos_tool_managment
           ;;
         esac
-      done
   fi
 }

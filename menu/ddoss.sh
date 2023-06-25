@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ddos(){
-  while true; do
     menu_items=("Встановлення ддос інструментів" "Управління ддос інструментами" "Повернутись назад")
     selected_choice=$(display_menu "ДДОС" "${menu_items[@]}")
 
@@ -20,6 +19,7 @@ ddos(){
         install_mhddos
         install_db1000n
         install_distress
+        ddos
       ;;
       2)
         ddos_tool_managment
@@ -28,5 +28,4 @@ ddos(){
         main_menu
       ;;
     esac
-  done
 }

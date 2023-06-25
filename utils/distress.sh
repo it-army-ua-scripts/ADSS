@@ -139,7 +139,6 @@ initiate_distress() {
   if [[ ! -e "/etc/systemd/system/distress.service" ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    while true; do
       menu_items=("Запуск Distress" "Зупинка Distress")
 
       if sudo systemctl is-enabled distress >/dev/null; then
@@ -167,9 +166,11 @@ initiate_distress() {
             sudo systemctl enable distress >/dev/null
             confirm_dialog "Distress додано в автозавантаження"
           fi
+          initiate_distress
         ;;
         4)
           configure_distress
+          initiate_distress
         ;;
         5)
           distress_get_status
@@ -178,6 +179,5 @@ initiate_distress() {
           ddos_tool_managment
         ;;
       esac
-    done
   fi
 }

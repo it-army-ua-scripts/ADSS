@@ -72,7 +72,9 @@ configure_mhddos() {
           echo "Будь ласка введіть правильні значення"
           read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
       done
-      params[vpn]=$vpn
+      if [[ $vpn == true ]]; then
+        params[vpn]=" "
+      fi
     fi
 
     if [[ $vpn == true ]]; then
@@ -173,7 +175,6 @@ initiate_mhddos() {
   if [[ ! -e "/etc/systemd/system/mhddos.service" ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    while true; do
       menu_items=("Запуск MHDDOS" "Зупинка MHDDOS")
       if sudo systemctl is-enabled mhddos >/dev/null; then
         enabled_disabled="Вимкнути автозавантаження"
@@ -200,9 +201,11 @@ initiate_mhddos() {
             sudo systemctl enable mhddos >/dev/null
             confirm_dialog "MHDDOS додано в автозавантаження"
           fi
+          initiate_mhddos
         ;;
         4)
           configure_mhddos
+          initiate_mhddos
         ;;
         5)
           mhddos_get_status
@@ -211,6 +214,5 @@ initiate_mhddos() {
           ddos_tool_managment
         ;;
       esac
-    done
   fi
 }
