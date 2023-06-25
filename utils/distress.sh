@@ -147,7 +147,7 @@ initiate_distress() {
       else
         enabled_disabled="Увімкнути автозавантаження"
       fi
-      $menu_items+=("$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
+      menu_items+=("$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
       selected_choice=$(display_menu "Distress" "${menu_items[@]}")
 
       case $selected_choice in
