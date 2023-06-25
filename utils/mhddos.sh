@@ -127,7 +127,7 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/mhddos_proxy_linux"
+  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
 
   while read -r line
   do

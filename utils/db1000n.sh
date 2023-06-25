@@ -97,7 +97,7 @@ write_db1000n_variable() {
 regenerate_db1000n_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/db1000n"
+  start="ExecStart=/opt/itarmy/bin/db1000n"
 
   while read -r line
   do

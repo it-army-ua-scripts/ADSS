@@ -96,7 +96,7 @@ write_distress_variable() {
 regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/distress"
+  start="ExecStart=/opt/itarmy/bin/distress"
 
   while read -r line
   do
