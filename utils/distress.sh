@@ -4,7 +4,7 @@ install_distress() {
     adss_dialog "Встановлюємо Distress"
 
     install() {
-        cd $SCRIPT_DIR
+        cd $TOOL_DIR
         OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
@@ -27,7 +27,7 @@ install_distress() {
 
         sudo curl -Lo distress "$package"
         sudo chmod +x distress
-        regenerate_service_file
+        regenerate_distress_service_file
         sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service
     }
     install > /dev/null 2>&1
@@ -79,15 +79,24 @@ configure_distress() {
     	  value="${params[$i]}"
     	  write_distress_variable "$i" "$value"
     done
-    regenerate_service_file
+    regenerate_distress_service_file
     confirm_dialog "Успішно виконано"
 }
 
+get_distress_variable() {
+  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
+}
 
-regenerate_service_file() {
-  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
+write_distress_variable() {
+  sed -i "/\[distress\]/,/\[\/distress\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
+}
 
-  start="ExecStart=/opt/itarmy/distress"
+regenerate_distress_service_file() {
+  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+
+  start="ExecStart=/opt/itarmy/bin/distress"
 
   while read -r line
   do
@@ -103,19 +112,9 @@ regenerate_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" ${SCRIPT_DIR}/services/distress.service
+  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/distress.service
 
   sudo systemctl daemon-reload
-}
-
-get_distress_variable() {
-  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
-  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
-  echo "$variable"
-}
-
-write_distress_variable() {
-  sed -i "/\[distress\]/,/\[\/distress\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
 }
 
 distress_run() {
@@ -140,43 +139,45 @@ initiate_distress() {
   if [[ ! -e "/etc/systemd/system/distress.service" ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    while true; do
-          selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "DISTRESS" \
-            --menu "Виберіть опцію:" 0 0 0 \
-            1 "Запуск Distress" \
-            2 "Зупинка Distress" \
-            3 "Налаштування Distress" \
-            4 "Статус Distress" \
-            5 "Повернутись назад")
+      menu_items=("Запуск Distress" "Зупинка Distress")
 
-          exit_status=$?
-          case $exit_status in
-              255 | 1)
-                   clear
-                   echo "Exiting..."
-                   exit 0
-              ;;
-          esac
+      if sudo systemctl is-enabled distress >/dev/null; then
+        enabled_disabled="Вимкнути автозавантаження"
+      else
+        enabled_disabled="Увімкнути автозавантаження"
+      fi
+      menu_items+=("$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
+      display_menu "Distress" "${menu_items[@]}"
 
-          case $selection in
-            1)
-              distress_run
-              distress_get_status
-            ;;
-            2)
-              distress_stop
-              distress_get_status
-            ;;
-            3)
-              configure_distress
-            ;;
-            4)
-              distress_get_status
-            ;;
-            5)
-              ddos_tool_managment
-            ;;
-          esac
-    done
+      case $? in
+        1)
+          distress_run
+          distress_get_status
+        ;;
+        2)
+          distress_stop
+          distress_get_status
+        ;;
+        3)
+          if sudo systemctl is-enabled distress >/dev/null; then
+            sudo systemctl disable distress >/dev/null
+            confirm_dialog "Distress видалено з автозавантаження"
+          else
+            sudo systemctl enable distress >/dev/null
+            confirm_dialog "Distress додано в автозавантаження"
+          fi
+          initiate_distress
+        ;;
+        4)
+          configure_distress
+          initiate_distress
+        ;;
+        5)
+          distress_get_status
+        ;;
+        6)
+          ddos_tool_managment
+        ;;
+      esac
   fi
 }

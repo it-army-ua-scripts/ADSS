@@ -5,7 +5,7 @@ install_mhddos() {
     adss_dialog "Встановлюємо MHDDOS"
 
 	  install() {
-        cd $SCRIPT_DIR
+        cd $TOOL_DIR
         OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
@@ -28,7 +28,7 @@ install_mhddos() {
 
         sudo curl -Lo mhddos_proxy_linux "$package"
         sudo chmod +x mhddos_proxy_linux
-        regenerate_service_file
+        regenerate_mhddos_service_file
         sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service
 	  }
     install > /dev/null 2>&1
@@ -68,13 +68,14 @@ configure_mhddos() {
     read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
     if [[ -n "$vpn" ]];then
       while [[ $vpn != false && $vpn != true ]]
-        do
+      do
           echo "Будь ласка введіть правильні значення"
           read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
-        done
+      done
+      if [[ $vpn == true ]]; then
+        params[vpn]=" "
+      fi
     fi
-
-    params[vpn]=$vpn
 
     if [[ $vpn == true ]]; then
       read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
@@ -90,7 +91,6 @@ configure_mhddos() {
     else
       params[vpn-percents]=" "
     fi
-
 
     read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
     if [[ -n "$threads" ]];then
@@ -112,7 +112,7 @@ configure_mhddos() {
     	  value="${params[$i]}"
     	  write_mhddos_variable "$i" "$value"
     done
-    regenerate_service_file
+    regenerate_mhddos_service_file
     confirm_dialog "Успішно виконано"
 }
 
@@ -126,10 +126,10 @@ write_mhddos_variable() {
   sed -i  "/\[mhddos\]/,/\[\/mhddos\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
 }
 
-regenerate_service_file() {
+regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/mhddos_proxy_linux"
+  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
 
   while read -r line
   do
@@ -175,24 +175,16 @@ initiate_mhddos() {
   if [[ ! -e "/etc/systemd/system/mhddos.service" ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
   else
-    while true; do
-      selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "MHDDOS" \
-        --menu "Виберіть опцію:" 0 0 0 \
-        1 "Запуск MHDDOS" \
-        2 "Зупинка MHDDOS" \
-        3 "Налаштування MHDDOS" \
-        4 "Статус MHDDOS" \
-        5 "Повернутись назад")
+      menu_items=("Запуск MHDDOS" "Зупинка MHDDOS")
+      if sudo systemctl is-enabled mhddos >/dev/null; then
+        enabled_disabled="Вимкнути автозавантаження"
+      else
+        enabled_disabled="Увімкнути автозавантаження"
+      fi
+      menu_items+=("$enabled_disabled" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
+      display_menu "MHDDOS" "${menu_items[@]}"
 
-      exit_status=$?
-      case $exit_status in
-          255 | 1)
-               clear
-               echo "Exiting..."
-               exit 0
-          ;;
-      esac
-      case $selection in
+      case $? in
         1)
           mhddos_run
           mhddos_get_status
@@ -202,15 +194,25 @@ initiate_mhddos() {
           mhddos_get_status
         ;;
         3)
-          configure_mhddos
+          if sudo systemctl is-enabled mhddos >/dev/null; then
+            sudo systemctl disable mhddos >/dev/null
+            confirm_dialog "MHDDOS видалено з автозавантаження"
+          else
+            sudo systemctl enable mhddos >/dev/null
+            confirm_dialog "MHDDOS додано в автозавантаження"
+          fi
+          initiate_mhddos
         ;;
         4)
-          mhddos_get_status
+          configure_mhddos
+          initiate_mhddos
         ;;
         5)
+          mhddos_get_status
+        ;;
+        6)
           ddos_tool_managment
         ;;
       esac
-    done
   fi
 }

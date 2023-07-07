@@ -1,27 +1,42 @@
 #!/bin/bash
 
+check_enabled() {
+  services=("mhddos" "distress" "db1000n")
+  stop_service=false
+  for service in "${services[@]}"
+  do
+    if sudo systemctl is-active "$service" >/dev/nul; then
+      stop_service=true
+      break
+    fi
+  done
+  return "$stop_service"
+}
+
+stop_services() {
+  adss_dialog "Зупиняємо атаку"
+  sudo systemctl stop distress.service
+  sudo systemctl stop db1000n.service
+  sudo systemctl stop mhddos.service
+  confirm_dialog "Атака зупинена"
+}
+
 ddos_tool_managment(){
-  while true; do
-    selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "Управління ддос інструментами" \
-      --menu "Виберіть опцію:" 0 0 0 \
-      1 "Статус атаки" \
-      2 "Зупинити атаку" \
-      3 "MHDDOS" \
-      4 "DB1000N" \
-      5 "Distress" \
-      6 "Повернутись назад")
-    exit_status=$?
-    case $exit_status in
-        255 | 1)
-             clear
-             echo "Exiting..."
-             exit 0
-        ;;
-    esac
-    case $selection in
+    menu_items=("Статус атаки")
+    enabled_tool=$(check_enabled)
+    if [[ "$enabled_tool" == true ]]; then
+      menu_items+=("Зупинити атаку")
+    fi
+    menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
+    display_menu "Управління ддос інструментами" "${menu_items[@]}"
+    if [[ "$enabled_tool" && "$?" == 2 ]]; then
+       stop_services
+       ddos_tool_managment
+    fi
+    case $? in
       1)
            services=("mhddos" "distress" "db1000n")
-            service=""
+           service=""
 
             for element in "${services[@]}"
             do
@@ -46,13 +61,7 @@ ddos_tool_managment(){
             else
                confirm_dialog "Немає запущених процесів"
             fi
-      ;;
-      2)
-          adss_dialog "Зупиняємо атаку"
-          sudo systemctl stop distress.service
-          sudo systemctl stop db1000n.service
-          sudo systemctl stop mhddos.service
-          confirm_dialog "Атака зупинена"
+            ddos_tool_managment
       ;;
       3)
         initiate_mhddos
@@ -67,5 +76,4 @@ ddos_tool_managment(){
         ddos
       ;;
     esac
-  done
 }

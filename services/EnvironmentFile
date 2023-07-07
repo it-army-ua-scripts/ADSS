@@ -17,7 +17,7 @@ concurrency=4096
 
 [db1000n]
 user-id=
-enable-self-update=
-proxy=0
+enable-self-update=1
+proxy=
 scale=1
 [/db1000n]

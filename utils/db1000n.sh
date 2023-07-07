@@ -3,7 +3,7 @@
 install_db1000n() {
     adss_dialog "Встановлюємо DB1000N"
     install() {
-      cd $SCRIPT_DIR
+      cd $TOOL_DIR
       OSARCH=$(uname -m)
 
       case "$OSARCH" in
@@ -32,6 +32,7 @@ install_db1000n() {
             confirm_dialog "Неможливо визначити розрядность операційної системи"
         ;;
       esac
+      regenerate_db1000n_service_file
       sudo ln -sf  "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service
     }
     install > /dev/null 2>&1
@@ -64,12 +65,12 @@ configure_db1000n() {
 
     params[proxy]=$proxies
 
-    read -e -p "Масштабування (1 | 0): "  -i "$(get_db1000n_variable 'scale')" scale
+    read -e -p "Масштабування (1 | X): "  -i "$(get_db1000n_variable 'scale')" scale
     if [[ -n "$scale" ]];then
-      while [[ "$scale" != "1" && "$scale" != "0" ]]
+      while [[ ! $scale =~ ^[0-9]+$ && "$scale" != "1" ]]
       do
         echo "Будь ласка введіть правильні значення"
-       read -e -p "Масштабування (1 | 0): "  -i "$(get_db1000n_variable 'scale')" scale
+       read -e -p "Масштабування (1 | X): "  -i "$(get_db1000n_variable 'scale')" scale
       done
     fi
 
@@ -79,14 +80,24 @@ configure_db1000n() {
     	  value="${params[$i]}"
         write_db1000n_variable "$i" "$value"
     done
-    regenerate_service_file
+    regenerate_db1000n_service_file
     confirm_dialog "Успішно виконано"
 }
 
-regenerate_service_file() {
-  lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
+get_db1000n_variable() {
+  lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
+}
 
-  start="ExecStart=/opt/itarmy/db1000n"
+write_db1000n_variable() {
+  sed -i "/\[db1000n\]/,/\[\/db1000n\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
+}
+
+regenerate_db1000n_service_file() {
+  lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+
+  start="ExecStart=/opt/itarmy/bin/db1000n"
 
   while read -r line
   do
@@ -102,19 +113,9 @@ regenerate_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" ${SCRIPT_DIR}/services/db1000n.service
+  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/db1000n.service
 
   sudo systemctl daemon-reload
-}
-
-get_db1000n_variable() {
-  lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" ${SCRIPT_DIR}/services/EnvironmentFile)
-  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
-  echo "$variable"
-}
-
-write_db1000n_variable() {
-  sed -i "/\[db1000n\]/,/\[\/db1000n\]/s/$1=.*/$1=$2/g" ${SCRIPT_DIR}/services/EnvironmentFile
 }
 
 db1000n_run() {
@@ -139,43 +140,45 @@ initiate_db1000n() {
   if [[ ! -e "/etc/systemd/system/db1000n.service" ]]; then
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
   else
-      while true; do
-            selection=$(dialog --clear --stdout --cancel-label "Вихід" --title "DB1000N" \
-              --menu "Виберіть опцію:" 0 0 0 \
-              1 "Запуск DB1000N" \
-              2 "Зупинка DB1000N" \
-              3 "Налаштування DB1000N" \
-              4 "Статус DB1000N" \
-              5 "Повернутись назад")
+        menu_items=("Запуск DB1000N" "Зупинка DB1000N")
 
-            exit_status=$?
-            case $exit_status in
-                255 | 1)
-                     clear
-                     echo "Exiting..."
-                     exit 0
-                ;;
-            esac
+        if sudo systemctl is-enabled db1000n >/dev/null; then
+          enabled_disabled="Вимкнути автозавантаження"
+        else
+          enabled_disabled="Увімкнути автозавантаження"
+        fi
+        menu_items+=("$enabled_disabled" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
+        display_menu "DB1000N" "${menu_items[@]}"
 
-            case $selection in
-              1)
-                db1000n_run
-                db1000n_get_status
-              ;;
-              2)
-                db1000n_stop
-                db1000n_get_status
-              ;;
-              3)
-                configure_db1000n
-              ;;
-              4)
-                db1000n_get_status
-              ;;
-              5)
-                ddos_tool_managment
-              ;;
-            esac
-      done
+        case $? in
+          1)
+            db1000n_run
+            db1000n_get_status
+          ;;
+          2)
+            db1000n_stop
+            db1000n_get_status
+          ;;
+          3)
+            if sudo systemctl is-enabled db1000n >/dev/null; then
+              sudo systemctl disable db1000n >/dev/null
+              confirm_dialog "DB1000N видалено з автозавантаження"
+            else
+              sudo systemctl enable db1000n >/dev/null
+              confirm_dialog "DB1000N додано в автозавантаження"
+            fi
+            initiate_db1000n
+          ;;
+          4)
+            configure_db1000n
+            initiate_db1000n
+          ;;
+          5)
+            db1000n_get_status
+          ;;
+          6)
+            ddos_tool_managment
+          ;;
+        esac
   fi
 }
