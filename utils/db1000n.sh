@@ -129,8 +129,8 @@ db1000n_stop() {
   sudo systemctl stop db1000n.service
 }
 db1000n_auto_enable() {
-  sudo systemctl disable mhddos.service
-  sudo systemctl disable distress.service
+  sudo systemctl disable mhddos.service >/dev/null
+  sudo systemctl disable distress.service >/dev/null
   sudo systemctl enable db1000n >/dev/null
 }
 

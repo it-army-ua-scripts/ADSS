@@ -125,8 +125,8 @@ distress_run() {
 }
 
 distress_auto_enable() {
-  sudo systemctl disable mhddos.service
-  sudo systemctl disable db1000n.service
+  sudo systemctl disable mhddos.service >/dev/null
+  sudo systemctl disable db1000n.service >/dev/null
   sudo systemctl enable distress >/dev/null
 }
 
