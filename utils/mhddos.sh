@@ -174,6 +174,7 @@ mhddos_get_status() {
 initiate_mhddos() {
   if [[ ! -e "/etc/systemd/system/mhddos.service" ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
+    ddos_tool_managment
   else
       menu_items=("Запуск MHDDOS" "Зупинка MHDDOS")
       if sudo systemctl is-enabled mhddos >/dev/null; then
