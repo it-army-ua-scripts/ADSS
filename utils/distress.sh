@@ -29,7 +29,7 @@ install_distress() {
         sudo curl -Lo distress "$package"
         sudo chmod +x distress
         regenerate_distress_service_file
-        sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service
+        create_symlink
     }
     install > /dev/null 2>&1
     confirm_dialog "Distress успішно встановлено"
@@ -125,6 +125,7 @@ distress_run() {
 }
 
 distress_auto_enable() {
+  create_symlink
   sudo systemctl disable mhddos.service >/dev/null 2>&1
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable distress >/dev/null 2>&1
@@ -168,6 +169,7 @@ initiate_distress() {
         ;;
         3)
           if sudo systemctl is-enabled distress >/dev/null 2>&1; then
+            create_symlink
             sudo systemctl disable distress >/dev/null 2>&1
             confirm_dialog "Distress видалено з автозавантаження"
           else

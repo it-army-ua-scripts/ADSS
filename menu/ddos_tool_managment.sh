@@ -13,6 +13,20 @@ check_enabled() {
   return "$stop_service"
 }
 
+create_symlink() {
+  if [ ! -L "/etc/systemd/system/mhddos.service" ]; then
+    sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service >/dev/null 2>&1
+  fi
+
+  if [ ! -L "/etc/systemd/system/distress.service" ]; then
+      sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service >/dev/null 2>&1
+  fi
+
+  if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
+    sudo ln -sf  "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
+  fi
+}
+
 stop_services() {
   adss_dialog "Зупиняємо атаку"
   sudo systemctl stop distress.service >/dev/null

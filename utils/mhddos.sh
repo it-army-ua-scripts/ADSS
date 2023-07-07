@@ -29,7 +29,7 @@ install_mhddos() {
         sudo curl -Lo mhddos_proxy_linux "$package"
         sudo chmod +x mhddos_proxy_linux
         regenerate_mhddos_service_file
-        sudo ln -sf  "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service
+        create_symlink
 	  }
     install > /dev/null 2>&1
     confirm_dialog "MHDDOS успішно встановлено"
@@ -157,12 +157,14 @@ mhddos_run() {
 }
 
 mhddos_auto_enable() {
+  create_symlink
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable mhddos.service >/dev/null 2>&1
 }
 
 mhddos_stop() {
+  create_mhddos_symlink
   sudo systemctl stop mhddos.service >/dev/null 2>&1
 }
 
@@ -198,6 +200,7 @@ initiate_mhddos() {
         ;;
         3)
           if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
+            create_symlink
             sudo systemctl disable mhddos >/dev/null 2>&1
             confirm_dialog "MHDDOS видалено з  автозавантаження"
           else

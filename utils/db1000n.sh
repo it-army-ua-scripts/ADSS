@@ -34,7 +34,7 @@ install_db1000n() {
         ;;
       esac
       regenerate_db1000n_service_file
-      sudo ln -sf  "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service
+      create_symlink
     }
     install > /dev/null 2>&1
     confirm_dialog "DB1000N успішно встановлено"
@@ -129,6 +129,7 @@ db1000n_stop() {
   sudo systemctl stop db1000n.service >/dev/null 2>&1
 }
 db1000n_auto_enable() {
+  create_symlink
   sudo systemctl disable mhddos.service >/dev/null 2>&1
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl enable db1000n >/dev/null 2>&1
@@ -168,6 +169,7 @@ initiate_db1000n() {
           ;;
           3)
             if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
+              create_symlink
               sudo systemctl disable db1000n >/dev/null 2>&1
               confirm_dialog "DB1000N видалено з автозавантаження"
             else
