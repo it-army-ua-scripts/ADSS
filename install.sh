@@ -26,6 +26,7 @@ if [ -r /etc/os-release ]; then
 	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog' 'bc')
           sudo "$PACKAGE_MANAGER" update -y
           for i in "${!TOOLS[@]}"; do
+            echo -e "${GREEN}Встановлюємо ${TOOLS[i]}${NC}"
             sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
           done
           if [ -d "$WORKING_DIR" ] && [ "$(ls -A $WORKING_DIR)" ];then
