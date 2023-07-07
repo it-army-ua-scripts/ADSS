@@ -5,7 +5,7 @@ check_enabled() {
   stop_service=false
   for service in "${services[@]}"
   do
-    if sudo systemctl is-active "$service" >/dev/nul; then
+    if sudo systemctl is-active "$service" >/dev/null; then
       stop_service=true
       break
     fi
