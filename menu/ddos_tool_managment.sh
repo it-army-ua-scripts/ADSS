@@ -23,8 +23,8 @@ stop_services() {
 
 ddos_tool_managment(){
     menu_items=("Статус атаки")
-    enabled_tool=$(check_enabled)
-    if [[ "$enabled_tool" == true ]]; then
+    check_enabled
+    if [[ "$?" == true ]]; then
       menu_items+=("Зупинити атаку")
     fi
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
