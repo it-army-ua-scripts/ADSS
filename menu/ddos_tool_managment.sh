@@ -25,12 +25,12 @@ ddos_tool_managment(){
     menu_items=("Статус атаки")
     check_enabled
     enabled_tool=$?
-    if [[ "$enabled_tool" ]]; then
+    if [[ "$enabled_tool" == 1 ]]; then
       menu_items+=("Зупинити атаку")
     fi
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
     display_menu "Управління ддос інструментами" "${menu_items[@]}"
-    if [[ "$enabled_tool" && "$?" == 2 ]]; then
+    if [[ "$enabled_tool" == 1 && "$?" == 2 ]]; then
        stop_services
        ddos_tool_managment
     fi
