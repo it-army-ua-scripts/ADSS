@@ -120,18 +120,18 @@ regenerate_db1000n_service_file() {
 }
 
 db1000n_run() {
-  sudo systemctl stop mhddos.service
-  sudo systemctl stop distress.service
-  sudo systemctl start db1000n.service
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
+  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo systemctl start db1000n.service >/dev/null 2>&1
 }
 
 db1000n_stop() {
-  sudo systemctl stop db1000n.service
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
 }
 db1000n_auto_enable() {
-  sudo systemctl disable mhddos.service >/dev/null
-  sudo systemctl disable distress.service >/dev/null
-  sudo systemctl enable db1000n >/dev/null
+  sudo systemctl disable mhddos.service >/dev/null 2>&1
+  sudo systemctl disable distress.service >/dev/null 2>&1
+  sudo systemctl enable db1000n >/dev/null 2>&1
 }
 
 db1000n_get_status() {

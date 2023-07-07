@@ -151,19 +151,19 @@ regenerate_mhddos_service_file() {
 }
 
 mhddos_run() {
-  sudo systemctl stop distress.service
-  sudo systemctl stop db1000n.service
-  sudo systemctl start mhddos.service
+  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo systemctl start mhddos.service >/dev/null 2>&1
 }
 
 mhddos_auto_enable() {
-  sudo systemctl disable distress.service >/dev/null
-  sudo systemctl disable db1000n.service >/dev/null
-  sudo systemctl enable mhddos.service >/dev/null
+  sudo systemctl disable distress.service >/dev/null 2>&1
+  sudo systemctl disable db1000n.service >/dev/null 2>&1
+  sudo systemctl enable mhddos.service >/dev/null 2>&1
 }
 
 mhddos_stop() {
-  sudo systemctl stop mhddos.service
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
 }
 
 mhddos_get_status() {
