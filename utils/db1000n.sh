@@ -143,7 +143,7 @@ db1000n_get_status() {
 }
 
 initiate_db1000n() {
-  if [[ ! $(systemctl status db1000n.service >/dev/null 2>&1) ]]; then
+  if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else

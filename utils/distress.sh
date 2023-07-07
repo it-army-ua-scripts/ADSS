@@ -143,7 +143,7 @@ distress_get_status() {
 }
 
 initiate_distress() {
-  if [[ ! $(systemctl status distress.service >/dev/null 2>&1) ]]; then
+  if [[ ! -f "$TOOL_DIR/distress" ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
