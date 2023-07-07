@@ -22,6 +22,7 @@ install_distress() {
 
           *)
             confirm_dialog "Неможливо визначити розрядность операційної системи"
+            ddos_tool_managment
           ;;
         esac
 
@@ -142,7 +143,7 @@ initiate_distress() {
   else
       menu_items=("Запуск Distress" "Зупинка Distress")
 
-      if sudo systemctl is-enabled distress >/dev/null; then
+      if sudo systemctl is-enabled distress >/dev/null 2>&1; then
         enabled_disabled="Вимкнути автозавантаження"
       else
         enabled_disabled="Увімкнути автозавантаження"

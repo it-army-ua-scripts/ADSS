@@ -1,9 +1,7 @@
 #!/bin/bash
 
 install_mhddos() {
-
     adss_dialog "Встановлюємо MHDDOS"
-
 	  install() {
         cd $TOOL_DIR
         OSARCH=$(uname -m)
@@ -19,10 +17,12 @@ install_mhddos() {
 
           i386* | i686*)
             confirm_dialog "Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"
+            ddos_tool_managment
           ;;
 
           *)
             confirm_dialog "Неможливо визначити розрядность операційної системи"
+            ddos_tool_managment
           ;;
         esac
 
@@ -195,9 +195,9 @@ initiate_mhddos() {
           mhddos_get_status
         ;;
         3)
-          if sudo systemctl is-enabled mhddos >/dev/null; then
+          if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
             sudo systemctl disable mhddos >/dev/null
-            confirm_dialog "MHDDOS видалено з автозавантаження"
+            confirm_dialog "MHDDOS видалено з  автозавантаження"
           else
             sudo systemctl enable mhddos >/dev/null
             confirm_dialog "MHDDOS додано в автозавантаження"

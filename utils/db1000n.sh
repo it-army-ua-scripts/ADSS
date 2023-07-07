@@ -30,6 +30,7 @@ install_db1000n() {
 
         *)
             confirm_dialog "Неможливо визначити розрядность операційної системи"
+            ddos_tool_managment
         ;;
       esac
       regenerate_db1000n_service_file
@@ -143,7 +144,7 @@ initiate_db1000n() {
   else
         menu_items=("Запуск DB1000N" "Зупинка DB1000N")
 
-        if sudo systemctl is-enabled db1000n >/dev/null; then
+        if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
           enabled_disabled="Вимкнути автозавантаження"
         else
           enabled_disabled="Увімкнути автозавантаження"
