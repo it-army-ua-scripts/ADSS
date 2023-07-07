@@ -138,6 +138,7 @@ distress_get_status() {
 initiate_distress() {
   if [[ ! -e "/etc/systemd/system/distress.service" ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
+    ddos_tool_managment
   else
       menu_items=("Запуск Distress" "Зупинка Distress")
 

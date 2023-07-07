@@ -139,6 +139,7 @@ db1000n_get_status() {
 initiate_db1000n() {
   if [[ ! -e "/etc/systemd/system/db1000n.service" ]]; then
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
+    ddos_tool_managment
   else
         menu_items=("Запуск DB1000N" "Зупинка DB1000N")
 
