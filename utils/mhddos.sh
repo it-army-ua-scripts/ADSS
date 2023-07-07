@@ -157,10 +157,10 @@ mhddos_run() {
 }
 
 mhddos_auto_enable() {
-  create_symlink
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable mhddos.service >/dev/null 2>&1
+  create_symlink
 }
 
 mhddos_stop() {
@@ -200,8 +200,8 @@ initiate_mhddos() {
         ;;
         3)
           if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
-            create_symlink
             sudo systemctl disable mhddos >/dev/null 2>&1
+            create_symlink
             confirm_dialog "MHDDOS видалено з  автозавантаження"
           else
             mhddos_auto_enable

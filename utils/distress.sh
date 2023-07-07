@@ -125,10 +125,10 @@ distress_run() {
 }
 
 distress_auto_enable() {
-  create_symlink
   sudo systemctl disable mhddos.service >/dev/null 2>&1
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable distress >/dev/null 2>&1
+  create_symlink
 }
 
 distress_stop() {
@@ -169,9 +169,9 @@ initiate_distress() {
         ;;
         3)
           if sudo systemctl is-enabled distress >/dev/null 2>&1; then
-            create_symlink
             sudo systemctl disable distress >/dev/null 2>&1
             confirm_dialog "Distress видалено з автозавантаження"
+            create_symlink
           else
             distress_auto_enable
             confirm_dialog "Distress додано в автозавантаження"

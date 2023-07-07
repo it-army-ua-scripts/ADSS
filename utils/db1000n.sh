@@ -129,10 +129,10 @@ db1000n_stop() {
   sudo systemctl stop db1000n.service >/dev/null 2>&1
 }
 db1000n_auto_enable() {
-  create_symlink
   sudo systemctl disable mhddos.service >/dev/null 2>&1
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl enable db1000n >/dev/null 2>&1
+  create_symlink
 }
 
 db1000n_get_status() {
@@ -169,8 +169,8 @@ initiate_db1000n() {
           ;;
           3)
             if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
-              create_symlink
               sudo systemctl disable db1000n >/dev/null 2>&1
+              create_symlink
               confirm_dialog "DB1000N видалено з автозавантаження"
             else
               db1000n_auto_enable
