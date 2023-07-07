@@ -157,7 +157,9 @@ mhddos_run() {
 }
 
 mhddos_auto_enable() {
-  sudo systemctl enable mhddos.service
+  sudo systemctl disable distress.service >/dev/null
+  sudo systemctl disable db1000n.service >/dev/null
+  sudo systemctl enable mhddos.service >/dev/null
 }
 
 mhddos_stop() {
@@ -199,7 +201,7 @@ initiate_mhddos() {
             sudo systemctl disable mhddos >/dev/null
             confirm_dialog "MHDDOS видалено з  автозавантаження"
           else
-            sudo systemctl enable mhddos >/dev/null
+            mhddos_auto_enable
             confirm_dialog "MHDDOS додано в автозавантаження"
           fi
           initiate_mhddos

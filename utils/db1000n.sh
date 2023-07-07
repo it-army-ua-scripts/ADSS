@@ -128,6 +128,11 @@ db1000n_run() {
 db1000n_stop() {
   sudo systemctl stop db1000n.service
 }
+db1000n_auto_enable() {
+  sudo systemctl disable mhddos.service
+  sudo systemctl disable distress.service
+  sudo systemctl enable db1000n >/dev/null
+}
 
 db1000n_get_status() {
   clear
@@ -166,7 +171,7 @@ initiate_db1000n() {
               sudo systemctl disable db1000n >/dev/null
               confirm_dialog "DB1000N видалено з автозавантаження"
             else
-              sudo systemctl enable db1000n >/dev/null
+              db1000n_auto_enable
               confirm_dialog "DB1000N додано в автозавантаження"
             fi
             initiate_db1000n

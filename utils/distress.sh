@@ -124,6 +124,12 @@ distress_run() {
   sudo systemctl start distress.service
 }
 
+distress_auto_enable() {
+  sudo systemctl disable mhddos.service
+  sudo systemctl disable db1000n.service
+  sudo systemctl enable distress >/dev/null
+}
+
 distress_stop() {
   sudo systemctl stop distress.service
 }
@@ -165,7 +171,7 @@ initiate_distress() {
             sudo systemctl disable distress >/dev/null
             confirm_dialog "Distress видалено з автозавантаження"
           else
-            sudo systemctl enable distress >/dev/null
+            distress_auto_enable
             confirm_dialog "Distress додано в автозавантаження"
           fi
           initiate_distress
