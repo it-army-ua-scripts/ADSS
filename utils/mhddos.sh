@@ -139,6 +139,9 @@ regenerate_mhddos_service_file() {
     if [[ "$key" = "[mhddos]" || "$key" = "[/mhddos]" ]]; then
       continue
     fi
+    if [[ "$key" == 'vpn' ]] && [[ "$value" == false ]];then
+      continue
+    fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
     fi
