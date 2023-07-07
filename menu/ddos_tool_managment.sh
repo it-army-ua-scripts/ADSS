@@ -21,6 +21,36 @@ stop_services() {
   confirm_dialog "Атака зупинена"
 }
 
+get_ddoss_status() {
+   services=("mhddos" "distress" "db1000n")
+   service=""
+
+    for element in "${services[@]}"
+    do
+      if systemctl is-active --quiet "$element.service"; then
+        service="$element"
+        break
+      fi
+    done
+    if [[ -n "$service" ]]; then
+      while true; do
+        clear
+        echo -e "${GREEN}Запущено $service${NC}"
+        journalctl -u "$service.service" | tail -20
+        echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+
+        sleep 3
+        if read -rsn1 -t 0.1; then
+          break
+        fi
+      done
+      ddos_tool_managment
+    else
+       confirm_dialog "Немає запущених процесів"
+    fi
+    ddos_tool_managment
+}
+
 ddos_tool_managment(){
     menu_items=("Статус атаки")
     check_enabled
@@ -31,39 +61,31 @@ ddos_tool_managment(){
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
     display_menu "Управління ддос інструментами" "${menu_items[@]}"
     status=$?
-    if [[ "$enabled_tool" == 1 && "$status" == 2 ]]; then
-       stop_services
-       ddos_tool_managment
+    if [[ "$enabled_tool" == 1]]; then
+        case $status in
+          1)
+            get_ddoss_status
+          ;;
+          2)
+            stop_services
+          ;;
+          3)
+            initiate_mhddos
+          ;;
+          4)
+            initiate_db1000n
+          ;;
+          5)
+            initiate_distress
+          ;;
+          6)
+            ddos
+          ;;
+        esac
     else
       case $status in
         1)
-             services=("mhddos" "distress" "db1000n")
-             service=""
-
-              for element in "${services[@]}"
-              do
-                if systemctl is-active --quiet "$element.service"; then
-                  service="$element"
-                  break
-                fi
-              done
-              if [[ -n "$service" ]]; then
-                while true; do
-                  clear
-                  echo -e "${GREEN}Запущено $service${NC}"
-                  journalctl -u "$service.service" | tail -20
-                  echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
-
-                  sleep 3
-                  if read -rsn1 -t 0.1; then
-                    break
-                  fi
-                done
-                ddos_tool_managment
-              else
-                 confirm_dialog "Немає запущених процесів"
-              fi
-              ddos_tool_managment
+          get_ddoss_status
         ;;
         2)
           initiate_mhddos
