@@ -23,7 +23,7 @@ if [ -r /etc/os-release ]; then
         esac
 
         if [[ ! -z "$PACKAGE_MANAGER" ]]; then
-	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog')
+	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog' 'bc')
           sudo "$PACKAGE_MANAGER" update -y
           for i in "${!TOOLS[@]}"; do
             sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
