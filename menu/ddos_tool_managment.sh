@@ -30,11 +30,12 @@ ddos_tool_managment(){
     fi
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
     display_menu "Управління ддос інструментами" "${menu_items[@]}"
-    if [[ "$enabled_tool" == 1 && "$?" == 2 ]]; then
+    status=$?
+    if [[ "$enabled_tool" == 1 && "$status" == 2 ]]; then
        stop_services
        ddos_tool_managment
     fi
-    case $? in
+    case $status in
       1)
            services=("mhddos" "distress" "db1000n")
            service=""
