@@ -23,17 +23,10 @@ if [ -r /etc/os-release ]; then
         esac
 
         if [[ ! -z "$PACKAGE_MANAGER" ]]; then
-	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git', 'dialog')
-
-          toUpdate=true
+	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog')
+          sudo "$PACKAGE_MANAGER" update -y
           for i in "${!TOOLS[@]}"; do
-            if ! which ${TOOLS[i]} >/dev/null; then
-              if [[ "$toUpdate" == true ]];then
-               sudo "$PACKAGE_MANAGER" update -y
-               toUpdate=false
-              fi
-              sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
-            fi
+            sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
           done
           if [[ -d "$WORKING_DIR" ]];then
              source "${WORKING_DIR}/utils/updater.sh"
