@@ -198,7 +198,7 @@ initiate_mhddos() {
         ;;
         3)
           if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
-            sudo systemctl disable mhddos >/dev/null
+            sudo systemctl disable mhddos >/dev/null 2>&1
             confirm_dialog "MHDDOS видалено з  автозавантаження"
           else
             mhddos_auto_enable
