@@ -61,7 +61,7 @@ ddos_tool_managment(){
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
     display_menu "Управління ддос інструментами" "${menu_items[@]}"
     status=$?
-    if [[ "$enabled_tool" == 1]]; then
+    if [[ "$enabled_tool" == 1 ]]; then
         case $status in
           1)
             get_ddoss_status
