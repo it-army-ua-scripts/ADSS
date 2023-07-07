@@ -15,9 +15,9 @@ check_enabled() {
 
 stop_services() {
   adss_dialog "Зупиняємо атаку"
-  sudo systemctl stop distress.service
-  sudo systemctl stop db1000n.service
-  sudo systemctl stop mhddos.service
+  sudo systemctl stop distress.service >/dev/null
+  sudo systemctl stop db1000n.service >/dev/null
+  sudo systemctl stop mhddos.service >/dev/null
   confirm_dialog "Атака зупинена"
 }
 
