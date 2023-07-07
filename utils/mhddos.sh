@@ -170,7 +170,7 @@ mhddos_auto_enable() {
 }
 
 mhddos_stop() {
-  create_mhddos_symlink
+  create_symlink
   sudo systemctl stop mhddos.service >/dev/null 2>&1
 }
 
