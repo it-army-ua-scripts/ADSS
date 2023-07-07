@@ -174,7 +174,7 @@ mhddos_get_status() {
   initiate_mhddos
 }
 initiate_mhddos() {
-  if [[ ! $(systemctl status mhddos.service) ]]; then
+  if [[ ! $(systemctl status mhddos.service >/dev/null 2>&1) ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
