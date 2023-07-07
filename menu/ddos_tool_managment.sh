@@ -2,11 +2,11 @@
 
 check_enabled() {
   services=("mhddos" "distress" "db1000n")
-  stop_service=false
+  stop_service=0
   for service in "${services[@]}"
   do
     if sudo systemctl is-active "$service" >/dev/null; then
-      stop_service=true
+      stop_service=1
       break
     fi
   done
@@ -24,7 +24,7 @@ stop_services() {
 ddos_tool_managment(){
     menu_items=("Статус атаки")
     check_enabled
-    if [[ "$?" == true ]]; then
+    if [[ "$?" == 1 ]]; then
       menu_items+=("Зупинити атаку")
     fi
     menu_items+=("MHDDOS" "DB1000N" "Distress" "Повернутись назад")
