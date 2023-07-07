@@ -33,6 +33,7 @@ stop_services() {
   sudo systemctl stop db1000n.service >/dev/null
   sudo systemctl stop mhddos.service >/dev/null
   confirm_dialog "Атака зупинена"
+  ddos_tool_managment
 }
 
 get_ddoss_status() {
