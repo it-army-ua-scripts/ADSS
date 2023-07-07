@@ -72,9 +72,7 @@ configure_mhddos() {
           echo "Будь ласка введіть правильні значення"
           read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
       done
-      if [[ $vpn == true ]]; then
-        params[vpn]=" "
-      fi
+    	params[vpn]=$vpn
     fi
 
     if [[ $vpn == true ]]; then
@@ -139,8 +137,13 @@ regenerate_mhddos_service_file() {
     if [[ "$key" = "[mhddos]" || "$key" = "[/mhddos]" ]]; then
       continue
     fi
-    if [[ "$key" == 'vpn' ]] && [[ "$value" == false ]];then
-      continue
+
+    if [[ "$key" == 'vpn' ]];then
+    	if [[ "$value" == false ]]; then
+    		continue
+    	elif [[ "$value" == true ]]; then
+    		value=" "
+    	fi
     fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
@@ -183,25 +186,30 @@ initiate_mhddos() {
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
-      menu_items=("Запуск MHDDOS" "Зупинка MHDDOS")
+      if sudo systemctl is-active mhddos >/dev/null 2>&1; then
+        active_disactive="Зупинка MHDDOS"
+      else
+        active_disactive="Запуск MHDDOS"
+      fi
       if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
         enabled_disabled="Вимкнути автозавантаження"
       else
         enabled_disabled="Увімкнути автозавантаження"
       fi
-      menu_items+=("$enabled_disabled" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
+      menu_items=("$active_disactive" "$enabled_disabled" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
       display_menu "MHDDOS" "${menu_items[@]}"
 
       case $? in
         1)
-          mhddos_run
-          mhddos_get_status
+          if sudo systemctl is-active mhddos >/dev/null 2>&1; then
+            mhddos_stop
+            mhddos_get_status
+          else
+            mhddos_run
+            mhddos_get_status
+          fi
         ;;
         2)
-          mhddos_stop
-          mhddos_get_status
-        ;;
-        3)
           if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
             sudo systemctl disable mhddos >/dev/null 2>&1
             create_symlink
@@ -212,14 +220,14 @@ initiate_mhddos() {
           fi
           initiate_mhddos
         ;;
-        4)
+        3)
           configure_mhddos
           initiate_mhddos
         ;;
-        5)
+        4)
           mhddos_get_status
         ;;
-        6)
+        5)
           ddos_tool_managment
         ;;
       esac

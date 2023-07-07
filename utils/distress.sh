@@ -148,26 +148,30 @@ initiate_distress() {
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
-      menu_items=("Запуск Distress" "Зупинка Distress")
-
+      if sudo systemctl is-active distress >/dev/null 2>&1; then
+        active_disactive="Зупинка Distress"
+      else
+        active_disactive="Запуск Distress"
+      fi
       if sudo systemctl is-enabled distress >/dev/null 2>&1; then
         enabled_disabled="Вимкнути автозавантаження"
       else
         enabled_disabled="Увімкнути автозавантаження"
       fi
-      menu_items+=("$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
+      menu_items=("$active_disactive" "$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
       display_menu "Distress" "${menu_items[@]}"
 
       case $? in
         1)
-          distress_run
-          distress_get_status
+          if sudo systemctl is-active distress >/dev/null 2>&1; then
+             distress_stop
+             distress_get_status
+          else
+            distress_run
+            distress_get_status
+          fi
         ;;
         2)
-          distress_stop
-          distress_get_status
-        ;;
-        3)
           if sudo systemctl is-enabled distress >/dev/null 2>&1; then
             sudo systemctl disable distress >/dev/null 2>&1
             confirm_dialog "Distress видалено з автозавантаження"
@@ -178,14 +182,14 @@ initiate_distress() {
           fi
           initiate_distress
         ;;
-        4)
+        3)
           configure_distress
           initiate_distress
         ;;
-        5)
+        4)
           distress_get_status
         ;;
-        6)
+        5)
           ddos_tool_managment
         ;;
       esac

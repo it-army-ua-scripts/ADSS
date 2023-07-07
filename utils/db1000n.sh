@@ -148,26 +148,30 @@ initiate_db1000n() {
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
-        menu_items=("Запуск DB1000N" "Зупинка DB1000N")
-
+        if sudo systemctl is-active db1000n >/dev/null 2>&1; then
+          active_disactive="Зупинка DB1000N"
+        else
+          active_disactive="Запуск DB1000N"
+        fi
         if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
           enabled_disabled="Вимкнути автозавантаження"
         else
           enabled_disabled="Увімкнути автозавантаження"
         fi
-        menu_items+=("$enabled_disabled" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
+        menu_items=("$active_disactive" "$enabled_disabled" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
         display_menu "DB1000N" "${menu_items[@]}"
 
         case $? in
           1)
-            db1000n_run
-            db1000n_get_status
+            if sudo systemctl is-active db1000n >/dev/null 2>&1; then
+              db1000n_stop
+              db1000n_get_status
+            else
+              db1000n_run
+              db1000n_get_status
+            fi
           ;;
           2)
-            db1000n_stop
-            db1000n_get_status
-          ;;
-          3)
             if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
               sudo systemctl disable db1000n >/dev/null 2>&1
               create_symlink
@@ -178,14 +182,14 @@ initiate_db1000n() {
             fi
             initiate_db1000n
           ;;
-          4)
+          3)
             configure_db1000n
             initiate_db1000n
           ;;
-          5)
+          4)
             db1000n_get_status
           ;;
-          6)
+          5)
             ddos_tool_managment
           ;;
         esac
