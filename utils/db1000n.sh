@@ -162,7 +162,7 @@ initiate_db1000n() {
             db1000n_get_status
           ;;
           3)
-            if sudo systemctl is-enabled db1000n >/dev/null; then
+            if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
               sudo systemctl disable db1000n >/dev/null
               confirm_dialog "DB1000N видалено з автозавантаження"
             else

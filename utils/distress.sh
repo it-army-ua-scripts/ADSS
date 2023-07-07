@@ -161,7 +161,7 @@ initiate_distress() {
           distress_get_status
         ;;
         3)
-          if sudo systemctl is-enabled distress >/dev/null; then
+          if sudo systemctl is-enabled distress >/dev/null 2>&1; then
             sudo systemctl disable distress >/dev/null
             confirm_dialog "Distress видалено з автозавантаження"
           else
