@@ -28,7 +28,7 @@ if [ -r /etc/os-release ]; then
           for i in "${!TOOLS[@]}"; do
             sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
           done
-          if [[ -d "$WORKING_DIR" ]];then
+          if [ -d "$WORKING_DIR" ] && [ "$(ls -A $WORKING_DIR)" ];then
              source "${WORKING_DIR}/utils/updater.sh"
              export SCRIPT_DIR="${WORKING_DIR}/"
              update_adss
