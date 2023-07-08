@@ -14,6 +14,7 @@ export SCRIPT_DIR="$(
   )/.." >/dev/null \
   && pwd
 )"
+export TOOL_DIR="$SCRIPT_DIR/bin"
 export GREEN='\033[0;32m'
 export GRAY='\033[0;37m'
 export RED='\033[0;31m'

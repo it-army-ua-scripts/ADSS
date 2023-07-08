@@ -1,22 +1,10 @@
 #!/bin/bash
 
 ddos(){
-  while true; do
-    selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "ДДОС" \
-      --menu "Виберіть опцію:" 0 0 0 \
-      1 "Встановлення ддос інструментів" \
-      2 "Управління ддос інструментами" \
-      3 "Повернутись назад")
+    menu_items=("Встановлення ддос інструментів" "Управління ддос інструментами" "Повернутись назад")
+    display_menu "ДДОС" "${menu_items[@]}"
 
-    exit_status=$?
-    case $exit_status in
-        255 | 1)
-             clear
-             echo "Exiting..."
-             exit 0
-        ;;
-    esac
-    case $selection in
+    case $? in
       1)
         clear
         echo -ne "
@@ -31,6 +19,7 @@ ddos(){
         install_mhddos
         install_db1000n
         install_distress
+        ddos
       ;;
       2)
         ddos_tool_managment
@@ -39,5 +28,4 @@ ddos(){
         main_menu
       ;;
     esac
-  done
 }
