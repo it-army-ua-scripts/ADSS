@@ -11,9 +11,7 @@ get_distribution() {
 
 validate_os() {
   operation_systems=("ubuntu" "fedora" "debian" "centos")
-
   os_exists=0
-
   for element in "${operation_systems[@]}"; do
     if [[ "$element" == "$(get_distribution)" ]]; then
       os_exists=1

@@ -4,7 +4,7 @@ install_distress() {
     adss_dialog "Встановлюємо Distress"
 
     install() {
-        cd $SCRIPT_DIR
+        cd $TOOL_DIR
         OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
@@ -22,13 +22,14 @@ install_distress() {
 
           *)
             confirm_dialog "Неможливо визначити розрядность операційної системи"
+            ddos_tool_managment
           ;;
         esac
 
         sudo curl -Lo distress "$package"
         sudo chmod +x distress
         regenerate_distress_service_file
-        sudo ln -sf  "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service
+        create_symlink
     }
     install > /dev/null 2>&1
     confirm_dialog "Distress успішно встановлено"
@@ -96,7 +97,7 @@ write_distress_variable() {
 regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/distress"
+  start="ExecStart=/opt/itarmy/bin/distress"
 
   while read -r line
   do
@@ -118,13 +119,20 @@ regenerate_distress_service_file() {
 }
 
 distress_run() {
-  sudo systemctl stop mhddos.service
-  sudo systemctl stop db1000n.service
-  sudo systemctl start distress.service
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo systemctl start distress.service >/dev/null 2>&1
+}
+
+distress_auto_enable() {
+  sudo systemctl disable mhddos.service >/dev/null 2>&1
+  sudo systemctl disable db1000n.service >/dev/null 2>&1
+  sudo systemctl enable distress >/dev/null 2>&1
+  create_symlink
 }
 
 distress_stop() {
-  sudo systemctl stop distress.service
+  sudo systemctl stop distress.service >/dev/null 2>&1
 }
 
 distress_get_status() {
@@ -136,46 +144,54 @@ distress_get_status() {
 }
 
 initiate_distress() {
-  if [[ ! -e "/etc/systemd/system/distress.service" ]]; then
+  if [[ ! -f "$TOOL_DIR/distress" ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
+    ddos_tool_managment
   else
-    while true; do
-          selection=$(dialog --ascii-lines --clear --stdout --cancel-label "Вихід" --title "DISTRESS" \
-            --menu "Виберіть опцію:" 0 0 0 \
-            1 "Запуск Distress" \
-            2 "Зупинка Distress" \
-            3 "Налаштування Distress" \
-            4 "Статус Distress" \
-            5 "Повернутись назад")
+      if sudo systemctl is-active distress >/dev/null 2>&1; then
+        active_disactive="Зупинка Distress"
+      else
+        active_disactive="Запуск Distress"
+      fi
+      if sudo systemctl is-enabled distress >/dev/null 2>&1; then
+        enabled_disabled="Вимкнути автозавантаження"
+      else
+        enabled_disabled="Увімкнути автозавантаження"
+      fi
+      menu_items=("$active_disactive" "$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
+      display_menu "Distress" "${menu_items[@]}"
 
-          exit_status=$?
-          case $exit_status in
-              255 | 1)
-                   clear
-                   echo "Exiting..."
-                   exit 0
-              ;;
-          esac
-
-          case $selection in
-            1)
-              distress_run
-              distress_get_status
-            ;;
-            2)
-              distress_stop
-              distress_get_status
-            ;;
-            3)
-              configure_distress
-            ;;
-            4)
-              distress_get_status
-            ;;
-            5)
-              ddos_tool_managment
-            ;;
-          esac
-    done
+      case $? in
+        1)
+          if sudo systemctl is-active distress >/dev/null 2>&1; then
+             distress_stop
+             distress_get_status
+          else
+            distress_run
+            distress_get_status
+          fi
+        ;;
+        2)
+          if sudo systemctl is-enabled distress >/dev/null 2>&1; then
+            sudo systemctl disable distress >/dev/null 2>&1
+            confirm_dialog "Distress видалено з автозавантаження"
+            create_symlink
+          else
+            distress_auto_enable
+            confirm_dialog "Distress додано в автозавантаження"
+          fi
+          initiate_distress
+        ;;
+        3)
+          configure_distress
+          initiate_distress
+        ;;
+        4)
+          distress_get_status
+        ;;
+        5)
+          ddos_tool_managment
+        ;;
+      esac
   fi
 }
