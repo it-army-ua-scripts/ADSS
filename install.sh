@@ -20,6 +20,9 @@ if [ -r /etc/os-release ]; then
                 centos)
                     PACKAGE_MANAGER="yum"
                 ;;
+                *)
+                    PACKAGE_MANAGER="apt-get"
+                ;;
         esac
 
         if [[ ! -z "$PACKAGE_MANAGER" ]]; then
