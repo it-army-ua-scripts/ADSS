@@ -23,7 +23,7 @@ install_docker() {
               install > /dev/null 2>&1
               confirm_dialog "Докер успішно встановлено"
           ;;
-          ubuntu)
+          ubuntu | pop)
               adss_dialog "Встановлюємо докер"
               install() {
                   sudo mkdir -m 0755 -p /etc/apt/keyrings

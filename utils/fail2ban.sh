@@ -4,7 +4,7 @@ source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
   case $(get_distribution) in
-          debian | ubuntu)
+          debian | ubuntu | pop)
               adss_dialog "Встановлюємо Fail2ban"
               install() {
                  sudo apt-get update -y

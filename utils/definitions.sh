@@ -10,7 +10,7 @@ get_distribution() {
 }
 
 validate_os() {
-  operation_systems=("ubuntu" "fedora" "debian" "centos")
+  operation_systems=("ubuntu" "fedora" "debian" "centos" "pop")
   os_exists=0
   for element in "${operation_systems[@]}"; do
     if [[ "$element" == "$(get_distribution)" ]]; then
@@ -20,7 +20,7 @@ validate_os() {
   done
 
   if [[ os_exists -eq 0 ]]; then
-    dialog --ascii-lines --keep-tite --msgbox 'Операційну систему не знайдено. Доступні ubuntu, fedora, debian, centos' 0 0
+    dialog --ascii-lines --keep-tite --msgbox 'Операційну систему не знайдено.' 0 0
     clear
     exit 0
   fi

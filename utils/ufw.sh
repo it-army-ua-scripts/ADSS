@@ -3,7 +3,7 @@
 source "${SCRIPT_DIR}/utils/definitions.sh"
 install_ufw() {
   case $(get_distribution) in
-          ubuntu | debian)
+          ubuntu | debian | pop)
               adss_dialog "Встановлюємо UFW фаєрвол"
               install() {
                 sudo apt-get update -y && sudo apt-get install ufw -y && sudo ufw disable
