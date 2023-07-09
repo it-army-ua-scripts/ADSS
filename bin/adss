@@ -38,7 +38,6 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-validate_os
 check_updates
 
 if [ "$1" = "--auto-install" ] ; then

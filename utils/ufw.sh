@@ -3,15 +3,6 @@
 source "${SCRIPT_DIR}/utils/definitions.sh"
 install_ufw() {
   case $(get_distribution) in
-          ubuntu | debian | pop)
-              adss_dialog "Встановлюємо UFW фаєрвол"
-              install() {
-                sudo apt-get update -y && sudo apt-get install ufw -y && sudo ufw disable
-                sudo /bin/systemctl restart ufw.service
-              }
-              install > /dev/null 2>&1
-              confirm_dialog "Фаєрвол UFW встановлено і деактивовано"
-          ;;
           fedora)
               adss_dialog "Встановлюємо UFW фаєрвол"
               install() {
@@ -36,7 +27,13 @@ install_ufw() {
               confirm_dialog "Фаєрвол UFW встановлено і деактивовано"
           ;;
           *)
-            confirm_dialog "[UFW] - операційну систему не знайдено"
+              adss_dialog "Встановлюємо UFW фаєрвол"
+              install() {
+                sudo apt-get update -y && sudo apt-get install ufw -y && sudo ufw disable
+                sudo /bin/systemctl restart ufw.service
+              }
+              install > /dev/null 2>&1
+              confirm_dialog "Фаєрвол UFW встановлено і деактивовано"
           ;;
   esac
 }
