@@ -23,21 +23,6 @@ install_docker() {
               install > /dev/null 2>&1
               confirm_dialog "Докер успішно встановлено"
           ;;
-          ubuntu)
-              adss_dialog "Встановлюємо докер"
-              install() {
-                  sudo mkdir -m 0755 -p /etc/apt/keyrings
-                  curl  -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
-                  echo \
-                    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-                    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-                  sudo apt-get update -y
-                  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-                  sudo systemctl start docker
-              }
-              install > /dev/null 2>&1
-              confirm_dialog "Докер успішно встановлено"
-          ;;
           fedora)
               adss_dialog "Встановлюємо докер"
               install() {
@@ -67,7 +52,19 @@ install_docker() {
               confirm_dialog "Докер успішно встановлено"
           ;;
           *)
-            confirm_dialog "[Docker] - операційну систему не знайдено"
+              adss_dialog "Встановлюємо докер"
+              install() {
+                  sudo mkdir -m 0755 -p /etc/apt/keyrings
+                  curl  -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
+                  echo \
+                    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                  sudo apt-get update -y
+                  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                  sudo systemctl start docker
+              }
+              install > /dev/null 2>&1
+              confirm_dialog "Докер успішно встановлено"
           ;;
   esac
 }

@@ -8,20 +8,3 @@ get_distribution() {
 
 	echo $lsb_dist
 }
-
-validate_os() {
-  operation_systems=("ubuntu" "fedora" "debian" "centos")
-  os_exists=0
-  for element in "${operation_systems[@]}"; do
-    if [[ "$element" == "$(get_distribution)" ]]; then
-      os_exists=1
-      break
-    fi
-  done
-
-  if [[ os_exists -eq 0 ]]; then
-    dialog --ascii-lines --keep-tite --msgbox 'Операційну систему не знайдено. Доступні ubuntu, fedora, debian, centos' 0 0
-    clear
-    exit 0
-  fi
-}

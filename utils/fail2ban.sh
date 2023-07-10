@@ -4,15 +4,6 @@ source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
   case $(get_distribution) in
-          debian | ubuntu)
-              adss_dialog "Встановлюємо Fail2ban"
-              install() {
-                 sudo apt-get update -y
-                 sudo apt-get install -y fail2ban
-              }
-              install > /dev/null 2>&1
-              confirm_dialog "Fail2ban успішно встановлено"
-          ;;
           fedora)
              adss_dialog "Встановлюємо Fail2ban"
              install() {
@@ -34,7 +25,13 @@ install_fail2ban() {
                confirm_dialog "Fail2ban успішно встановлено"
           ;;
           *)
-            confirm_dialog "[Fail2ban] - операційну систему не знайдено"
+              adss_dialog "Встановлюємо Fail2ban"
+              install() {
+                 sudo apt-get update -y
+                 sudo apt-get install -y fail2ban
+              }
+              install > /dev/null 2>&1
+              confirm_dialog "Fail2ban успішно встановлено"
           ;;
   esac
 }
