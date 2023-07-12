@@ -168,8 +168,8 @@ db1000n_installed() {
 }
 
 initiate_db1000n() {
-  db1000n_installed
-  if [[ $? == 1 ]]; then
+
+  if [[ db1000n_installed == 1 ]]; then
     ddos_tool_managment
   else
         if sudo systemctl is-active db1000n >/dev/null 2>&1; then
