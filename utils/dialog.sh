@@ -5,6 +5,7 @@ adss_dialog() {
 }
 
 confirm_dialog() {
-  dialog --ascii-lines --title "Execution Message" --msgbox "$1" 10 40
+  dialog --ascii-lines --title "Execution Message" --infobox "$1" 10 40
+  sleep 2
 }
 
