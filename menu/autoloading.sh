@@ -27,9 +27,9 @@ autoload_configuration() {
   fi
 
   if distress_enabled; then
-      distress_item_menu="Вимкнути автозапуск MHDDOS"
+      distress_item_menu="Вимкнути автозапуск DISTRESS"
   else
-      distress_item_menu="Увімкнути автозапуск MHDDOS"
+      distress_item_menu="Увімкнути автозапуск DISTRESS"
   fi
   menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" "Повернутись назад")
   display_menu "Налаштування автозапуску" "${menu_items[@]}"
