@@ -1,9 +1,19 @@
 #!/bin/bash
 
 autoload_configuration() {
-  if [[ ! db1000n_installed || ! distress_installed || ! mhddos_installed ]]; then
+  db1000n_installed
+  if [[ $? == 1 ]]; then
     ddos_tool_managment
   fi
+  distress_installed
+  if [[ $? == 1 ]]; then
+    ddos_tool_managment
+  fi
+  mhddos_installed
+  if [[ $? == 1 ]]; then
+    ddos_tool_managment
+  fi
+
   if mhddos_enabled; then
     mhddos_item_menu="Вимкнути автозапуск MHDDOS"
   else
