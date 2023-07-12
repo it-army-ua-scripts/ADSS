@@ -39,7 +39,7 @@ update_adss() {
   git checkout services/db1000n.service && \
   git checkout services/distress.service && \
   git checkout services/mhddos.service && \
-  git pull --all
+  git pull --all >> /dev/null
 
   SERVICES=('mhddos' 'distress' 'db1000n')
   for SERVICE in "${!SERVICES[@]}"; do
