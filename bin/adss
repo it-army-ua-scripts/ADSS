@@ -49,7 +49,7 @@ if [ "$1" = "--auto-install" ] ; then
    mhddos_run
    mhddos_auto_enable
    extend_ports
-   main_menu
+   get_ddoss_status
 elif [ "$1" = "--restore" ] ; then
   sudo rm -rf /opt/itarmy
   source <(curl -s https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh)
