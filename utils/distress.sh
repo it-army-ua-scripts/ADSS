@@ -129,6 +129,21 @@ distress_auto_enable() {
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable distress >/dev/null 2>&1
   create_symlink
+  confirm_dialog "Distress додано з автозавантаження"
+}
+
+distress_auto_disable() {
+  sudo systemctl disable distress >/dev/null 2>&1
+  create_symlink
+  confirm_dialog "Distress видалено з автозавантаження"
+}
+
+distress_enabled() {
+  if sudo systemctl is-enabled distress >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 distress_stop() {
@@ -143,8 +158,17 @@ distress_get_status() {
   initiate_distress
 }
 
-initiate_distress() {
+distress_installed() {
   if [[ ! -f "$TOOL_DIR/distress" ]]; then
+      confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
+      return 1
+  else
+      return 0
+  fi
+}
+
+initiate_distress() {
+   if [[ ! distress_installed ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
@@ -153,12 +177,7 @@ initiate_distress() {
       else
         active_disactive="Запуск Distress"
       fi
-      if sudo systemctl is-enabled distress >/dev/null 2>&1; then
-        enabled_disabled="Вимкнути автозавантаження"
-      else
-        enabled_disabled="Увімкнути автозавантаження"
-      fi
-      menu_items=("$active_disactive" "$enabled_disabled" "Налаштування Distress" "Статус Distress" "Повернутись назад")
+      menu_items=("$active_disactive" "Налаштування Distress" "Статус Distress" "Повернутись назад")
       display_menu "Distress" "${menu_items[@]}"
 
       case $? in
@@ -172,24 +191,13 @@ initiate_distress() {
           fi
         ;;
         2)
-          if sudo systemctl is-enabled distress >/dev/null 2>&1; then
-            sudo systemctl disable distress >/dev/null 2>&1
-            confirm_dialog "Distress видалено з автозавантаження"
-            create_symlink
-          else
-            distress_auto_enable
-            confirm_dialog "Distress додано в автозавантаження"
-          fi
-          initiate_distress
-        ;;
-        3)
           configure_distress
           initiate_distress
         ;;
-        4)
+        3)
           distress_get_status
         ;;
-        5)
+        4)
           ddos_tool_managment
         ;;
       esac

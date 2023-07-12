@@ -133,6 +133,21 @@ db1000n_auto_enable() {
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl enable db1000n >/dev/null 2>&1
   create_symlink
+  confirm_dialog "DB1000N додано з автозавантаження"
+}
+
+db1000n_auto_disable() {
+  sudo systemctl disable db1000n >/dev/null 2>&1
+  create_symlink
+  confirm_dialog "DB1000N видалено з автозавантаження"
+}
+
+db1000n_enabled() {
+  if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 db1000n_get_status() {
@@ -143,8 +158,17 @@ db1000n_get_status() {
   initiate_db1000n
 }
 
-initiate_db1000n() {
+db1000n_installed() {
   if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
+      confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
+      return 1
+  else
+      return 0
+  fi
+}
+
+initiate_db1000n() {
+  if [[ ! db1000n_installed ]]; then
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
@@ -153,12 +177,7 @@ initiate_db1000n() {
         else
           active_disactive="Запуск DB1000N"
         fi
-        if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
-          enabled_disabled="Вимкнути автозавантаження"
-        else
-          enabled_disabled="Увімкнути автозавантаження"
-        fi
-        menu_items=("$active_disactive" "$enabled_disabled" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
+        menu_items=("$active_disactive" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
         display_menu "DB1000N" "${menu_items[@]}"
 
         case $? in
@@ -172,24 +191,13 @@ initiate_db1000n() {
             fi
           ;;
           2)
-            if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
-              sudo systemctl disable db1000n >/dev/null 2>&1
-              create_symlink
-              confirm_dialog "DB1000N видалено з автозавантаження"
-            else
-              db1000n_auto_enable
-              confirm_dialog "DB1000N додано в автозавантаження"
-            fi
-            initiate_db1000n
-          ;;
-          3)
             configure_db1000n
             initiate_db1000n
           ;;
-          4)
+          3)
             db1000n_get_status
           ;;
-          5)
+          4)
             ddos_tool_managment
           ;;
         esac

@@ -167,6 +167,19 @@ mhddos_auto_enable() {
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable mhddos.service >/dev/null 2>&1
   create_symlink
+  confirm_dialog "MHDDOS додано з  автозавантаження"
+}
+mhddos_auto_disable() {
+ sudo systemctl disable mhddos >/dev/null 2>&1
+ create_symlink
+ confirm_dialog "MHDDOS видалено з  автозавантаження"
+}
+mhddos_enabled() {
+  if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 mhddos_stop() {
@@ -181,8 +194,16 @@ mhddos_get_status() {
   read -s -n 1 key
   initiate_mhddos
 }
-initiate_mhddos() {
+mhddos_installed() {
   if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
+      confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
+      return 1
+  else
+      return 0
+  fi
+}
+initiate_mhddos() {
+  if [[ ! mhddos_installed ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
@@ -191,12 +212,7 @@ initiate_mhddos() {
       else
         active_disactive="Запуск MHDDOS"
       fi
-      if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
-        enabled_disabled="Вимкнути автозавантаження"
-      else
-        enabled_disabled="Увімкнути автозавантаження"
-      fi
-      menu_items=("$active_disactive" "$enabled_disabled" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
+      menu_items=("$active_disactive" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
       display_menu "MHDDOS" "${menu_items[@]}"
 
       case $? in
@@ -210,24 +226,13 @@ initiate_mhddos() {
           fi
         ;;
         2)
-          if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
-            sudo systemctl disable mhddos >/dev/null 2>&1
-            create_symlink
-            confirm_dialog "MHDDOS видалено з  автозавантаження"
-          else
-            mhddos_auto_enable
-            confirm_dialog "MHDDOS додано в автозавантаження"
-          fi
-          initiate_mhddos
-        ;;
-        3)
           configure_mhddos
           initiate_mhddos
         ;;
-        4)
+        3)
           mhddos_get_status
         ;;
-        5)
+        4)
           ddos_tool_managment
         ;;
       esac
