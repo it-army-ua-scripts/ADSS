@@ -203,8 +203,8 @@ mhddos_installed() {
   fi
 }
 initiate_mhddos() {
-  mhddos_installed
-  if [[ $? == 1 ]]; then
+#  mhddos_installed
+  if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
