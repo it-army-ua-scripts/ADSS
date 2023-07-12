@@ -106,15 +106,18 @@ ddos_tool_managment(){
           get_ddoss_status
         ;;
         2)
-          initiate_mhddos
+          autoload_configuration
         ;;
         3)
-          initiate_db1000n
+          initiate_mhddos
         ;;
         4)
-          initiate_distress
+          initiate_db1000n
         ;;
         5)
+          initiate_distress
+        ;;
+        6)
           ddos
         ;;
       esac
