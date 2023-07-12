@@ -169,7 +169,7 @@ distress_installed() {
 
 initiate_distress() {
    distress_installed
-   if [[ ! $? ]]; then
+   if [[ $? == 1 ]]; then
     confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else

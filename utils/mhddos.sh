@@ -204,7 +204,7 @@ mhddos_installed() {
 }
 initiate_mhddos() {
   mhddos_installed
-  if [[ ! $? ]]; then
+  if [[ $? == 1 ]]; then
     confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else

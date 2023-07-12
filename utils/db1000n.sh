@@ -169,7 +169,7 @@ db1000n_installed() {
 
 initiate_db1000n() {
   db1000n_installed
-  if [[ ! $? ]]; then
+  if [[ $? == 1 ]]; then
     confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
