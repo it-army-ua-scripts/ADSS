@@ -133,7 +133,7 @@ db1000n_auto_enable() {
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl enable db1000n >/dev/null 2>&1
   create_symlink
-  confirm_dialog "DB1000N додано з автозавантаження"
+  confirm_dialog "DB1000N додано до автозавантаження"
 }
 
 db1000n_auto_disable() {

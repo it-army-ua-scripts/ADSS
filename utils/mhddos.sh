@@ -167,12 +167,12 @@ mhddos_auto_enable() {
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable mhddos.service >/dev/null 2>&1
   create_symlink
-  confirm_dialog "MHDDOS додано з  автозавантаження"
+  confirm_dialog "MHDDOS додано до автозавантаження"
 }
 mhddos_auto_disable() {
  sudo systemctl disable mhddos >/dev/null 2>&1
  create_symlink
- confirm_dialog "MHDDOS видалено з  автозавантаження"
+ confirm_dialog "MHDDOS видалено з автозавантаження"
 }
 mhddos_enabled() {
   if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
