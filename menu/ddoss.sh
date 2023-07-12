@@ -2,7 +2,7 @@
 
 ddos(){
     menu_items=("Встановлення ддос інструментів" "Управління ддос інструментами" "Повернутись назад")
-    display_menu "ДДОС" "${menu_items[@]}"
+    display_menu "DDOS" "${menu_items[@]}"
 
     case $? in
       1)
