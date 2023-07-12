@@ -50,6 +50,6 @@ autoload_configuration() {
     4)
       ddos_tool_managment
     ;;
-  ddos_tool_managment
   esac
+  ddos_tool_managment
 }
