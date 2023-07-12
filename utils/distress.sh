@@ -170,7 +170,6 @@ distress_installed() {
 initiate_distress() {
    distress_installed
    if [[ $? == 1 ]]; then
-    confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
       if sudo systemctl is-active distress >/dev/null 2>&1; then

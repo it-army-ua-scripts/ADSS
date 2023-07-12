@@ -170,7 +170,6 @@ db1000n_installed() {
 initiate_db1000n() {
   db1000n_installed
   if [[ $? == 1 ]]; then
-    confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
     ddos_tool_managment
   else
         if sudo systemctl is-active db1000n >/dev/null 2>&1; then

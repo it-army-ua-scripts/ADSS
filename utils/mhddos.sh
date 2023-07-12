@@ -203,9 +203,8 @@ mhddos_installed() {
   fi
 }
 initiate_mhddos() {
-#  mhddos_installed
-  if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
-    confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
+  mhddos_installed
+  if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
       if sudo systemctl is-active mhddos >/dev/null 2>&1; then
