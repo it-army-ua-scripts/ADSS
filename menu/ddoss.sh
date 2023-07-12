@@ -7,9 +7,14 @@ ddos(){
     case $? in
       1)
         clear
+        echo -ne "${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}"
         echo -ne "
-Юзер ІД ${GREEN}(Для збору та використання для лідерборда особистої статистики)${NC}:
+${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}"
+        echo -ne "
+${GREEN}Щоб пропустити, натисніть Enter${NC}
 "
+        echo -ne "
+Юзер ІД : "
         read user_id
 
         if [[ "$user_id" ]]; then
