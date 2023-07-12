@@ -32,6 +32,7 @@ autoload_configuration() {
       else
         mhddos_auto_enable
       fi
+      autoload_configuration
     ;;
     2)
       if db1000n_enabled; then
@@ -39,6 +40,7 @@ autoload_configuration() {
       else
         db1000n_auto_enable
       fi
+      autoload_configuration
     ;;
     3)
       if distress_enabled; then
@@ -46,10 +48,10 @@ autoload_configuration() {
       else
           distress_auto_enable
       fi
+      autoload_configuration
     ;;
     4)
       ddos_tool_managment
     ;;
   esac
-  ddos_tool_managment
 }
