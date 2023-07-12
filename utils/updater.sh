@@ -18,9 +18,8 @@ prepare_for_update() {
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']}
   remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
-  need_update=$(echo "$current_version < $remote_version" | bc -l)
 
-  if [[ $need_update -eq 1  ]];then
+  if [[ $(echo -e "$current_version\n$remote_version" | sort -V | head -n1) == $current_version ]]; then
       update_adss
   fi
   write_version $(date +%s)
