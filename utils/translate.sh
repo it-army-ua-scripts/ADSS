@@ -22,6 +22,6 @@ trans() {
   if [[ -z "${localization[$1]}" ]]; then
     echo "$1"
   else
-    echo ${localization[$1]}
+    echo "${localization[$1]}"
   fi
 }
