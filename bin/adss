@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ $? -ne 0 ] ; then
-        echo "Неправильний вхідний параметр!"; 1>&2
+        echo "$(trans "Неправильний вхідний параметр!")"; 1>&2
         exit 1;
 fi
 
@@ -33,7 +33,7 @@ source_files_in_directory() {
             fi
         done
     else
-        echo -e "${RED}Папку '$directory' не знайдено.${NC}"
+        echo -e "$(trans "${RED}Не знайдено папку '$directory'.${NC}")"
     fi
 }
 source_files_in_directory "$SCRIPT_DIR/utils"

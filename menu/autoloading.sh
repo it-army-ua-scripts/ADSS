@@ -15,24 +15,24 @@ autoload_configuration() {
   fi
 
   if mhddos_enabled; then
-    mhddos_item_menu="Вимкнути автозапуск MHDDOS"
+    mhddos_item_menu="$(trans "Вимкнути автозапуск MHDDOS")"
   else
-    mhddos_item_menu="Увімкнути автозапуск MHDDOS"
+    mhddos_item_menu="$(trans "Увімкнути автозапуск MHDDOS")"
   fi
 
   if db1000n_enabled; then
-    db1000n_item_menu="Вимкнути автозапуск DB1000N"
+    db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
   else
-    db1000n_item_menu="Увімкнути автозапуск DB1000N"
+    db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
   fi
 
   if distress_enabled; then
-      distress_item_menu="Вимкнути автозапуск DISTRESS"
+      distress_item_menu="$(trans "Вимкнути автозапуск DISTRESS")"
   else
-      distress_item_menu="Увімкнути автозапуск DISTRESS"
+      distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
   fi
-  menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" "Повернутись назад")
-  display_menu "Налаштування автозапуску" "${menu_items[@]}"
+  menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" "$(trans "Повернутись назад")")
+  display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}"
   status=$?
 
   case $status in
