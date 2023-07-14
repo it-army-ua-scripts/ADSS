@@ -16,7 +16,7 @@ apply_localization() {
 }
 
 trans() {
-  if [[ -z "${localization[$1]}" ]]; then
+  if [[ -z "${localization[@]}" || -z "${localization[$1]}" ]]; then
     echo "$1"
   else
     echo "${localization[$1]}"

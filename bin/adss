@@ -45,7 +45,6 @@ if [[ -n "$localization_file" ]]; then
   source "$localization_file"
 fi
 
-
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban
    install_ufw
