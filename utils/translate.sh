@@ -10,6 +10,7 @@ apply_localization() {
       elif [[ "$arg" == "en" && "$lang_param_found" == true ]]; then
           file_to_include="$PATH_TO_LOCALIZATION/en.sh"
           break
+      fi
   done
   echo "$file_to_include"
 }
