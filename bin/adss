@@ -40,6 +40,7 @@ source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
 check_updates
+load_translation_file
 
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban
