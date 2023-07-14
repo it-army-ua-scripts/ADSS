@@ -40,7 +40,11 @@ source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
 check_updates
-load_translation_file "$@"
+localization_file=$(apply_localization "$@")
+if [[ -n "$localization_file" ]]; then
+  source "$localization_file"
+fi
+
 
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban

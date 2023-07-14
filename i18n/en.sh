@@ -1,5 +1,7 @@
 #!/bin/bash
 
-declare -A localization
+declare -A localization=(
+  ["Встановити докер"]="Install docker"
+)
 
-localization["Встановити докер"]="Install docker"
+export localization
