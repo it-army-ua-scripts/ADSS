@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -A localization=(
-  ["Встановити докер"]="Install docker"
+  ["Встановити докер"]="Install Docker"
   
   ["Неправильний вхідний параметр!"]="Invalid input parameter!"
   ["${RED}Не знайдено папку '$directory'.${NC}"]="${RED}'$directory' folder not found.${NC}"
@@ -30,7 +30,7 @@ declare -A localization=(
   ["Для збору особистої статистики та відображення у лідерборді на офіційному сайті."]="To gather personal statistics and display on the leaderboard on the official website."
   ["Надається Telegram ботом"]="Provided by Telegram bot"
   ["Щоб пропустити, натисніть Enter"]="To skip, press Enter"
-  ["Встановити докер"]="Install Docker"
+
   ["Розширення портів"]="Port extension"
   ["Налаштування безпеки"]="Security settings"
   ["Головне меню"]="Main menu"
@@ -50,9 +50,9 @@ declare -A localization=(
   ["MHDDOS видалено з автозавантаження"]="MHDDOS removed from autostart"
   ["DISTRESS додано до автозавантаження"]="DISTRESS added to autostart"
   ["DISTRESS видалено з автозавантаження"]="DISTRESS removed from autostart"
-  ["DB1000N не встановлений, будь ласка встановіть і спробуйте знову"]="is not installed, please install and try again"
-  ["MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"]="is not installed, please install and try again"
-  ["DISTRESS не встановлений, будь ласка встановіть і спробуйте знову"]="is not installed, please install and try again"
+  ["DB1000N не встановлений, будь ласка встановіть і спробуйте знову"]="DB1000N is not installed, please install and try again"
+  ["MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"]="MHDDOS is not installed, please install and try again"
+  ["DISTRESS не встановлений, будь ласка встановіть і спробуйте знову"]="DISTRESS is not installed, please install and try again"
   
   ["Зупинка DB1000N"]="Stopping DB1000N"
   ["Запуск DB1000N"]="Starting DB1000N"
@@ -70,15 +70,24 @@ declare -A localization=(
 
   ["Встановлюємо DB1000N"]="Installing DB1000N"
   ["DB1000N успішно встановлено"]="DB1000N installed successfully"
-  ["Встановлюємо DB1000N"]="Installing MHDDOS"
-  ["DB1000N успішно встановлено"]="MHDDOS installed successfully"
-  ["Встановлюємо DB1000N"]="Installing DISTRESS"
-  ["DB1000N успішно встановлено"]="DISTRESS installed successfully"
+  ["Встановлюємо MHDDOS"]="Installing MHDDOS"
+  ["MHDDOS успішно встановлено"]="MHDDOS installed successfully"
+  ["Встановлюємо DISTRESS"]="Installing DISTRESS"
+  ["DISTRESS успішно встановлено"]="DISTRESS installed successfully"
+  
+  ["Встановлюємо Docker"]="Installing Docker"
+  ["Docker успішно встановлено"]="Docker installed successfully"
+  
+  ["Встановлюємо Fail2ban"]="Installing Fail2ban"
+  ["Fail2ban успішно встановлено"]="Fail2ban installed successfully"
+  ["Налаштовуємо Fail2ban"]="Setting Fail2ban"
+  ["Fail2ban успішно налаштовано"]="Fail2ban set up successfully"
+  ["Fail2ban не встановлений, будь ласка встановіть і спробуйте знову"]="Fail2ban is not installed, please install and try again"
   
   ["${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
-  ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource)): "
+  ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
 
 
@@ -90,7 +99,7 @@ declare -A localization=(
 
 
 
-  ["Налаштовуємо"]="Setting"
+
   
 
 
@@ -98,8 +107,8 @@ declare -A localization=(
   ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bitness"
 
   ["Юзер ІД"]="User ID"
-  ["Мова"]="Language"
-  ["Кількість копій"]="Number of copies"
+  ["Мова (ua | en | es | de | pl | it): "]="Language (ua | en | es | de | pl | it): "
+  ["Кількість копій (auto | X): "]="Number of copies (auto | X): "
   ["Успішно виконано"]="Execution successful"
 
 

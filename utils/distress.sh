@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install_distress() {
-    adss_dialog "Встановлюємо Distress"
+    adss_dialog "$(trans "Встановлюємо DISTRESS")"
 
     install() {
         cd $TOOL_DIR
@@ -21,7 +21,7 @@ install_distress() {
           ;;
 
           *)
-            confirm_dialog "Неможливо визначити розрядность операційної системи"
+            confirm_dialog "$(trans "Неможливо визначити розрядность операційної системи")"
             ddos_tool_managment
           ;;
         esac
@@ -32,45 +32,45 @@ install_distress() {
         create_symlink
     }
     install > /dev/null 2>&1
-    confirm_dialog "Distress успішно встановлено"
+    confirm_dialog "$(trans "DISTRESS успішно встановлено")"
 }
 
 configure_distress() {
     clear
     declare -A params;
 
-    echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
-    read -e -p "Юзер ІД: " -i "$(get_distress_variable 'user-id')" user_id
+    echo -e "$(trans "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}")"
+    read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
 
     params[user-id]=$user_id
 
-    read -e -p "Відсоткове співвідношення використання власної IP адреси (0-100): " -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
     if [[ -n "$use_my_ip" ]];then
       while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
-        echo "Будь ласка введіть правильні значення"
-        read -e -p "Відсоткове співвідношення використання власної IP адреси (0-100): " -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
     fi
 
     params[use-my-ip]=$use_my_ip
 
-    read -e -p "Кількість підключень Tor (0-100): "  -i "$(get_distress_variable 'use-tor')" use_tor
+    read -e -p "$(trans "Кількість підключень Tor (0-100): ")"  -i "$(get_distress_variable 'use-tor')" use_tor
     if [[ -n "$use_tor" ]];then
       while [[ $use_tor -lt 0 || $use_tor -gt 100 ]]
       do
-        echo "Будь ласка введіть правильні значення"
-        read -e -p "Кількість підключень Tor (0-100): " -i "$(get_distress_variable 'use-tor')" use_tor
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Кількість підключень Tor (0-100): ")" -i "$(get_distress_variable 'use-tor')" use_tor
       done
     fi
     params[use-tor]=$use_tor
 
-    read -e -p "Кількість створювачів завдань (4096): "  -i "$(get_distress_variable 'concurrency')" concurrency
+    read -e -p "$(trans "Кількість створювачів завдань (4096): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
     if [[ -n "$concurrency" ]];then
       while [[ ! $concurrency =~ ^[0-9]+$ ]]
       do
-        echo "Будь ласка введіть правильні значення"
-        read -e -p "Кількість створювачів завдань (4096): " -i "$(get_distress_variable 'concurrency')" concurrency
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Кількість створювачів завдань (4096): ")" -i "$(get_distress_variable 'concurrency')" concurrency
       done
     fi
 
@@ -81,7 +81,7 @@ configure_distress() {
     	  write_distress_variable "$i" "$value"
     done
     regenerate_distress_service_file
-    confirm_dialog "Успішно виконано"
+    confirm_dialog "$(trans "Успішно виконано")"
 }
 
 get_distress_variable() {
@@ -129,13 +129,13 @@ distress_auto_enable() {
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable distress >/dev/null 2>&1
   create_symlink
-  confirm_dialog "Distress додано до автозавантаження"
+  confirm_dialog "$(trans "DISTRESS додано до автозавантаження")"
 }
 
 distress_auto_disable() {
   sudo systemctl disable distress >/dev/null 2>&1
   create_symlink
-  confirm_dialog "Distress видалено з автозавантаження"
+  confirm_dialog "$(trans "DISTRESS видалено з автозавантаження")"
 }
 
 distress_enabled() {
@@ -153,14 +153,14 @@ distress_stop() {
 distress_get_status() {
   clear
   sudo systemctl status distress.service
-  echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+  echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
   read -s -n 1 key
   initiate_distress
 }
 
 distress_installed() {
   if [[ ! -f "$TOOL_DIR/distress" ]]; then
-      confirm_dialog "Distress не встановлений, будь ласка встановіть і спробуйте знову"
+      confirm_dialog "$(trans "DISTRESS не встановлений, будь ласка встановіть і спробуйте знову")"
       return 1
   else
       return 0
@@ -173,12 +173,12 @@ initiate_distress() {
     ddos_tool_managment
   else
       if sudo systemctl is-active distress >/dev/null 2>&1; then
-        active_disactive="Зупинка Distress"
+        active_disactive="$(trans "Зупинка DISTRESS")"
       else
-        active_disactive="Запуск Distress"
+        active_disactive="$(trans "Запуск DISTRESS")"
       fi
-      menu_items=("$active_disactive" "Налаштування Distress" "Статус Distress" "Повернутись назад")
-      display_menu "Distress" "${menu_items[@]}"
+      menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
+      display_menu "DISTRESS" "${menu_items[@]}"
 
       case $? in
         1)

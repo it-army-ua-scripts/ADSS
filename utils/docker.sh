@@ -5,7 +5,7 @@ source "${SCRIPT_DIR}/utils/definitions.sh"
 install_docker() {
   case $(get_distribution) in
           debian)
-              adss_dialog "Встановлюємо докер"
+              adss_dialog "$(trans "Встановлюємо Docker")"
               install() {
                  sudo apt-get update -y
                  sudo apt-get install ca-certificates curl gnupg -y
@@ -21,10 +21,10 @@ install_docker() {
                   sudo systemctl start docker
               }
               install > /dev/null 2>&1
-              confirm_dialog "Докер успішно встановлено"
+              confirm_dialog "$(trans "Docker успішно встановлено")"
           ;;
           fedora)
-              adss_dialog "Встановлюємо докер"
+              adss_dialog "$(trans "Встановлюємо Docker")"
               install() {
                   sudo dnf install -y dnf-plugins-core
                   sudo dnf config-manager \
@@ -35,11 +35,11 @@ install_docker() {
               }
 
               install > /dev/null 2>&1
-              confirm_dialog "Докер успішно встановлено"
+              confirm_dialog "$(trans "Docker успішно встановлено")"
           ;;
 
           centos)
-              adss_dialog "Встановлюємо докер"
+              adss_dialog "$(trans "Встановлюємо Docker")"
               install() {
                  sudo yum install -y yum-utils
                   sudo yum-config-manager \
@@ -49,10 +49,10 @@ install_docker() {
                   sudo systemctl start docker
               }
               install > /dev/null 2>&1
-              confirm_dialog "Докер успішно встановлено"
+              confirm_dialog "$(trans "Docker успішно встановлено")"
           ;;
           *)
-              adss_dialog "Встановлюємо докер"
+              adss_dialog "$(trans "Встановлюємо Docker")"
               install() {
                   sudo mkdir -m 0755 -p /etc/apt/keyrings
                   curl  -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -64,7 +64,7 @@ install_docker() {
                   sudo systemctl start docker
               }
               install > /dev/null 2>&1
-              confirm_dialog "Докер успішно встановлено"
+              confirm_dialog "$(trans "Docker успішно встановлено")"
           ;;
   esac
 }

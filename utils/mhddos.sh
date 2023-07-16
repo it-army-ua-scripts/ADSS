@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install_mhddos() {
-    adss_dialog "Встановлюємо MHDDOS"
+    adss_dialog "$(trans "Встановлюємо MHDDOS")"
 	  install() {
         cd $TOOL_DIR
         OSARCH=$(uname -m)
@@ -16,12 +16,12 @@ install_mhddos() {
           ;;
 
           i386* | i686*)
-            confirm_dialog "Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"
+            confirm_dialog "$(trans "Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності")"
             ddos_tool_managment
           ;;
 
           *)
-            confirm_dialog "Неможливо визначити розрядность операційної системи"
+            confirm_dialog "$(trans "Неможливо визначити розрядность операційної системи")"
             ddos_tool_managment
           ;;
         esac
@@ -32,35 +32,35 @@ install_mhddos() {
         create_symlink
 	  }
     install > /dev/null 2>&1
-    confirm_dialog "MHDDOS успішно встановлено"
+    confirm_dialog "$(trans "MHDDOS успішно встановлено")"
 }
 
 configure_mhddos() {
     clear
     declare -A params
-    echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
-    read -e -p "Юзер ІД: " -i "$(get_mhddos_variable 'user-id')" user_id
+    echo -e "$(trans "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}")"
+    read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
 
     params[user-id]=$user_id
-    read -e -p "Мова (ua | en | es | de | pl | it): " -i "$(get_mhddos_variable 'lang')" lang
+    read -e -p "$(trans "Мова (ua | en | es | de | pl | it): ")" -i "$(get_mhddos_variable 'lang')" lang
 
     languages=("ua" "en" "es" "de" "pl" "it")
     if [[ -n "$lang" ]];then
       while [[ ! "${languages[*]}" =~ "$lang" ]]
       do
-        echo "Будь ласка введіть правильні значення"
-        read -e -p "Мова (ua | en | es | de | pl | it): " -i "$(get_mhddos_variable 'lang')" lang
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Мова (ua | en | es | de | pl | it): ")" -i "$(get_mhddos_variable 'lang')" lang
       done
     fi
 
     params[lang]=$lang
 
-    read -e -p "Кількість копій (auto | X): " -i "$(get_mhddos_variable 'copies')" copies
+    read -e -p "$(trans "Кількість копій (auto | X): ")" -i "$(get_mhddos_variable 'copies')" copies
     if [[ -n "$copies" ]];then
       while  [[ ! $copies =~ ^[0-9]+$ && "$copies" != "auto" ]]
       do
-        echo "Будь ласка введіть правильні значення"
-        read -e -p "Кількість копій (auto | X): " -i "$(get_mhddos_variable 'copies')" copies
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Кількість копій (auto | X): ")" -i "$(get_mhddos_variable 'copies')" copies
       done
     fi
 
@@ -69,7 +69,7 @@ configure_mhddos() {
     if [[ -n "$vpn" ]];then
       while [[ $vpn != false && $vpn != true ]]
       do
-          echo "Будь ласка введіть правильні значення"
+          echo "$(trans "Будь ласка введіть правильні значення")"
           read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
       done
     	params[vpn]=$vpn
@@ -80,7 +80,7 @@ configure_mhddos() {
       if [[ -n "$vpn_percents" ]];then
         while [[ $vpn_percents -lt 1 || $vpn_percents -gt 100 ]]
         do
-          echo "Будь ласка введіть правильні значення"
+          echo "$(trans "Будь ласка введіть правильні значення")"
           read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
         done
       fi
@@ -94,14 +94,14 @@ configure_mhddos() {
     if [[ -n "$threads" ]];then
       while [[ ! $threads =~ ^[0-9]+$ ]]
       do
-        echo "Будь ласка введіть правильні значення"
+        echo "$(trans "Будь ласка введіть правильні значення")"
         read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
       done
     fi
 
     params[threads]=$threads
 
-    read -e -p "Проксі (шлях до файлу або веб-ресурсу): " -i "$(get_mhddos_variable 'proxies')" proxies
+    read -e -p "$(trans "Проксі (шлях до файлу або веб-ресурсу): ")" -i "$(get_mhddos_variable 'proxies')" proxies
     proxies=$(echo $proxies  | sed 's/\//\\\//g')
 
     params[proxies]=$proxies
@@ -111,7 +111,7 @@ configure_mhddos() {
     	  write_mhddos_variable "$i" "$value"
     done
     regenerate_mhddos_service_file
-    confirm_dialog "Успішно виконано"
+    confirm_dialog "$(trans "Успішно виконано")"
 }
 
 get_mhddos_variable() {
@@ -167,12 +167,12 @@ mhddos_auto_enable() {
   sudo systemctl disable db1000n.service >/dev/null 2>&1
   sudo systemctl enable mhddos.service >/dev/null 2>&1
   create_symlink
-  confirm_dialog "MHDDOS додано до автозавантаження"
+  confirm_dialog "$(trans "MHDDOS додано до автозавантаження")"
 }
 mhddos_auto_disable() {
  sudo systemctl disable mhddos >/dev/null 2>&1
  create_symlink
- confirm_dialog "MHDDOS видалено з автозавантаження"
+ confirm_dialog "$(trans "MHDDOS видалено з автозавантаження")"
 }
 mhddos_enabled() {
   if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
@@ -190,13 +190,13 @@ mhddos_stop() {
 mhddos_get_status() {
   clear
   sudo systemctl status mhddos.service
-  echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+  echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
   read -s -n 1 key
   initiate_mhddos
 }
 mhddos_installed() {
   if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
-      confirm_dialog "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"
+      confirm_dialog "$(trans "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову")"
       return 1
   else
       return 0
@@ -208,11 +208,11 @@ initiate_mhddos() {
     ddos_tool_managment
   else
       if sudo systemctl is-active mhddos >/dev/null 2>&1; then
-        active_disactive="Зупинка MHDDOS"
+        active_disactive="$(trans "Зупинка MHDDOS")"
       else
-        active_disactive="Запуск MHDDOS"
+        active_disactive="$(trans "Запуск MHDDOS")"
       fi
-      menu_items=("$active_disactive" "Налаштування MHDDOS" "Статус MHDDOS" "Повернутись назад")
+      menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
       display_menu "MHDDOS" "${menu_items[@]}"
 
       case $? in
