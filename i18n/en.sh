@@ -26,7 +26,6 @@ declare -A localization=(
   ["Встановлення ддос інструментів"]="Install DDOS tools"
   ["Управління ддос інструментами"]="Manage DDOS tools"
 
-
   ["Для збору особистої статистики та відображення у лідерборді на офіційному сайті."]="To gather personal statistics and display on the leaderboard on the official website."
   ["Надається Telegram ботом"]="Provided by Telegram bot"
   ["Щоб пропустити, натисніть Enter"]="To skip, press Enter"
@@ -38,7 +37,6 @@ declare -A localization=(
   ["Налаштування захисту від брутфорса"]="Bruteforce protection settings"
   ["Вихід"]="Exit"
   ["Оберіть опцію:"]="Choose an option:"
-
 
   ["Встановлення захисту"]="Install protection"
   ["Налаштування захисту"]="Protection settings"
@@ -84,24 +82,21 @@ declare -A localization=(
   ["Fail2ban успішно налаштовано"]="Fail2ban set up successfully"
   ["Fail2ban не встановлений, будь ласка встановіть і спробуйте знову"]="Fail2ban is not installed, please install and try again"
   
+  ["Встановлюємо UFW фаєрвол"]="Installing UFW firewall"
+  ["Фаєрвол UFW встановлено і деактивовано"]="UFW firewall installed and deactivated"
+  ["Фаєрвол UFW налаштовано і активовано"]="UFW firewall set up and activated"
+  ["UFW не встановлений, будь ласка встановіть і спробуйте знову"]="UFW is not installed, please install and try again"
+  ["Налаштовуємо UFW фаєрвол"]="Setting UFW firewall"  
+  
   ["${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
 
-
   ["Відсоткове співвідношення використання власної IP адреси (0-100)"]="Percentage of own IP address use (0-100)"
   ["Кількість підключень Tor (0-100)"]="Number of Tor connections (0-100)"
   ["Кількість створювачів завдань (4096)"]="Number of task creators (4096)"
-
-
-
-
-
-
-  
-
 
   ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="No MHDDOS implementation for x86 architecture, which corresponds to 32-bit"
   ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bitness"
@@ -111,21 +106,13 @@ declare -A localization=(
   ["Кількість копій (auto | X): "]="Number of copies (auto | X): "
   ["Успішно виконано"]="Execution successful"
 
-
   ["Порти успішно розширено"]="Ports successfully extended"
   ["Наразі всі порти розширено"]="All ports are currently extended"
   ["Не можливо виконати дію"]="Unable to perform action"
-  ["UFW фаєрвол"]="UFW firewall"
-  ["Фаєрвол UFW встановлено і деактивовано"]="UFW firewall installed and deactivated"
 
-
-
-  ["Фаєрвол UFW налаштовано і активовано"]="UFW firewall set up and activated"
-  ["Перевіряємо наявленість оновлень"]="Checking for updates"
-  ["Оновляємо ADSS"]="Updating ADSS"
-  ["ADSS успішно оновлено"]="ADSS updated successfully"
-
-
+  ["${GREEN}Перевіряємо наявленість оновлень${NC}"]="${GREEN}Checking for updates${NC}"
+  ["${GREEN}Оновляємо ADSS${NC}"]="${GREEN}Updating ADSS${NC}"
+  ["${GREEN}ADSS успішно оновлено${NC}"]="${GREEN}ADSS updated successfully${NC}"
 )
 
 export localization

@@ -11,11 +11,11 @@ extend_ports() {
             sudo sysctl -p
           }
           extend  > /dev/null 2>&1
-          confirm_dialog "Порти успішно розширено"
+          confirm_dialog "$(trans "Порти успішно розширено")"
       else
-         confirm_dialog "Наразі всі порти розширено"
+         confirm_dialog "$(trans "Наразі всі порти розширено")"
       fi
     else
-      confirm_dialog "Не можливо виконати дію"
+      confirm_dialog "$(trans "Не можливо виконати дію")"
     fi
 }
