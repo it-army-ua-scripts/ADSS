@@ -26,9 +26,9 @@ declare -A localization=(
   ["Встановлення ддос інструментів"]="Install DDOS tools"
   ["Управління ддос інструментами"]="Manage DDOS tools"
 
-  ["Для збору особистої статистики та відображення у лідерборді на офіційному сайті."]="To gather personal statistics and display on the leaderboard on the official website."
-  ["Надається Telegram ботом"]="Provided by Telegram bot"
-  ["Щоб пропустити, натисніть Enter"]="To skip, press Enter"
+  ["${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}"]="${GREEN}To gather personal statistics and display on the leaderboard on the official website.${NC}"
+  ["${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}"]="${GREEN}Provided by Telegram bot ${ORANGE}@itarmy_stat_bot${NC}${NC}"
+  ["${GREEN}Щоб пропустити, натисніть Enter${NC}"]="${GREEN}To skip, press Enter${NC}"
 
   ["Розширення портів"]="Port extension"
   ["Налаштування безпеки"]="Security settings"
@@ -101,7 +101,7 @@ declare -A localization=(
   ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="No MHDDOS implementation for x86 architecture, which corresponds to 32-bit"
   ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bitness"
 
-  ["Юзер ІД"]="User ID"
+  ["Юзер ІД: "]="User ID: "
   ["Мова (ua | en | es | de | pl | it): "]="Language (ua | en | es | de | pl | it): "
   ["Кількість копій (auto | X): "]="Number of copies (auto | X): "
   ["Успішно виконано"]="Execution successful"

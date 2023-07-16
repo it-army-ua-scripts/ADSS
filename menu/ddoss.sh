@@ -14,7 +14,7 @@ ${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${N
 ${GREEN}Щоб пропустити, натисніть Enter${NC}
 ")"
         echo -ne "$(trans "
-Юзер ІД : ")"
+Юзер ІД: ")"
         read user_id
 
         if [[ "$user_id" ]]; then
