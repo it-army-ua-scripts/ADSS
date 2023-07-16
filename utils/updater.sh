@@ -7,7 +7,7 @@ check_updates() {
   else
       timestamp=$(date +%s)
       diff=$((timestamp - ADSS_DEPLOYMENT_VERSION))
-      one_hour=3600
+      one_hour=300
       if [[ $diff -gt $one_hour  ]];then
         prepare_for_update
       fi
