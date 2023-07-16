@@ -48,12 +48,13 @@ fi
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban
    install_ufw
+   configure_ufw
    install_db1000n
    install_distress
    install_mhddos
+   extend_ports
    mhddos_run
    mhddos_auto_enable
-   extend_ports
    get_ddoss_status
 elif [ "$1" = "--restore" ] ; then
   sudo rm -rf /opt/itarmy

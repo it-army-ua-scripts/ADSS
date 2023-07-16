@@ -1,8 +1,8 @@
 #!/bin/bash
 
 security_settings() {
-  menu_items=("Встановлення захисту" "Налаштування захисту" "Повернутись назад")
-  display_menu "Налаштування безпеки" "${menu_items[@]}"
+  menu_items=("$(trans "Встановлення захисту")" "$(trans "Налаштування захисту")" "$(trans "Повернутись назад")")
+  display_menu "$(trans "Налаштування безпеки")" "${menu_items[@]}"
 
   case $? in
     1)

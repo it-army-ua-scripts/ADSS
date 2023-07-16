@@ -1,8 +1,8 @@
 #!/bin/bash
 
 main_menu() {
-  menu_items=("$(trans "Встановити докер")" "Розширення портів" "Налаштування безпеки" "DDOS")
-  display_menu "Головне меню" "${menu_items[@]}"
+  menu_items=("$(trans "Встановити докер")" "$(trans "Розширення портів")" "$(trans "Налаштування безпеки")" "DDOS")
+  display_menu "$(trans "Головне меню")" "${menu_items[@]}"
   case $? in
     1)
       install_docker

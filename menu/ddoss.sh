@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ddos(){
-    menu_items=("Встановлення ддос інструментів" "Управління ддос інструментами" "Повернутись назад")
+    menu_items=("$(trans "Встановлення ддос інструментів")" "$(trans "Управління ддос інструментами")" "$(trans "Повернутись назад")")
     display_menu "DDOS" "${menu_items[@]}"
 
     case $? in
       1)
         clear
-        echo -ne "${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}"
-        echo -ne "
-${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}"
-        echo -ne "
+        echo -ne "$(trans "${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}")"
+        echo -ne "$(trans "
+${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}")"
+        echo -ne "$(trans "
 ${GREEN}Щоб пропустити, натисніть Enter${NC}
-"
-        echo -ne "
-Юзер ІД : "
+")"
+        echo -ne "$(trans "
+Юзер ІД : ")"
         read user_id
 
         if [[ "$user_id" ]]; then

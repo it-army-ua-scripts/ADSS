@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install_db1000n() {
-    adss_dialog "Встановлюємо DB1000N"
+    adss_dialog "$(trans "Встановлюємо DB1000N")"
     install() {
       cd $TOOL_DIR
       OSARCH=$(uname -m)
@@ -29,7 +29,7 @@ install_db1000n() {
         ;;
 
         *)
-            confirm_dialog "Неможливо визначити розрядность операційної системи"
+            confirm_dialog "$(trans "Неможливо визначити розрядность операційної системи")"
             ddos_tool_managment
         ;;
       esac
@@ -37,41 +37,41 @@ install_db1000n() {
       create_symlink
     }
     install > /dev/null 2>&1
-    confirm_dialog "DB1000N успішно встановлено"
+    confirm_dialog "$(trans "DB1000N успішно встановлено")"
 }
 
 configure_db1000n() {
     clear
     declare -A params;
-    echo -e "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"
+    echo -e "$(trans "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}")"
 
-    read -e -p "Юзер ІД: " -i "$(get_db1000n_variable 'user-id')" user_id
+    read -e -p "$(trans "Юзер ІД: ")" -i "$(get_db1000n_variable 'user-id')" user_id
 
     params[user-id]=$user_id
 
-    read -e -p "Автооновлення (1 | 0): " -i "$(get_db1000n_variable 'enable-self-update')" enable_self_update
+    read -e -p "$(trans "Автооновлення (1 | 0): ")" -i "$(get_db1000n_variable 'enable-self-update')" enable_self_update
 
     if [[ -n "$enable_self_update" ]];then
         while [[ "$enable_self_update" != "1" && "$enable_self_update" != "0" ]]
         do
-          echo "Будь ласка введіть правильні значення"
-          read -e -p "Автооновлення (1 | 0): " -i "$(get_db1000n_variable 'enable-self-update')" enable_self_update
+          echo "$(trans "Будь ласка введіть правильні значення")"
+          read -e -p "$(trans "Автооновлення (1 | 0): ")" -i "$(get_db1000n_variable 'enable-self-update')" enable_self_update
         done
     fi
 
     params[enable-self-update]=$enable_self_update
 
-    read -e -p "Проксі (шлях до файлу або веб-ресурсу): " -i "$(get_db1000n_variable 'proxy')" proxies
+    read -e -p "$(trans "Проксі (шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxy')" proxies
     proxies=$(echo $proxies  | sed 's/\//\\\//g')
 
     params[proxy]=$proxies
 
-    read -e -p "Масштабування (1 | X): "  -i "$(get_db1000n_variable 'scale')" scale
+    read -e -p "$(trans "Масштабування (1 | X): ")"  -i "$(get_db1000n_variable 'scale')" scale
     if [[ -n "$scale" ]];then
       while [[ ! $scale =~ ^[0-9]+$ && "$scale" != "1" ]]
       do
-        echo "Будь ласка введіть правильні значення"
-       read -e -p "Масштабування (1 | X): "  -i "$(get_db1000n_variable 'scale')" scale
+        echo "$(trans "Будь ласка введіть правильні значення")"
+       read -e -p "$(trans "Масштабування (1 | X): ")"  -i "$(get_db1000n_variable 'scale')" scale
       done
     fi
 
@@ -82,7 +82,7 @@ configure_db1000n() {
         write_db1000n_variable "$i" "$value"
     done
     regenerate_db1000n_service_file
-    confirm_dialog "Успішно виконано"
+    confirm_dialog "$(trans "Успішно виконано")"
 }
 
 get_db1000n_variable() {
@@ -133,13 +133,13 @@ db1000n_auto_enable() {
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl enable db1000n >/dev/null 2>&1
   create_symlink
-  confirm_dialog "DB1000N додано до автозавантаження"
+  confirm_dialog "$(trans "DB1000N додано до автозавантаження")"
 }
 
 db1000n_auto_disable() {
   sudo systemctl disable db1000n >/dev/null 2>&1
   create_symlink
-  confirm_dialog "DB1000N видалено з автозавантаження"
+  confirm_dialog "$(trans "DB1000N видалено з автозавантаження")"
 }
 
 db1000n_enabled() {
@@ -153,14 +153,14 @@ db1000n_enabled() {
 db1000n_get_status() {
   clear
   sudo systemctl status db1000n.service
-  echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+  echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
   read -s -n 1 key
   initiate_db1000n
 }
 
 db1000n_installed() {
   if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
-      confirm_dialog "DB1000N не встановлений, будь ласка встановіть і спробуйте знову"
+      confirm_dialog "$(trans "DB1000N не встановлений, будь ласка встановіть і спробуйте знову")"
       return 1
   else
       return 0
@@ -173,11 +173,11 @@ initiate_db1000n() {
     ddos_tool_managment
   else
         if sudo systemctl is-active db1000n >/dev/null 2>&1; then
-          active_disactive="Зупинка DB1000N"
+          active_disactive="$(trans "Зупинка DB1000N")"
         else
-          active_disactive="Запуск DB1000N"
+          active_disactive="$(trans "Запуск DB1000N")"
         fi
-        menu_items=("$active_disactive" "Налаштування DB1000N" "Статус DB1000N" "Повернутись назад")
+        menu_items=("$active_disactive" "$(trans "Налаштування DB1000N")" "$(trans "Статус DB1000N")" "$(trans "Повернутись назад")")
         display_menu "DB1000N" "${menu_items[@]}"
 
         case $? in

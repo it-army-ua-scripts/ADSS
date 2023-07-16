@@ -28,11 +28,11 @@ create_symlink() {
 }
 
 stop_services() {
-  adss_dialog "Зупиняємо атаку"
+  adss_dialog "$(trans "Зупиняємо атаку")"
   sudo systemctl stop distress.service >/dev/null
   sudo systemctl stop db1000n.service >/dev/null
   sudo systemctl stop mhddos.service >/dev/null
-  confirm_dialog "Атака зупинена"
+  confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }
 
@@ -50,9 +50,9 @@ get_ddoss_status() {
     if [[ -n "$service" ]]; then
       while true; do
         clear
-        echo -e "${GREEN}Запущено $service${NC}"
+        echo -e "$(trans "${GREEN}Запущено $service${NC}")"
         journalctl -u "$service.service" | tail -20
-        echo -e "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"
+        echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
 
         sleep 3
         if read -rsn1 -t 0.1; then
@@ -61,20 +61,20 @@ get_ddoss_status() {
       done
       ddos_tool_managment
     else
-       confirm_dialog "Немає запущених процесів"
+       confirm_dialog "$(trans "Немає запущених процесів")"
     fi
     ddos_tool_managment
 }
 
 ddos_tool_managment(){
-    menu_items=("Статус атаки")
+    menu_items=("$(trans "Статус атаки")")
     check_enabled
     enabled_tool=$?
     if [[ "$enabled_tool" == 1 ]]; then
-      menu_items+=("Зупинити атаку")
+      menu_items+=("$(trans "Зупинити атаку")")
     fi
-    menu_items+=("Налаштування автозапуску" "MHDDOS" "DB1000N" "Distress" "Повернутись назад")
-    display_menu "Управління ддос інструментами" "${menu_items[@]}"
+    menu_items+=("$(trans "Налаштування автозапуску")" "MHDDOS" "DB1000N" "Distress" "$(trans "Повернутись назад")")
+    display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}"
     status=$?
     if [[ "$enabled_tool" == 1 ]]; then
         case $status in
