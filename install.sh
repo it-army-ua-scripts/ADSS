@@ -26,7 +26,7 @@ if [ -r /etc/os-release ]; then
         esac
 
         if [[ ! -z "$PACKAGE_MANAGER" ]]; then
-	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog' 'bc')
+	        TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog' 'bc' 'translate-shell')
           sudo "$PACKAGE_MANAGER" update -y
           for i in "${!TOOLS[@]}"; do
             echo -e "${GREEN}Встановлюємо ${TOOLS[i]}${NC}"
