@@ -53,12 +53,12 @@ declare -A localization=(
   ["MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"]="MHDDOS is not installed, please install and try again"
   ["DISTRESS не встановлений, будь ласка встановіть і спробуйте знову"]="DISTRESS is not installed, please install and try again"
   
-  ["Зупинка DB1000N"]="Stopping DB1000N"
-  ["Запуск DB1000N"]="Starting DB1000N"
-  ["Зупинка MHDDOS"]="Stopping MHDDOS"
-  ["Запуск MHDDOS"]="Starting MHDDOS"
-  ["Зупинка DISTRESS"]="Stopping DISTRESS"
-  ["Запуск DISTRESS"]="Starting DISTRESS"
+  ["Зупинка DB1000N"]="Stop DB1000N"
+  ["Запуск DB1000N"]="Start DB1000N"
+  ["Зупинка MHDDOS"]="Stop MHDDOS"
+  ["Запуск MHDDOS"]="Start MHDDOS"
+  ["Зупинка DISTRESS"]="Stop DISTRESS"
+  ["Запуск DISTRESS"]="Start DISTRESS"
   
   ["Налаштування DB1000N"]="DB1000N settings"
   ["Статус DB1000N"]="DB1000N status"
@@ -95,9 +95,9 @@ declare -A localization=(
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
 
-  ["Відсоткове співвідношення використання власної IP адреси (0-100)"]="Percentage of own IP address use (0-100)"
-  ["Кількість підключень Tor (0-100)"]="Number of Tor connections (0-100)"
-  ["Кількість створювачів завдань (4096)"]="Number of task creators (4096)"
+  ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of own IP address use (0-100): "
+  ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
+  ["Кількість створювачів завдань (4096): "]="Number of task creators (4096): "
 
   ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="No MHDDOS implementation for x86 architecture, which corresponds to 32-bit"
   ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bitness"
