@@ -21,13 +21,13 @@ declare -A localization=(
   ["${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"]="${GRAY}Press any key to continue${NC}"
   ["Немає запущених процесів"]="No processes running"
   ["Статус атаки"]="Attack status"
-  ["Зупинити атаку"]="Stop attack"
+  ["Зупинити атаку"]="Stop an attack"
   ["Управління ддос інструментами"]="DDOS tool management"
   ["Встановлення ддос інструментів"]="Install DDOS tools"
   ["Управління ддос інструментами"]="Manage DDOS tools"
 
   ["${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}"]="${GREEN}To gather personal statistics and display on the leaderboard on the official website.${NC}"
-  ["${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}"]="${GREEN}Provided by Telegram bot ${ORANGE}@itarmy_stat_bot${NC}${NC}"
+  ["${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}"]="${GREEN}Provided by the Telegram bot ${ORANGE}@itarmy_stat_bot${NC}${NC}"
   ["${GREEN}Щоб пропустити, натисніть Enter${NC}"]="${GREEN}To skip, press Enter${NC}"
 
   ["Розширення портів"]="Port extension"
@@ -95,12 +95,12 @@ declare -A localization=(
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
 
-  ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of own IP address use (0-100): "
+  ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
   ["Кількість створювачів завдань (4096): "]="Number of task creators (4096): "
 
-  ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="No MHDDOS implementation for x86 architecture, which corresponds to 32-bit"
-  ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bitness"
+  ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="There's no MHDDOS implementation for the x86 architecture that corresponds to the 32-bit variant"
+  ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bit depth"
 
   ["Юзер ІД: "]="User ID: "
   ["Мова (ua | en | es | de | pl | it): "]="Language (ua | en | es | de | pl | it): "
@@ -109,7 +109,7 @@ declare -A localization=(
 
   ["Порти успішно розширено"]="Ports successfully extended"
   ["Наразі всі порти розширено"]="All ports are currently extended"
-  ["Не можливо виконати дію"]="Unable to perform action"
+  ["Не можливо виконати дію"]="Unable to perform the action"
 
   ["${GREEN}Перевіряємо наявленість оновлень${NC}"]="${GREEN}Checking for updates${NC}"
   ["${GREEN}Оновляємо ADSS${NC}"]="${GREEN}Updating ADSS${NC}"
