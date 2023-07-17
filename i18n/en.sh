@@ -37,6 +37,7 @@ declare -A localization=(
   ["Налаштування захисту від брутфорса"]="Bruteforce protection settings"
   ["Вихід"]="Exit"
   ["Оберіть опцію:"]="Choose an option:"
+  ["ДДОС інструменти не встановлено"]="No DDOS tools installed"
 
   ["Встановлення захисту"]="Install protection"
   ["Налаштування захисту"]="Protection settings"

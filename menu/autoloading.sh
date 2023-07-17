@@ -2,15 +2,8 @@
 
 autoload_configuration() {
   db1000n_installed
-  if [[ $? == 1 ]]; then
-    ddos_tool_managment
-  fi
-  distress_installed
-  if [[ $? == 1 ]]; then
-    ddos_tool_managment
-  fi
-  mhddos_installed
-  if [[ $? == 1 ]]; then
+  if [[ ! -f "$TOOL_DIR/db1000n" || ! -f "$TOOL_DIR/mhddos_proxy_linux" || ! -f "$TOOL_DIR/distress" ]]; then
+    confirm_dialog "$(trans "ДДОС інструменти не встановлено")"
     ddos_tool_managment
   fi
 
