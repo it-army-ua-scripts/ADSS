@@ -4,7 +4,7 @@ source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
   case $(get_distribution) in
-          fedora)
+          fedora | rocky)
              adss_dialog "$(trans "Встановлюємо Fail2ban")"
              install() {
                 sudo dnf update -y

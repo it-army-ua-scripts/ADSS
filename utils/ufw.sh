@@ -3,7 +3,7 @@
 source "${SCRIPT_DIR}/utils/definitions.sh"
 install_ufw() {
   case $(get_distribution) in
-          fedora)
+          fedora | rocky)
               adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
               install() {
                 sudo systemctl stop firewalld

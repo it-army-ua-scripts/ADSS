@@ -38,6 +38,21 @@ install_docker() {
               confirm_dialog "$(trans "Docker успішно встановлено")"
           ;;
 
+          rocky)
+              adss_dialog "$(trans "Встановлюємо Docker")"
+              install() {
+                  sudo dnf install -y dnf-plugins-core
+                  sudo dnf config-manager \
+                      --add-repo \
+                      https://download.docker.com/linux/centos/docker-ce.repo
+                  sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+                  sudo systemctl start docker
+              }
+
+              install > /dev/null 2>&1
+              confirm_dialog "$(trans "Docker успішно встановлено")"
+          ;;
+
           centos)
               adss_dialog "$(trans "Встановлюємо Docker")"
               install() {
