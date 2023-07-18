@@ -14,7 +14,7 @@ if [ -r /etc/os-release ]; then
                 debian | ubuntu)
                     PACKAGE_MANAGER="apt-get"
                 ;;
-                fedora)
+                fedora | rocky)
                     PACKAGE_MANAGER="dnf"
                 ;;
                 centos)
