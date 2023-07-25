@@ -4,7 +4,7 @@ ADSS is a Shell script that automatically updates itself and determines the vers
 
 Tested support for the current version - ubuntu, debian, fedora, centos (х86,х64,arm)
 
-#### [English version - click here](/README-EN.md)
+#### [Українська версія - нажміть сюди](/README.md)
 #### 💁 [Technical support](https://t.me/+H6PnjkydZX0xNDky)
 
 ### 💽 Installation
