@@ -1,6 +1,7 @@
 ## Automatic DDoS Server Starter from IT Army Ukraine (ADSS)
 
 ADSS is a Shell script that automatically updates itself and determines the version, bitness, and distribution of your Linux OS.
+Tested support for the current version - ubuntu, debian, fedora, centos (х86,х64,arm)
 
 #### [English version - click here](/README-EN.md)
 #### 💁 [Technical support](https://t.me/+H6PnjkydZX0xNDky)
@@ -15,7 +16,7 @@ source <(curl -s https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/insta
 
 During the installation, the script automatically installs the necessary packages :
 
-`**zip, unzip, gnupg, ca-certificates, curl, git, dialog**`
+`zip, unzip, gnupg, ca-certificates, curl, git, dialog`
 
 ### 🛠 Managing ADSS
 
