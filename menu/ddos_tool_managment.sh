@@ -73,7 +73,7 @@ ddos_tool_managment(){
     if [[ "$enabled_tool" == 1 ]]; then
       menu_items+=("$(trans "Зупинити атаку")")
     fi
-    menu_items+=("$(trans "Налаштування автозапуску")" "MHDDOS" "DB1000N" "Distress" "$(trans "Повернутись назад")")
+    menu_items+=("$(trans "Налаштування автозапуску")" "MHDDOS" "DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
     display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}"
     status=$?
     if [[ "$enabled_tool" == 1 ]]; then
