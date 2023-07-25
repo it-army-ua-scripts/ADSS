@@ -59,7 +59,7 @@ if [ "$1" = "--auto-install" ] ; then
    get_ddoss_status
 elif [ "$1" = "--restore" ] ; then
   sudo rm -rf /opt/itarmy
-  source <(curl -s https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh)
+  curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s
 else
     main_menu
 fi
