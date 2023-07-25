@@ -12,7 +12,7 @@ Tested support for the current version - ubuntu, debian, fedora, centos (х86,х
 Use this command for installation :
 
 ```
-source <(curl -s https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh)
+curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s
 ```
 
 During the installation, the script automatically installs the necessary packages :

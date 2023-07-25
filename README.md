@@ -12,7 +12,7 @@ ADSS - це скрипт, написаний на Shell, який автомат
 Використовуйте цю команду для встановлення :
 
 ```
-source <(curl -s https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh)
+curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s
 ```
 
 Під час встановлення скрипт автоматично встановлює потрібні пакети:
