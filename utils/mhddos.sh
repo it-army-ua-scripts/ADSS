@@ -146,7 +146,7 @@ regenerate_mhddos_service_file() {
     		value=" "
     	fi
     fi
-    if [[ "$key" == 'vpn-percent' && "$vpn" == false ]];then
+    if [[ "$key" == 'vpn-percents' && "$vpn" == false ]];then
       continue
     fi
     if [[ "$value" ]]; then
