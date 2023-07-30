@@ -74,8 +74,20 @@ configure_db1000n() {
        read -e -p "$(trans "Масштабування (1 | X): ")"  -i "$(get_db1000n_variable 'scale')" scale
       done
     fi
-
     params[scale]=$scale
+
+    read -e -p "$(trans "Проксі List(шлях до файлу або веб-ресурсу): ")" -i "$(get_mhddos_variable 'proxylist')" proxylist
+    proxylist=$(echo $proxylist  | sed 's/\//\\\//g')
+    if [[ -n "$proxylist" ]];then
+      params[proxylist]=$proxylist
+    fi
+
+    if [[ -n "$proxylist" ]];then
+        read -e -p "$(trans "default-proxy-proto: ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default-proxy-proto
+        if [[ -n "$default-proxy-proto" ]];then
+          params[default-proxy-proto]=$default-proxy-proto
+        fi
+    fi
 
     for i in "${!params[@]}"; do
     	  value="${params[$i]}"
