@@ -80,6 +80,8 @@ configure_db1000n() {
     proxylist=$(echo $proxylist  | sed 's/\//\\\//g')
     if [[ -n "$proxylist" ]];then
       params[proxylist]=$proxylist
+    else
+      params[proxylist]=" "
     fi
 
     if [[ -n "$proxylist" ]];then
