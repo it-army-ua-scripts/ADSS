@@ -128,7 +128,7 @@ regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
-
+  vpn=false
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
@@ -139,11 +139,15 @@ regenerate_mhddos_service_file() {
     fi
 
     if [[ "$key" == 'vpn' ]];then
+      vpn=$value
     	if [[ "$value" == false ]]; then
     		continue
     	elif [[ "$value" == true ]]; then
     		value=" "
     	fi
+    fi
+    if [[ "$key" == 'vpn-percent' && "$vpn" == false ]];then
+      continue
     fi
     if [[ "$value" ]]; then
       start="$start --$key $value"

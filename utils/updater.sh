@@ -28,17 +28,17 @@ prepare_for_update() {
 write_version() {
   env_file="/etc/environment"
   sudo sed -i '/ADSS_DEPLOYMENT_VERSION/d' $env_file
-  echo "ADSS_DEPLOYMENT_VERSION=\"$1\"" | sudo tee -a $env_file >> /dev/null
+  echo "ADSS_DEPLOYMENT_VERSION=\"$1\"" | sudo tee -a $env_file >/dev/null 2>&1
   source $env_file
 }
 
 update_adss() {
   echo -e "$(trans "${GREEN}Оновляємо ADSS${NC}")"
   cd $SCRIPT_DIR && \
-  git checkout services/db1000n.service && \
-  git checkout services/distress.service && \
-  git checkout services/mhddos.service && \
-  git pull --all >> /dev/null
+  git checkout services/db1000n.service >/dev/null 2>&1 && \
+  git checkout services/distress.service >/dev/null 2>&1 && \
+  git checkout services/mhddos.service >/dev/null 2>&1 && \
+  git pull --all >/dev/null 2>&1
 
   SERVICES=('mhddos' 'distress' 'db1000n')
   for SERVICE in "${!SERVICES[@]}"; do
