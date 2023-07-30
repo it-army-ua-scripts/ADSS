@@ -83,9 +83,9 @@ configure_db1000n() {
     fi
 
     if [[ -n "$proxylist" ]];then
-        read -e -p "$(trans "default-proxy-proto: ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default-proxy-proto
-        if [[ -n "$default-proxy-proto" ]];then
-          params[default-proxy-proto]=$default-proxy-proto
+        read -e -p "$(trans "default-proxy-proto: ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+        if [[ -n "$default_proxy_proto" ]];then
+          params[default-proxy-proto]=$default_proxy_proto
         fi
     fi
 
