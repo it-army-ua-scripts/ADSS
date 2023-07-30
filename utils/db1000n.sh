@@ -76,7 +76,7 @@ configure_db1000n() {
     fi
     params[scale]=$scale
 
-    read -e -p "$(trans "Проксі List(шлях до файлу або веб-ресурсу): ")" -i "$(get_mhddos_variable 'proxylist')" proxylist
+    read -e -p "$(trans "Проксі List(шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
     proxylist=$(echo $proxylist  | sed 's/\//\\\//g')
     if [[ -n "$proxylist" ]];then
       params[proxylist]=$proxylist
@@ -87,6 +87,8 @@ configure_db1000n() {
         if [[ -n "$default_proxy_proto" ]];then
           params[default-proxy-proto]=$default_proxy_proto
         fi
+    else
+      params[default-proxy-proto]=" "
     fi
 
     for i in "${!params[@]}"; do
