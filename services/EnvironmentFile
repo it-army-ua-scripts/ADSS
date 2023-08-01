@@ -20,4 +20,6 @@ user-id=
 enable-self-update=1
 proxy=
 scale=1
+proxylist=
+default-proxy-proto=
 [/db1000n]

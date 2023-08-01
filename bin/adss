@@ -39,11 +39,12 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-check_updates
 localization_file=$(apply_localization "$@")
 if [[ -n "$localization_file" ]]; then
   source "$localization_file"
 fi
+
+check_updates
 
 if [ "$1" = "--auto-install" ] ; then
    install_fail2ban
