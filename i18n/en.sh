@@ -111,9 +111,6 @@ declare -A localization=(
   ["Наразі всі порти розширено"]="All ports are currently extended"
   ["Не можливо виконати дію"]="Unable to perform the action"
 
-  ["${GREEN}Перевіряємо наявленість оновлень${NC}"]="${GREEN}Checking for updates${NC}"
-  ["${GREEN}Оновляємо ADSS${NC}"]="${GREEN}Updating ADSS${NC}"
-  ["${GREEN}ADSS успішно оновлено${NC}"]="${GREEN}ADSS updated successfully${NC}"
 )
 
 export localization
