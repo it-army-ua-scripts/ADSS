@@ -18,8 +18,7 @@ concurrency=4096
 [db1000n]
 user-id=
 enable-self-update=1
-proxy=
 scale=1
 proxylist=
-default-proxy-proto=
+default-proxy-proto=socks5
 [/db1000n]

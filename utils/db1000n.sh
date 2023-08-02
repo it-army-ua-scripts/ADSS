@@ -61,11 +61,6 @@ configure_db1000n() {
 
     params[enable-self-update]=$enable_self_update
 
-    read -e -p "$(trans "Проксі (шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxy')" proxies
-    proxies=$(echo $proxies  | sed 's/\//\\\//g')
-
-    params[proxy]=$proxies
-
     read -e -p "$(trans "Масштабування (1 | X): ")"  -i "$(get_db1000n_variable 'scale')" scale
     if [[ -n "$scale" ]];then
       while [[ ! $scale =~ ^[0-9]+$ && "$scale" != "1" ]]
@@ -76,7 +71,7 @@ configure_db1000n() {
     fi
     params[scale]=$scale
 
-    read -e -p "$(trans "Проксі List(шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
+    read -e -p "$(trans "Proxy List(шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
     proxylist=$(echo $proxylist  | sed 's/\//\\\//g')
     if [[ -n "$proxylist" ]];then
       params[proxylist]=$proxylist
@@ -85,11 +80,20 @@ configure_db1000n() {
     fi
 
     if [[ -n "$proxylist" ]];then
-        read -e -p "$(trans "default-proxy-proto: ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+        read -e -p "$(trans "default-proxy-proto (socks5, socks5h, socks4, socks4a, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
         if [[ -n "$default_proxy_proto" ]];then
+          while [[
+          "$default_proxy_proto" != "socks5"
+          && "$default_proxy_proto" != "socks5h"
+          && "$default_proxy_proto" != "socks4"
+          && "$default_proxy_proto" != "socks4a"
+          && "$default_proxy_proto" != "http"
+          ]]
+          do
+            echo "$(trans "Будь ласка введіть правильні значення")"
+            read -e -p "$(trans "default-proxy-proto (socks5, socks5h, socks4, socks4a, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+          done
           params[default-proxy-proto]=$default_proxy_proto
-        else
-          params[default-proxy-proto]=" "
         fi
     else
       params[default-proxy-proto]=" "
