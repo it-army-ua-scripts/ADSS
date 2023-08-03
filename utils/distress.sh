@@ -81,6 +81,9 @@ configure_distress() {
     	  write_distress_variable "$i" "$value"
     done
     regenerate_distress_service_file
+    if systemctl is-active --quiet distress.service; then
+        sudo systemctl restart distress.service >/dev/null 2>&1
+    fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
 
