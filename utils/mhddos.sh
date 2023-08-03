@@ -111,6 +111,7 @@ configure_mhddos() {
     done
     regenerate_mhddos_service_file
     if systemctl is-active --quiet mhddos.service; then
+        sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
         sudo systemctl restart mhddos.service >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
@@ -163,6 +164,7 @@ regenerate_mhddos_service_file() {
 }
 
 mhddos_run() {
+  sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
   sudo systemctl stop distress.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
   sudo systemctl start mhddos.service >/dev/null 2>&1

@@ -59,6 +59,7 @@ if [ "$1" = "--auto-install" ] ; then
    mhddos_auto_enable
    get_ddoss_status
 elif [ "$1" = "--restore" ] ; then
+  sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s
 else
