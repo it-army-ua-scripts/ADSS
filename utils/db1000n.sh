@@ -22,10 +22,10 @@ install_db1000n() {
         ;;
 
         i386* | i686*)
-          sudo curl -Lo db1000n_linux_386.zip  https://github.com/Arriven/db1000n/releases/latest/download/db1000n_linux_386.zip
-          sudo unzip db1000n_linux_386.zip
+          sudo curl -Lo db1000n_linux_386.tar.gz  https://github.com/Arriven/db1000n/releases/latest/download/db1000n_linux_386.tar.gz
+          sudo unzip db1000n_linux_386.tar.gz
           sudo chmod +x db1000n
-          sudo rm db1000n_linux_386.zip
+          sudo rm db1000n_linux_386.tar.gz
         ;;
 
         *)
