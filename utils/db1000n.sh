@@ -104,6 +104,9 @@ configure_db1000n() {
         write_db1000n_variable "$i" "$value"
     done
     regenerate_db1000n_service_file
+    if systemctl is-active --quiet db1000n.service; then
+        sudo systemctl restart db1000n.service >/dev/null 2>&1
+    fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
 

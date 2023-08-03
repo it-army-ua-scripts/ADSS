@@ -16,8 +16,7 @@ install_mhddos() {
           ;;
 
           i386* | i686*)
-            confirm_dialog "$(trans "Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності")"
-            ddos_tool_managment
+            package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux_x86
           ;;
 
           *)
@@ -111,6 +110,9 @@ configure_mhddos() {
     	  write_mhddos_variable "$i" "$value"
     done
     regenerate_mhddos_service_file
+    if systemctl is-active --quiet mhddos.service; then
+        sudo systemctl restart mhddos.service >/dev/null 2>&1
+    fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
 
