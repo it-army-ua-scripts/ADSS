@@ -14,7 +14,7 @@ check_updates() {
   fi
 }
 prepare_for_update() {
-  echo -e "${GREEN}Перевіряємо наявленість оновлень/Checking for updates${NC}"
+  echo -e "$(trans "${GREEN}Перевіряємо наявленість оновлень${NC}")"
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']}
   remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
@@ -33,7 +33,7 @@ write_version() {
 }
 
 update_adss() {
-  echo -e "${GREEN}Оновляємо/Updating ADSS${NC}"
+  echo -e "$(trans "${GREEN}Оновляємо ADSS${NC}")"
   cd $SCRIPT_DIR && \
   git checkout services/db1000n.service >/dev/null 2>&1 && \
   git checkout services/distress.service >/dev/null 2>&1 && \
@@ -45,5 +45,5 @@ update_adss() {
     source "${SCRIPT_DIR}/utils/${SERVICES[SERVICE]}.sh"
     regenerate_"${SERVICES[SERVICE]}"_service_file
   done
-  echo -e "${GREEN}ADSS успішно оновлено/updated successfully${NC}"
+  echo -e "$(trans "${GREEN}ADSS успішно оновлено${NC}")"
 }
