@@ -117,6 +117,8 @@ declare -A localization=(
   ["${GREEN}Перевіряємо наявленість оновлень${NC}"]="${GREEN}Checking for updates${NC}"
   ["${GREEN}Оновляємо ADSS${NC}"]="${GREEN}Updating ADSS${NC}"
   ["${GREEN}ADSS успішно оновлено${NC}"]="${GREEN}ADSS updated successfully${NC}"
+  ["Встановлена версія = ${ORANGE}$current_version${NC}"]="Installed Version = ${ORANGE}$current_version${NC}"
+  ["Актуальна версія = ${ORANGE}$remote_version${NC}"]="Latest Version = ${ORANGE}$remote_version${NC}"
 )
 
 export localization

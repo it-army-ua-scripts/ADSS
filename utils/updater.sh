@@ -18,6 +18,9 @@ prepare_for_update() {
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']}
   remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
+  
+  echo -e "$(trans "Встановлена версія = ${ORANGE}$current_version${NC}")"
+  echo -e "$(trans "Актуальна версія = ${ORANGE}$remote_version${NC}")"
 
   if [[ $(echo -e "$current_version\n$remote_version" | sort -V | head -n1) == $current_version ]]; then
       update_adss
@@ -38,7 +41,7 @@ update_adss() {
   git checkout services/db1000n.service >/dev/null 2>&1 && \
   git checkout services/distress.service >/dev/null 2>&1 && \
   git checkout services/mhddos.service >/dev/null 2>&1 && \
-  git pull --all >/dev/null 2>&1
+  git pull --all
 
   SERVICES=('mhddos' 'distress' 'db1000n')
   for SERVICE in "${!SERVICES[@]}"; do
