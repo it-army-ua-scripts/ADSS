@@ -70,8 +70,10 @@ configure_db1000n() {
       done
     fi
     params[scale]=$scale
-
-    read -e -p "$(trans "Proxy List(шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
+	
+    echo -ne "\n"
+    echo -e "$(trans "Список проксі у форматі ${ORANGE}protocol://ip:port${NC} або ${ORANGE}ip:port${NC}")"
+    read -e -p "$(trans "Проксі (шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
     proxylist=$(echo $proxylist  | sed 's/\//\\\//g')
     if [[ -n "$proxylist" ]];then
       params[proxylist]=$proxylist
@@ -80,7 +82,9 @@ configure_db1000n() {
     fi
 
     if [[ -n "$proxylist" ]];then
-        read -e -p "$(trans "default-proxy-proto (socks5, socks5h, socks4, socks4a, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+        echo -ne "\n"
+        echo -e "$(trans "Укажіть протокол, якщо формат ${ORANGE}ip:port${NC}")"
+        read -e -p "$(trans "Протокол проксі (socks5, socks4, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
         if [[ -n "$default_proxy_proto" ]];then
           while [[
           "$default_proxy_proto" != "socks5"
@@ -91,7 +95,7 @@ configure_db1000n() {
           ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"
-            read -e -p "$(trans "default-proxy-proto (socks5, socks5h, socks4, socks4a, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+            read -e -p "$(trans "Протокол проксі (socks5, socks4, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
           done
           params[default-proxy-proto]=$default_proxy_proto
         fi

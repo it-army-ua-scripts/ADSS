@@ -94,6 +94,9 @@ declare -A localization=(
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
+  ["Список проксі у форматі ${ORANGE}protocol://ip:port${NC} або ${ORANGE}ip:port${NC}"]="List of proxies in ${ORANGE}protocol://ip:port${NC} or ${ORANGE}ip:port${NC} format"
+  ["Укажіть протокол, якщо формат ${ORANGE}ip:port${NC}"]="Specify the protocol if the format is ${ORANGE}ip:port${NC}"
+  ["Протокол проксі (socks5, socks4, http): "]="Proxy protocol (socks5, socks4, http): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "

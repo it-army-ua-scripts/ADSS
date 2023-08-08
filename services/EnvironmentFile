@@ -20,5 +20,5 @@ user-id=
 enable-self-update=1
 scale=1
 proxylist=
-default-proxy-proto=socks5
+default-proxy-proto=
 [/db1000n]
