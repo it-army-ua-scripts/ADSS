@@ -65,9 +65,7 @@ fail2ban_installed() {
 
 configure_fail2ban(){
   fail2ban_installed
-  if [[ $? == 0 ]]; then
-
-  else
+  if [[ $? == 1 ]]; then
     adss_dialog "$(trans "Налаштовуємо Fail2ban")"
     configure() {
         sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local

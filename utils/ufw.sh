@@ -64,9 +64,7 @@ ufw_installed() {
 }
 configure_ufw(){
   ufw_installed
-  if [[ $? == 0 ]]; then
-
-  else
+  if [[ $? == 1 ]]; then
     adss_dialog "$(trans "Налаштовуємо UFW фаєрвол")"
     configure() {
       sudo ufw default deny incoming
