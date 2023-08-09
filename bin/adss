@@ -63,6 +63,7 @@ elif [ "$1" = "--restore" ] ; then
   sudo rm -rf /opt/itarmy
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s
 elif [ "$1" = "config" ] ; then
+  clear
   cat /opt/itarmy/services/EnvironmentFile && echo ""
 else
     main_menu
