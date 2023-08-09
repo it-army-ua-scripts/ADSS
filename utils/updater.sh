@@ -19,6 +19,9 @@ prepare_for_update() {
   current_version=${current_version//[$'\t\r\n']}
   remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
 
+  echo -e "$(trans "Встановлена версія = ${ORANGE}$current_version${NC}")"
+  echo -e "$(trans "Актуальна версія = ${ORANGE}$remote_version${NC}")"
+
   if [[ "$current_version" < "$remote_version" ]]; then
       update_adss
   fi
