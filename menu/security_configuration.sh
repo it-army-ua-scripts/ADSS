@@ -39,6 +39,7 @@ security_configuration() {
         else
             enable_ufw
         fi
+        security_configuration
       ;;
       2)
         fail2ban_is_active
@@ -47,6 +48,7 @@ security_configuration() {
         else
             enable_fail2ban
         fi
+        security_configuration
       ;;
       3)
         configure_ufw
@@ -70,6 +72,7 @@ security_configuration() {
         else
             enable_ufw
         fi
+        security_configuration
       ;;
       2)
         configure_ufw
@@ -93,11 +96,11 @@ security_configuration() {
           else
               enable_fail2ban
           fi
+          security_configuration
         ;;
         2)
           configure_ufw
           security_configuration
-
         ;;
         3)
           configure_fail2ban
