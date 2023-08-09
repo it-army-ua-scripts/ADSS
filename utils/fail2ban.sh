@@ -56,7 +56,6 @@ disable_fail2ban() {
 
 fail2ban_installed() {
    if [[ ! -e "/etc/fail2ban" ]]; then
-        confirm_dialog "$(trans "Fail2ban не встановлений, будь ласка встановіть і спробуйте знову")"
         return 0
     else
         return 1
@@ -65,7 +64,9 @@ fail2ban_installed() {
 
 configure_fail2ban(){
   fail2ban_installed
-  if [[ $? == 1 ]]; then
+  if [[ $? == 0 ]]; then
+    confirm_dialog "$(trans "Fail2ban не встановлений, будь ласка встановіть і спробуйте знову")"
+  else
     adss_dialog "$(trans "Налаштовуємо Fail2ban")"
     configure() {
         sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local

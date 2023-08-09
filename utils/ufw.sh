@@ -56,7 +56,6 @@ disable_ufw() {
 }
 ufw_installed() {
    if [[ ! $(sudo ufw status 2>/dev/null) ]]; then
-        confirm_dialog "$(trans "UFW не встановлений, будь ласка встановіть і спробуйте знову")"
         return 0
     else
         return 1
@@ -64,7 +63,9 @@ ufw_installed() {
 }
 configure_ufw(){
   ufw_installed
-  if [[ $? == 1 ]]; then
+  if [[ $? == 0 ]]; then
+    confirm_dialog "$(trans "UFW не встановлений, будь ласка встановіть і спробуйте знову")"
+  else
     adss_dialog "$(trans "Налаштовуємо UFW фаєрвол")"
     configure() {
       sudo ufw default deny incoming
