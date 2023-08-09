@@ -82,13 +82,21 @@ declare -A localization=(
   ["Налаштовуємо Fail2ban"]="Setting Fail2ban"
   ["Fail2ban успішно налаштовано"]="Fail2ban set up successfully"
   ["Fail2ban не встановлений, будь ласка встановіть і спробуйте знову"]="Fail2ban is not installed, please install and try again"
-  
+  ["Увімкнути захист від брутфорсу"]="Enable brute force protection"
+  ["Вимкнути захист від брутфорсу"]="Disable brute force protection"
+  ["Fail2ban успішно увімкнено"]="Fail2ban successfully enabled"
+  ["Fail2ban успішно вимкнено"]="Fail2ban successfully disabled"
+
   ["Встановлюємо UFW фаєрвол"]="Installing UFW firewall"
   ["Фаєрвол UFW встановлено і деактивовано"]="UFW firewall installed and deactivated"
   ["Фаєрвол UFW налаштовано і активовано"]="UFW firewall set up and activated"
   ["UFW не встановлений, будь ласка встановіть і спробуйте знову"]="UFW is not installed, please install and try again"
   ["Налаштовуємо UFW фаєрвол"]="Setting UFW firewall"  
-  
+  ["Увімкнути фаервол"]="Enable UFW firewall"
+  ["Вимкнути фаервол"]="Disable UFW firewall"
+  ["UFW успішно увімкнено"]="UFW successfully enabled"
+  ["UFW успішно вимкнено"]="UFW successfully disabled"
+
   ["${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"

@@ -36,8 +36,35 @@ install_fail2ban() {
   esac
 }
 
+fail2ban_is_active() {
+  if systemctl is-active --quiet fail2ban; then
+      return 1
+  else
+      return 0
+  fi
+}
+enable_fail2ban() {
+  sudo systemctl enable fail2ban >/dev/null 2>&1
+  sudo systemctl start fail2ban >/dev/null 2>&1
+  confirm_dialog "$(trans "Fail2ban успішно увімкнено")"
+}
+disable_fail2ban() {
+  sudo systemctl disable fail2ban >/dev/null 2>&1
+  sudo systemctl stop fail2ban >/dev/null 2>&1
+  confirm_dialog "$(trans "Fail2ban успішно вимкнено")"
+}
+
+fail2ban_installed() {
+   if [[ ! -e "/etc/fail2ban" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 configure_fail2ban(){
-  if [[ ! -e "/etc/fail2ban" ]]; then
+  fail2ban_installed
+  if [[ $? == 0 ]]; then
     confirm_dialog "$(trans "Fail2ban не встановлений, будь ласка встановіть і спробуйте знову")"
   else
     adss_dialog "$(trans "Налаштовуємо Fail2ban")"
