@@ -44,13 +44,13 @@ fail2ban_is_active() {
   fi
 }
 enable_fail2ban() {
-  systemctl enable fail2ban >/dev/null 2>&1
-  systemctl start fail2ban >/dev/null 2>&1
+  sudo systemctl enable fail2ban >/dev/null 2>&1
+  sudo systemctl start fail2ban >/dev/null 2>&1
   confirm_dialog "$(trans "Fail2ban успішно увімкнено")"
 }
 disable_fail2ban() {
-  systemctl disable fail2ban >/dev/null 2>&1
-  systemctl stop fail2ban >/dev/null 2>&1
+  sudo systemctl disable fail2ban >/dev/null 2>&1
+  sudo systemctl stop fail2ban >/dev/null 2>&1
   confirm_dialog "$(trans "Fail2ban успішно вимкнено")"
 }
 

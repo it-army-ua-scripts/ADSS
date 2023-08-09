@@ -45,13 +45,13 @@ ufw_is_active() {
   fi
 }
 enable_ufw() {
-  systemctl enable ufw >/dev/null 2>&1
-  systemctl start ufw >/dev/null 2>&1
+  sudo systemctl enable ufw >/dev/null 2>&1
+  sudo systemctl start ufw >/dev/null 2>&1
   confirm_dialog "$(trans "UFW успішно увімкнено")"
 }
 disable_ufw() {
-  systemctl disable ufw >/dev/null 2>&1
-  systemctl stop ufw >/dev/null 2>&1
+  sudo systemctl disable ufw >/dev/null 2>&1
+  sudo systemctl stop ufw >/dev/null 2>&1
   confirm_dialog "$(trans "UFW успішно вимкнено")"
 }
 ufw_installed() {
