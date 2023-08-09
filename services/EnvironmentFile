@@ -13,6 +13,7 @@ user-id=
 use-my-ip=0
 use-tor=0
 concurrency=4096
+direct-udp-failover=
 [/distress]
 
 [db1000n]
