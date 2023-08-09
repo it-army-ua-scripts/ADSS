@@ -49,6 +49,12 @@ adss --auto-install
 adss --restore
 ```
 
+Перегляд поточних налаштувань ADSS :
+
+```
+adss config
+```
+
 ### ✪ Пункти меню
 <details>
 <summary>Розгорнути</summary>

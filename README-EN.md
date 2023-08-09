@@ -49,6 +49,11 @@ For full script renovation\reinstallation to default settings :
 adss --restore
 ```
 
+View current ADSS settings :
+
+```
+adss config
+```
 
 ### ✪ Menu items
 <details>
