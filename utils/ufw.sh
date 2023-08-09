@@ -37,10 +37,35 @@ install_ufw() {
           ;;
   esac
 }
-
+ufw_is_active() {
+  if systemctl is-active --quiet ufw; then
+      return 1
+  else
+      return 0
+  fi
+}
+enable_ufw() {
+  systemctl enable ufw >/dev/null 2>&1
+  systemctl start ufw >/dev/null 2>&1
+  confirm_dialog "$(trans "UFW успішно увімкнено")"
+}
+disable_ufw() {
+  systemctl disable ufw >/dev/null 2>&1
+  systemctl stop ufw >/dev/null 2>&1
+  confirm_dialog "$(trans "UFW успішно вимкнено")"
+}
+ufw_installed() {
+   if [[ ! $(sudo ufw status 2>/dev/null) ]]; then
+        confirm_dialog "$(trans "UFW не встановлений, будь ласка встановіть і спробуйте знову")"
+        return 0
+    else
+        return 1
+    fi
+}
 configure_ufw(){
-  if [[ ! $(sudo ufw status 2>/dev/null) ]]; then
-    confirm_dialog "$(trans "UFW не встановлений, будь ласка встановіть і спробуйте знову")"
+  ufw_installed
+  if [[ $? == 0 ]]; then
+
   else
     adss_dialog "$(trans "Налаштовуємо UFW фаєрвол")"
     configure() {
