@@ -107,6 +107,7 @@ declare -A localization=(
   ["Протокол проксі (socks5, socks4, http): "]="Proxy protocol (socks5, socks4, http): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
+  ["Увімкнути UDP flood (1 | 0): "]="Enable UDP flood (1 | 0): "
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
   ["Кількість створювачів завдань (4096): "]="Number of task creators (4096): "
 

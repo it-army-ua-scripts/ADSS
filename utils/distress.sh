@@ -55,6 +55,23 @@ configure_distress() {
 
     params[use-my-ip]=$use_my_ip
 
+    if [[ $use_my_ip > 0 ]]; then
+      read -e -p "$(trans "Увімкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'direct-udp-failover')" direct_udp_failover
+      if [[ -n "$direct_udp_failover" ]];then
+        while [[ "$direct_udp_failover" != "1" && "$direct_udp_failover" != "0" ]]
+        do
+          echo "$(trans "Будь ласка введіть правильні значення")"
+          read -e -p "$(trans "Увімкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'direct-udp-failover')" direct_udp_failover
+        done
+      fi
+	  
+      params[direct-udp-failover]=$direct_udp_failover
+    else
+      params[direct-udp-failover]=" "
+    fi
+
+    params[direct-udp-failover]=$direct_udp_failover
+
     read -e -p "$(trans "Кількість підключень Tor (0-100): ")"  -i "$(get_distress_variable 'use-tor')" use_tor
     if [[ -n "$use_tor" ]];then
       while [[ $use_tor -lt 0 || $use_tor -gt 100 ]]
@@ -63,6 +80,7 @@ configure_distress() {
         read -e -p "$(trans "Кількість підключень Tor (0-100): ")" -i "$(get_distress_variable 'use-tor')" use_tor
       done
     fi
+
     params[use-tor]=$use_tor
 
     read -e -p "$(trans "Кількість створювачів завдань (4096): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
@@ -109,6 +127,13 @@ regenerate_distress_service_file() {
 
     if [[ "$key" = "[distress]" || "$key" = "[/distress]" ]]; then
       continue
+    fi
+    if [[ "$key" == 'direct-udp-failover' ]];then
+      if [[ "$value" == 0 ]]; then
+        continue
+      elif [[ "$value" == 1 ]]; then
+        value=" "
+      fi
     fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
