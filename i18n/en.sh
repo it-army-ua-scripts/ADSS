@@ -127,6 +127,8 @@ declare -A localization=(
   ["${GREEN}ADSS успішно оновлено${NC}"]="${GREEN}ADSS updated successfully${NC}"
   ["Встановлена версія = ${ORANGE}$current_version${NC}"]="Installed Version = ${ORANGE}$current_version${NC}"
   ["Актуальна версія = ${ORANGE}$remote_version${NC}"]="Latest Version = ${ORANGE}$remote_version${NC}"
+
+  ["Не вдалося оновити ADSS, виконайте ${GREEN}adss --restore${NC}"]="Failed to update ADSS, run ${GREEN}adss --restore${NC}"
 )
 
 export localization
