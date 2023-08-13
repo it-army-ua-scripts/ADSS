@@ -41,7 +41,7 @@ update_adss() {
   git checkout services/db1000n.service >/dev/null 2>&1 && \
   git checkout services/distress.service >/dev/null 2>&1 && \
   git checkout services/mhddos.service >/dev/null 2>&1 && \
-  git pull --all || echo "Не вдалося оновити ADSS, виконайте ${GREEN}adss --restore${NC}"
+  git pull --all || adss --restore
 
   SERVICES=('mhddos' 'distress' 'db1000n')
   for SERVICE in "${!SERVICES[@]}"; do
