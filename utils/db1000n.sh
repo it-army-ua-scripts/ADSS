@@ -137,6 +137,13 @@ regenerate_db1000n_service_file() {
     if [[ "$key" = "[db1000n]" || "$key" = "[/db1000n]" ]]; then
       continue
     fi
+    if [[ "$key" == 'enable-self-update' ]];then
+      if [[ "$value" == false ]]; then
+        continue
+      elif [[ "$value" == true ]]; then
+        value=" "
+      fi
+    fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
     fi
