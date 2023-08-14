@@ -68,6 +68,7 @@ elif [ "$1" = "--restore" ] ; then
 
   distress_stop
   distress_auto_disable >/dev/null 2>&1
+  sudo rm -rf /tmp/distress >/dev/null 2>&1
 
   sudo rm -rf /opt/itarmy
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s

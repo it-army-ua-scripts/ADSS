@@ -100,6 +100,7 @@ configure_distress() {
     done
     regenerate_distress_service_file
     if systemctl is-active --quiet distress.service; then
+        sudo rm -rf /tmp/distress >/dev/null 2>&1
         sudo systemctl restart distress.service >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
@@ -147,6 +148,7 @@ regenerate_distress_service_file() {
 }
 
 distress_run() {
+  sudo rm -rf /tmp/distress >/dev/null 2>&1
   sudo systemctl stop mhddos.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
   sudo systemctl start distress.service >/dev/null 2>&1

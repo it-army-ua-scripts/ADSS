@@ -51,7 +51,8 @@ get_ddoss_status() {
       while true; do
         clear
         echo -e "$(trans "${GREEN}Запущено $service${NC}")"
-        journalctl -u "$service.service" | tail -20
+#        journalctl -u "$service.service" | tail -20
+        tail --lines=20 /var/log/syslog | grep -w "$service"
         echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
 
         sleep 3
