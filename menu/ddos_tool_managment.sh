@@ -51,8 +51,14 @@ get_ddoss_status() {
       while true; do
         clear
         echo -e "$(trans "${GREEN}Запущено $service${NC}")"
-#        journalctl -u "$service.service" | tail -20
-        tail --lines=20 /var/log/syslog | grep -w "$service"
+		
+        #Fix Kali
+        #https://t.me/c/1764189517/301014
+        #https://t.me/c/1764189517/300970
+        #tail --lines=20 /var/log/syslog | grep -w "$service"
+
+        journalctl -n 20 -u "$service.service" --no-pager
+
         echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
 
         sleep 3
