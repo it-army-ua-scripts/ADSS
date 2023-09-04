@@ -5,16 +5,16 @@ security_settings() {
   display_menu "$(trans "Налаштування безпеки")" "${menu_items[@]}"
 
   case $? in
-    1)
-      install_ufw
-      install_fail2ban
-      security_settings
+  1)
+    install_ufw
+    install_fail2ban
+    security_settings
     ;;
-    2)
-      security_configuration
+  2)
+    security_configuration
     ;;
-    3)
-      main_menu
+  3)
+    main_menu
     ;;
   esac
 }

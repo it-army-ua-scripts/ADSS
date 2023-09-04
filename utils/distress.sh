@@ -64,7 +64,7 @@ configure_distress() {
           read -e -p "$(trans "Увімкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'direct-udp-failover')" direct_udp_failover
         done
       fi
-	  
+
       params[direct-udp-failover]=$direct_udp_failover
     else
       params[direct-udp-failover]=" "
@@ -93,6 +93,13 @@ configure_distress() {
     fi
 
     params[concurrency]=$concurrency
+
+    read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_distress_variable 'interface')" interface
+    if [[ -n "$interface" ]];then
+      params[interface]=$interface
+    else
+      params[interface]=" "
+    fi
 
     for i in "${!params[@]}"; do
     	  value="${params[$i]}"

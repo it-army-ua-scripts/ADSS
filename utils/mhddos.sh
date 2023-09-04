@@ -105,6 +105,13 @@ configure_mhddos() {
 
     params[proxies]=$proxies
 
+    read -e -p "$(trans "Інтерфейси (через пробіл): ")"  -i "$(get_distress_variable 'interface')" interface
+    if [[ -n "$interface" ]];then
+      params[bind]=$interface
+    else
+      params[bind]=" "
+    fi
+
     for i in "${!params[@]}"; do
     	  value="${params[$i]}"
     	  write_mhddos_variable "$i" "$value"

@@ -70,7 +70,7 @@ configure_db1000n() {
       done
     fi
     params[scale]=$scale
-	
+
     echo -ne "\n"
     echo -e "$(trans "Список проксі у форматі ${ORANGE}protocol://ip:port${NC} або ${ORANGE}ip:port${NC}")"
     read -e -p "$(trans "Проксі (шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
