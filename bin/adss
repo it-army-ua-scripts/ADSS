@@ -77,6 +77,17 @@ elif [ "$1" = "--restore" ]; then
 elif [ "$1" = "config" ]; then
   clear
   cat /opt/itarmy/services/EnvironmentFile && echo ""
+elif [ "$1" = "--uninstall" ]; then
+  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
+  mhddos_auto_disable >/dev/null 2>&1
+  db1000n_auto_disable >/dev/null 2>&1
+  distress_auto_disable >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/db1000n.service >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/distress.service >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy
 else
   main_menu
 fi
