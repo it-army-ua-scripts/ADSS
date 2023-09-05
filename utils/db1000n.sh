@@ -43,7 +43,7 @@ install_db1000n() {
 configure_db1000n() {
     clear
     declare -A params;
-    echo -e "$(trans "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}")"
+    echo -e "$(trans "${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}")"
 
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_db1000n_variable 'user-id')" user_id
 

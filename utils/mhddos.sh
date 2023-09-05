@@ -37,7 +37,7 @@ install_mhddos() {
 configure_mhddos() {
     clear
     declare -A params
-    echo -e "$(trans "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}")"
+    echo -e "$(trans "${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}")"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
 
     params[user-id]=$user_id
@@ -105,7 +105,9 @@ configure_mhddos() {
 
     params[proxies]=$proxies
 
-    read -e -p "$(trans "Інтерфейси (через пробіл): ")"  -i "$(get_mhddos_variable 'bind')" interface
+    echo -ne "\n"
+    echo -e "$(trans "${ORANGE}IP адреса кожного інтерфейсу через пробіл.${NC}")"
+    read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_mhddos_variable 'bind')" interface
     if [[ -n "$interface" ]];then
       params[bind]=$interface
     else

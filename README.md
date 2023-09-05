@@ -55,6 +55,12 @@ adss --restore
 adss config
 ```
 
+Видалити ADSS :
+
+```
+adss --uninstall
+```
+
 ### ✪ Пункти меню
 <details>
 <summary>Розгорнути</summary>

@@ -39,7 +39,7 @@ configure_distress() {
     clear
     declare -A params;
 
-    echo -e "$(trans "${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}")"
+    echo -e "$(trans "${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}")"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
 
     params[user-id]=$user_id
@@ -94,6 +94,8 @@ configure_distress() {
 
     params[concurrency]=$concurrency
 
+    echo -ne "\n"
+    echo -e "$(trans "${ORANGE}Назва інтерфейсу (ensXXX, ethX, тощо.)${NC}")"
     read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_distress_variable 'interface')" interface
     if [[ -n "$interface" ]];then
       params[interface]=$interface

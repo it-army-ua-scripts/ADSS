@@ -97,7 +97,7 @@ declare -A localization=(
   ["UFW успішно увімкнено"]="UFW successfully enabled"
   ["UFW успішно вимкнено"]="UFW successfully disabled"
 
-  ["${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
+  ["${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
@@ -129,8 +129,10 @@ declare -A localization=(
   ["Встановлена версія = ${ORANGE}$current_version${NC}"]="Installed Version = ${ORANGE}$current_version${NC}"
   ["Актуальна версія = ${ORANGE}$remote_version${NC}"]="Latest Version = ${ORANGE}$remote_version${NC}"
 
-  ["Інтерфейс"]="Interface"
-  ["Інтерфейси (через пробіл): "]="Interfaces (space separator)"
+  ["${ORANGE}Назва інтерфейсу (ensXXX, ethX, тощо.)${NC}"]="${ORANGE}Interface name (ensXXX, ethX, etc.)${NC}"
+  ["Інтерфейс: "]="Interface: "
+  ["${ORANGE}IP адреса кожного інтерфейсу через пробіл.${NC}"]="${ORANGE}IP addresses of each interface, space separated.${NC}"
+  ["Інтерфейси: "]="Interfaces: "
   ["${GREEN}ADSS успішно видалено${NC}"]="${GREEN}ADSS was deleted successfully${NC}"
 )
 
