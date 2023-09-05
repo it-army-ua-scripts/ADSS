@@ -131,6 +131,7 @@ declare -A localization=(
 
   ["Інтерфейс"]="Interface"
   ["Інтерфейси (через пробіл): "]="Interfaces (space separator)"
+  ["${GREEN}ADSS успішно видалено${NC}"]="${GREEN}ADSS was deleted successfully${NC}"
 )
 
 export localization
