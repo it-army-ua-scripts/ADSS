@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-if [ $? -ne 0 ] ; then
-        echo "$(trans "Неправильний вхідний параметр!")"; 1>&2
-        exit 1;
+if [ $? -ne 0 ]; then
+  echo "$(trans "Неправильний вхідний параметр!")"
+  1>&2
+  exit 1
 fi
 
 export SCRIPT_DIR="$(
   cd "$(
     dirname "$(
-      (readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}") \
-        | sed -e "s#^../#$(dirname "$(dirname "${BASH_SOURCE[0]}")")/#"
+      (readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}") |
+        sed -e "s#^../#$(dirname "$(dirname "${BASH_SOURCE[0]}")")/#"
     )"
-  )/.." >/dev/null \
-  && pwd
+  )/.." >/dev/null &&
+    pwd
 )"
 export TOOL_DIR="$SCRIPT_DIR/bin"
 export GREEN='\033[0;32m'
@@ -22,19 +23,19 @@ export NC='\033[0m'
 export ORANGE='\033[0;33m'
 
 source_files_in_directory() {
-    local directory="$1"
+  local directory="$1"
 
-    if [[ -d "$directory" ]]; then
-        local files=("$directory"/*)
+  if [[ -d "$directory" ]]; then
+    local files=("$directory"/*)
 
-        for file in "${files[@]}"; do
-            if [[ -f "$file" ]]; then
-                source "$file"
-            fi
-        done
-    else
-        echo -e "$(trans "${RED}Не знайдено папку '$directory'.${NC}")"
-    fi
+    for file in "${files[@]}"; do
+      if [[ -f "$file" ]]; then
+        source "$file"
+      fi
+    done
+  else
+    echo -e "$(trans "${RED}Не знайдено папку '$directory'.${NC}")"
+  fi
 }
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
@@ -45,20 +46,21 @@ if [[ -n "$localization_file" ]]; then
 fi
 
 check_updates
+apply_patch
 
-if [ "$1" = "--auto-install" ] ; then
-   install_fail2ban
-   configure_fail2ban
-   install_ufw
-   configure_ufw
-   install_db1000n
-   install_distress
-   install_mhddos
-   extend_ports
-   mhddos_run
-   mhddos_auto_enable
-   get_ddoss_status
-elif [ "$1" = "--restore" ] ; then
+if [ "$1" = "--auto-install" ]; then
+  install_fail2ban
+  configure_fail2ban
+  install_ufw
+  configure_ufw
+  install_db1000n
+  install_distress
+  install_mhddos
+  extend_ports
+  mhddos_run
+  mhddos_auto_enable
+  get_ddoss_status
+elif [ "$1" = "--restore" ]; then
   mhddos_stop
   mhddos_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
@@ -71,10 +73,23 @@ elif [ "$1" = "--restore" ] ; then
   sudo rm -rf /tmp/distress >/dev/null 2>&1
 
   sudo rm -rf /opt/itarmy
-  curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh  | bash -s
-elif [ "$1" = "config" ] ; then
+  curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh | bash -s
+elif [ "$1" = "config" ]; then
   clear
   cat /opt/itarmy/services/EnvironmentFile && echo ""
+elif [ "$1" = "--uninstall" ]; then
+  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
+  mhddos_auto_disable >/dev/null 2>&1
+  db1000n_auto_disable >/dev/null 2>&1
+  distress_auto_disable >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/db1000n.service >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/distress.service >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
+  sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy
+  echo -e "$(trans "${GREEN}ADSS успішно видалено${NC}")"
 else
-    main_menu
+  main_menu
 fi

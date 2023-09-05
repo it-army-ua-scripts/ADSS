@@ -19,41 +19,41 @@ autoload_configuration() {
   fi
 
   if distress_enabled; then
-      distress_item_menu="$(trans "Вимкнути автозапуск DISTRESS")"
+    distress_item_menu="$(trans "Вимкнути автозапуск DISTRESS")"
   else
-      distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
+    distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
   fi
   menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" "$(trans "Повернутись назад")")
   display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}"
   status=$?
 
   case $status in
-    1)
-      if mhddos_enabled; then
-        mhddos_auto_disable
-      else
-        mhddos_auto_enable
-      fi
-      autoload_configuration
+  1)
+    if mhddos_enabled; then
+      mhddos_auto_disable
+    else
+      mhddos_auto_enable
+    fi
+    autoload_configuration
     ;;
-    2)
-      if db1000n_enabled; then
-        db1000n_auto_disable
-      else
-        db1000n_auto_enable
-      fi
-      autoload_configuration
+  2)
+    if db1000n_enabled; then
+      db1000n_auto_disable
+    else
+      db1000n_auto_enable
+    fi
+    autoload_configuration
     ;;
-    3)
-      if distress_enabled; then
-          distress_auto_disable
-      else
-          distress_auto_enable
-      fi
-      autoload_configuration
+  3)
+    if distress_enabled; then
+      distress_auto_disable
+    else
+      distress_auto_enable
+    fi
+    autoload_configuration
     ;;
-    4)
-      ddos_tool_managment
+  4)
+    ddos_tool_managment
     ;;
   esac
 }

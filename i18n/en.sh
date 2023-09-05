@@ -2,10 +2,10 @@
 
 declare -A localization=(
   ["Встановити докер"]="Install Docker"
-  
+
   ["Неправильний вхідний параметр!"]="Invalid input parameter!"
   ["${RED}Не знайдено папку '$directory'.${NC}"]="${RED}'$directory' folder not found.${NC}"
-  
+
   ["Вимкнути автозапуск MHDDOS"]="Disable autostart for MHDDOS"
   ["Увімкнути автозапуск MHDDOS"]="Enable autostart for MHDDOS"
   ["Вимкнути автозапуск DB1000N"]="Disable autostart for DB1000N"
@@ -14,7 +14,7 @@ declare -A localization=(
   ["Увімкнути автозапуск DISTRESS"]="Enable autostart for DISTRESS"
   ["Повернутись назад"]="Go back"
   ["Налаштування автозапуску"]="Autostart settings"
-  
+
   ["Зупиняємо атаку"]="Stopping the attack"
   ["Атака зупинена"]="Attack stopped"
   ["${GREEN}Запущено $service${NC}"]="${GREEN}$service$ started${NC}"
@@ -52,14 +52,14 @@ declare -A localization=(
   ["DB1000N не встановлений, будь ласка встановіть і спробуйте знову"]="DB1000N is not installed, please install and try again"
   ["MHDDOS не встановлений, будь ласка встановіть і спробуйте знову"]="MHDDOS is not installed, please install and try again"
   ["DISTRESS не встановлений, будь ласка встановіть і спробуйте знову"]="DISTRESS is not installed, please install and try again"
-  
+
   ["Зупинка DB1000N"]="Stop DB1000N"
   ["Запуск DB1000N"]="Start DB1000N"
   ["Зупинка MHDDOS"]="Stop MHDDOS"
   ["Запуск MHDDOS"]="Start MHDDOS"
   ["Зупинка DISTRESS"]="Stop DISTRESS"
   ["Запуск DISTRESS"]="Start DISTRESS"
-  
+
   ["Налаштування DB1000N"]="DB1000N settings"
   ["Статус DB1000N"]="DB1000N status"
   ["Налаштування MHDDOS"]="MHDDOS settings"
@@ -73,10 +73,10 @@ declare -A localization=(
   ["MHDDOS успішно встановлено"]="MHDDOS installed successfully"
   ["Встановлюємо DISTRESS"]="Installing DISTRESS"
   ["DISTRESS успішно встановлено"]="DISTRESS installed successfully"
-  
+
   ["Встановлюємо Docker"]="Installing Docker"
   ["Docker успішно встановлено"]="Docker installed successfully"
-  
+
   ["Встановлюємо Fail2ban"]="Installing Fail2ban"
   ["Fail2ban успішно встановлено"]="Fail2ban installed successfully"
   ["Налаштовуємо Fail2ban"]="Setting Fail2ban"
@@ -91,13 +91,13 @@ declare -A localization=(
   ["Фаєрвол UFW встановлено і деактивовано"]="UFW firewall installed and deactivated"
   ["Фаєрвол UFW налаштовано і активовано"]="UFW firewall set up and activated"
   ["UFW не встановлений, будь ласка встановіть і спробуйте знову"]="UFW is not installed, please install and try again"
-  ["Налаштовуємо UFW фаєрвол"]="Setting UFW firewall"  
+  ["Налаштовуємо UFW фаєрвол"]="Setting UFW firewall"
   ["Увімкнути фаервол"]="Enable UFW firewall"
   ["Вимкнути фаервол"]="Disable UFW firewall"
   ["UFW успішно увімкнено"]="UFW successfully enabled"
   ["UFW успішно вимкнено"]="UFW successfully disabled"
 
-  ["${GRAY}Залиште пустим якщо хочите видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
+  ["${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
@@ -129,6 +129,11 @@ declare -A localization=(
   ["Встановлена версія = ${ORANGE}$current_version${NC}"]="Installed Version = ${ORANGE}$current_version${NC}"
   ["Актуальна версія = ${ORANGE}$remote_version${NC}"]="Latest Version = ${ORANGE}$remote_version${NC}"
 
+  ["${ORANGE}Назва інтерфейсу (ensXXX, ethX, тощо.)${NC}"]="${ORANGE}Interface name (ensXXX, ethX, etc.)${NC}"
+  ["Інтерфейс: "]="Interface: "
+  ["${ORANGE}IP адреса кожного інтерфейсу через пробіл.${NC}"]="${ORANGE}IP addresses of each interface, space separated.${NC}"
+  ["Інтерфейси: "]="Interfaces: "
+  ["${GREEN}ADSS успішно видалено${NC}"]="${GREEN}ADSS was deleted successfully${NC}"
 )
 
 export localization

@@ -55,6 +55,12 @@ View current ADSS settings :
 adss config
 ```
 
+Uninstall ADSS :
+
+```
+adss --uninstall
+```
+
 ### ✪ Menu items
 <details>
 <summary>Expand</summary>

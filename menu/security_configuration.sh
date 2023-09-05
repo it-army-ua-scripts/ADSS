@@ -10,9 +10,9 @@ security_configuration() {
     ufw=1
     ufw_is_active
     if [[ $? == 1 ]]; then
-        menu_items+=("$(trans "Вимкнути фаервол")")
+      menu_items+=("$(trans "Вимкнути фаервол")")
     else
-        menu_items+=("$(trans "Увімкнути фаервол")")
+      menu_items+=("$(trans "Увімкнути фаервол")")
     fi
   fi
 
@@ -21,9 +21,9 @@ security_configuration() {
     fail2ban=1
     fail2ban_is_active
     if [[ $? == 1 ]]; then
-        menu_items+=("$(trans "Вимкнути захист від брутфорсу")")
+      menu_items+=("$(trans "Вимкнути захист від брутфорсу")")
     else
-        menu_items+=("$(trans "Увімкнути захист від брутфорсу")")
+      menu_items+=("$(trans "Увімкнути захист від брутфорсу")")
     fi
   fi
 
@@ -32,97 +32,97 @@ security_configuration() {
   res=$?
   if [[ $ufw == 1 && $fail2ban == 1 ]]; then
     case $res in
-      1)
-        ufw_is_active
-        if [[ $? == 1 ]]; then
-            disable_ufw
-        else
-            enable_ufw
-        fi
-        security_configuration
+    1)
+      ufw_is_active
+      if [[ $? == 1 ]]; then
+        disable_ufw
+      else
+        enable_ufw
+      fi
+      security_configuration
       ;;
-      2)
-        fail2ban_is_active
-        if [[ $? == 1 ]]; then
-            disable_fail2ban
-        else
-            enable_fail2ban
-        fi
-        security_configuration
+    2)
+      fail2ban_is_active
+      if [[ $? == 1 ]]; then
+        disable_fail2ban
+      else
+        enable_fail2ban
+      fi
+      security_configuration
       ;;
-      3)
-        configure_ufw
-        security_configuration
+    3)
+      configure_ufw
+      security_configuration
 
       ;;
-      4)
-        configure_fail2ban
-        security_configuration
+    4)
+      configure_fail2ban
+      security_configuration
       ;;
-      5)
-        security_settings
+    5)
+      security_settings
       ;;
     esac
   elif [[ $ufw == 1 && $fail2ban == "" ]]; then
     case $res in
-      1)
-        ufw_is_active
-        if [[ $? == 1 ]]; then
-            disable_ufw
-        else
-            enable_ufw
-        fi
-        security_configuration
+    1)
+      ufw_is_active
+      if [[ $? == 1 ]]; then
+        disable_ufw
+      else
+        enable_ufw
+      fi
+      security_configuration
       ;;
-      2)
-        configure_ufw
-        security_configuration
+    2)
+      configure_ufw
+      security_configuration
 
       ;;
-      3)
-        configure_fail2ban
-        security_configuration
+    3)
+      configure_fail2ban
+      security_configuration
       ;;
-      4)
-        security_settings
+    4)
+      security_settings
       ;;
     esac
   elif [[ $ufw == "" && $fail2ban == 1 ]]; then
-      case $res in
-        1)
-          fail2ban_is_active
-          if [[ $? == 1 ]]; then
-              disable_fail2ban
-          else
-              enable_fail2ban
-          fi
-          security_configuration
-        ;;
-        2)
-          configure_ufw
-          security_configuration
-        ;;
-        3)
-          configure_fail2ban
-          security_configuration
-        ;;
-        4)
-          security_settings
-        ;;
-      esac
+    case $res in
+    1)
+      fail2ban_is_active
+      if [[ $? == 1 ]]; then
+        disable_fail2ban
+      else
+        enable_fail2ban
+      fi
+      security_configuration
+      ;;
+    2)
+      configure_ufw
+      security_configuration
+      ;;
+    3)
+      configure_fail2ban
+      security_configuration
+      ;;
+    4)
+      security_settings
+      ;;
+    esac
   else
     case $? in
-        1)
-          configure_ufw
-          security_configuration
-        ;;
-        2)
-          configure_fail2ban
-          security_configuration
-        ;;
-        3)
-          security_settings
-        ;;
-      esac
+    1)
+      configure_ufw
+      security_configuration
+      ;;
+    2)
+      configure_fail2ban
+      security_configuration
+      ;;
+    3)
+      security_settings
+      ;;
+    esac
   fi
 }
