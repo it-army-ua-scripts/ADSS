@@ -103,6 +103,15 @@ configure_db1000n() {
       params[default-proxy-proto]=" "
     fi
 
+    echo -ne "\n"
+    echo -e "$(trans "${ORANGE}Назва інтерфейсу (ensXXX, ethX, тощо.)${NC}")"
+    read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_db1000n_variable 'interface')" interface
+    if [[ -n "$interface" ]];then
+      params[interface]=$interface
+    else
+      params[interface]=" "
+    fi
+
     for i in "${!params[@]}"; do
     	  value="${params[$i]}"
         write_db1000n_variable "$i" "$value"
