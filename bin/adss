@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-if [ $? -ne 0 ]; then
-  echo "$(trans "Неправильний вхідний параметр!")"
-  1>&2
-  exit 1
-fi
-
 export SCRIPT_DIR="$(
   cd "$(
     dirname "$(
@@ -15,6 +9,19 @@ export SCRIPT_DIR="$(
   )/.." >/dev/null &&
     pwd
 )"
+
+source "$SCRIPT_DIR/utils/translate.sh"
+
+localization_file=$(apply_localization "$@")
+if [[ -n "$localization_file" ]]; then
+  source "$localization_file"
+fi
+
+if [ $? -ne 0 ]; then
+  echo "$(trans "Неправильний вхідний параметр!")"
+  1>&2
+  exit 1
+fi
 export TOOL_DIR="$SCRIPT_DIR/bin"
 export GREEN='\033[0;32m'
 export GRAY='\033[0;37m'
@@ -39,11 +46,6 @@ source_files_in_directory() {
 }
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
-
-localization_file=$(apply_localization "$@")
-if [[ -n "$localization_file" ]]; then
-  source "$localization_file"
-fi
 
 if [ "$1" = "--auto-install" ]; then
   check_updates
