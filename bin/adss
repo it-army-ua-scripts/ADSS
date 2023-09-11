@@ -45,10 +45,10 @@ if [[ -n "$localization_file" ]]; then
   source "$localization_file"
 fi
 
-check_updates
-apply_patch
-
 if [ "$1" = "--auto-install" ]; then
+  check_updates
+  apply_patch
+
   install_fail2ban
   configure_fail2ban
   install_ufw
@@ -61,6 +61,9 @@ if [ "$1" = "--auto-install" ]; then
   mhddos_auto_enable
   get_ddoss_status
 elif [ "$1" = "--restore" ]; then
+  check_updates
+  apply_patch
+
   mhddos_stop
   mhddos_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
@@ -91,5 +94,8 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -rf /opt/itarmy
   echo -e "$(trans "${GREEN}ADSS успішно видалено${NC}")"
 else
+  check_updates
+  apply_patch
+
   main_menu
 fi
