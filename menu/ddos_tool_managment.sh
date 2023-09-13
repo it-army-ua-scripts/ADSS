@@ -48,7 +48,7 @@ get_ddoss_status() {
   if [[ -n "$service" ]]; then
     while true; do
       clear
-      echo -e "$(trans "${GREEN}Запущено $service${NC}")"
+      echo -e "${GREEN}$(trans "Запущено $service")${NC}"
 
       #Fix Kali
       #https://t.me/c/1764189517/301014
@@ -57,7 +57,7 @@ get_ddoss_status() {
 
       journalctl -n 20 -u "$service.service" --no-pager
 
-      echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
+      echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
 
       sleep 3
       if read -rsn1 -t 0.1; then

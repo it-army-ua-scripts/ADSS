@@ -17,5 +17,5 @@ apply_patch() {
   if ! awk '/\[db1000n\]/,/\[\/db1000n\]/' "$envFile" | grep -q 'interface='; then
     sed -i 's/\[\/db1000n\]/interface=\n\[\/db1000n\]/g' "$envFile"
   fi
-  # end 1.1.0
+  # end 1.1.1
 }

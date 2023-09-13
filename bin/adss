@@ -41,7 +41,7 @@ source_files_in_directory() {
       fi
     done
   else
-    echo -e "$(trans "${RED}Не знайдено папку '$directory'.${NC}")"
+    echo -e "${RED}$(trans "Не знайдено папку '$directory'.")${NC}"
   fi
 }
 source_files_in_directory "$SCRIPT_DIR/utils"
@@ -94,7 +94,7 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
-  echo -e "$(trans "${GREEN}ADSS успішно видалено${NC}")"
+  echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else
   check_updates
   apply_patch

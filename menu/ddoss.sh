@@ -7,9 +7,11 @@ ddos() {
   case $? in
   1)
     clear
-    echo -ne "$(trans "${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}")""\n"
-    echo -ne "$(trans "${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}")""\n"
-    echo -ne "$(trans "${GREEN}Щоб пропустити, натисніть Enter${NC}")""\n""\n"
+    echo -ne "\n"
+    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
+    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
+    echo -ne "\n"
+    echo -ne "${GREEN}$(trans "Щоб пропустити, натисніть Enter")${NC}""\n""\n"
     echo -ne "$(trans "Юзер ІД: ")"
     read user_id
 

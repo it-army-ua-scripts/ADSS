@@ -4,7 +4,7 @@ declare -A localization=(
   ["Встановити докер"]="Install Docker"
 
   ["Неправильний вхідний параметр!"]="Invalid input parameter!"
-  ["${RED}Не знайдено папку '$directory'.${NC}"]="${RED}'$directory' folder not found.${NC}"
+  ["Не знайдено папку '$directory'."]="'$directory' folder not found."
 
   ["Вимкнути автозапуск MHDDOS"]="Disable autostart for MHDDOS"
   ["Увімкнути автозапуск MHDDOS"]="Enable autostart for MHDDOS"
@@ -17,8 +17,8 @@ declare -A localization=(
 
   ["Зупиняємо атаку"]="Stopping the attack"
   ["Атака зупинена"]="Attack stopped"
-  ["${GREEN}Запущено $service${NC}"]="${GREEN}$service$ started${NC}"
-  ["${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}"]="${GRAY}Press any key to continue${NC}"
+  ["Запущено"]="Started"
+  ["Нажміть будь яку клавішу щоб продовжити"]="Press any key to continue"
   ["Немає запущених процесів"]="No processes running"
   ["Статус атаки"]="Attack status"
   ["Зупинити атаку"]="Stop an attack"
@@ -26,9 +26,9 @@ declare -A localization=(
   ["Встановлення ддос інструментів"]="Install DDOS tools"
   ["Управління ддос інструментами"]="Manage DDOS tools"
 
-  ["${GREEN}Для збору особистої статистики та відображення у лідерборді на офіційному сайті.${NC}"]="${GREEN}To gather personal statistics and display on the leaderboard on the official website.${NC}"
-  ["${GREEN}Надається Telegram ботом ${ORANGE}@itarmy_stat_bot${NC}${NC}"]="${GREEN}Provided by the Telegram bot ${ORANGE}@itarmy_stat_bot${NC}${NC}"
-  ["${GREEN}Щоб пропустити, натисніть Enter${NC}"]="${GREEN}To skip, press Enter${NC}"
+  ["Для збору особистої статистики та відображення у лідерборді на офіційному сайті."]="To gather personal statistics and display on the leaderboard on the official website."
+  ["Надається Telegram ботом"]="Provided by the Telegram bot"
+  ["Щоб пропустити, натисніть Enter"]="To skip, press Enter"
 
   ["Розширення портів"]="Port extension"
   ["Налаштування безпеки"]="Security settings"
@@ -97,13 +97,14 @@ declare -A localization=(
   ["UFW успішно увімкнено"]="UFW successfully enabled"
   ["UFW успішно вимкнено"]="UFW successfully disabled"
 
-  ["${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}"]="${GRAY}Leave blank if you want to delete parameters${NC}"
+  ["Залишіть пустим якщо бажаєте видалити пераметри"]="Leave blank if you want to delete parameters"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
-  ["Список проксі у форматі ${ORANGE}protocol://ip:port${NC} або ${ORANGE}ip:port${NC}"]="List of proxies in ${ORANGE}protocol://ip:port${NC} or ${ORANGE}ip:port${NC} format"
-  ["Укажіть протокол, якщо формат ${ORANGE}ip:port${NC}"]="Specify the protocol if the format is ${ORANGE}ip:port${NC}"
+  ["Список проксі у форматі"]="List of proxies in format"
+  ["або"]="or"
+  ["Укажіть протокол, якщо формат"]="Specify the protocol if the format is"
   ["Протокол проксі (socks5, socks4, http): "]="Proxy protocol (socks5, socks4, http): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
@@ -123,17 +124,17 @@ declare -A localization=(
   ["Наразі всі порти розширено"]="All ports are currently extended"
   ["Не можливо виконати дію"]="Unable to perform the action"
 
-  ["${GREEN}Перевіряємо наявленість оновлень${NC}"]="${GREEN}Checking for updates${NC}"
-  ["${GREEN}Оновляємо ADSS${NC}"]="${GREEN}Updating ADSS${NC}"
-  ["${GREEN}ADSS успішно оновлено${NC}"]="${GREEN}ADSS updated successfully${NC}"
-  ["Встановлена версія = ${ORANGE}$current_version${NC}"]="Installed Version = ${ORANGE}$current_version${NC}"
-  ["Актуальна версія = ${ORANGE}$remote_version${NC}"]="Latest Version = ${ORANGE}$remote_version${NC}"
+  ["Перевіряємо наявленість оновлень"]="Checking for updates"
+  ["Оновляємо ADSS"]="Updating ADSS"
+  ["ADSS успішно оновлено"]="ADSS updated successfully"
+  ["Встановлена версія"]="Installed Version"
+  ["Актуальна версія"]="Latest Version"
 
-  ["${ORANGE}Назва інтерфейсу (ensXXX, ethX, тощо.)${NC}"]="${ORANGE}Interface name (ensXXX, ethX, etc.)${NC}"
+  ["Назва інтерфейсу (ensXXX, ethX, тощо.)"]="Interface name (ensXXX, ethX, etc.)"
   ["Інтерфейс: "]="Interface: "
-  ["${ORANGE}IP адреса кожного інтерфейсу через пробіл.${NC}"]="${ORANGE}IP addresses of each interface, space separated.${NC}"
+  ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
   ["Інтерфейси: "]="Interfaces: "
-  ["${GREEN}ADSS успішно видалено${NC}"]="${GREEN}ADSS was deleted successfully${NC}"
+  ["ADSS успішно видалено"]="ADSS was deleted successfully"
 )
 
 export localization

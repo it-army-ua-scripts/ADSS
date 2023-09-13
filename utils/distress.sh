@@ -39,7 +39,7 @@ configure_distress() {
     clear
     declare -A params;
 
-    echo -e "$(trans "${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}")"
+    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
 
     params[user-id]=$user_id
@@ -95,7 +95,7 @@ configure_distress() {
     params[concurrency]=$concurrency
 
     echo -ne "\n"
-    echo -e "$(trans "${ORANGE}Назва інтерфейсу (ensXXX, ethX, тощо.)${NC}")"
+    echo -e "${ORANGE}$(trans "Назва інтерфейсу (ensXXX, ethX, тощо.)")${NC}"
     read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_distress_variable 'interface')" interface
     if [[ -n "$interface" ]];then
       params[interface]=$interface
@@ -192,7 +192,7 @@ distress_stop() {
 distress_get_status() {
   clear
   sudo systemctl status distress.service
-  echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
+  echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_distress
 }
