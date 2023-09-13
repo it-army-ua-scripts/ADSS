@@ -43,7 +43,7 @@ install_db1000n() {
 configure_db1000n() {
     clear
     declare -A params;
-    echo -e "$(trans "${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}")"
+    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
 
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_db1000n_variable 'user-id')" user_id
 
@@ -72,7 +72,7 @@ configure_db1000n() {
     params[scale]=$scale
 
     echo -ne "\n"
-    echo -e "$(trans "Список проксі у форматі ${ORANGE}protocol://ip:port${NC} або ${ORANGE}ip:port${NC}")"
+    echo -e "$(trans "Список проксі у форматі") ${ORANGE}protocol://ip:port${NC} $(trans "або") ${ORANGE}ip:port${NC}"
     read -e -p "$(trans "Проксі (шлях до файлу або веб-ресурсу): ")" -i "$(get_db1000n_variable 'proxylist')" proxylist
     proxylist=$(echo $proxylist  | sed 's/\//\\\//g')
     if [[ -n "$proxylist" ]];then
@@ -83,7 +83,7 @@ configure_db1000n() {
 
     if [[ -n "$proxylist" ]];then
         echo -ne "\n"
-        echo -e "$(trans "Укажіть протокол, якщо формат ${ORANGE}ip:port${NC}")"
+        echo -e "$(trans "Укажіть протокол, якщо формат") ${ORANGE}ip:port${NC}"
         read -e -p "$(trans "Протокол проксі (socks5, socks4, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
         if [[ -n "$default_proxy_proto" ]];then
           while [[
@@ -101,6 +101,15 @@ configure_db1000n() {
         fi
     else
       params[default-proxy-proto]=" "
+    fi
+
+    echo -ne "\n"
+    echo -e "${ORANGE}$(trans "Назва інтерфейсу (ensXXX, ethX, тощо.)")${NC}"
+    read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_db1000n_variable 'interface')" interface
+    if [[ -n "$interface" ]];then
+      params[interface]=$interface
+    else
+      params[interface]=" "
     fi
 
     for i in "${!params[@]}"; do
@@ -189,7 +198,7 @@ db1000n_enabled() {
 db1000n_get_status() {
   clear
   sudo systemctl status db1000n.service
-  echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
+  echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_db1000n
 }

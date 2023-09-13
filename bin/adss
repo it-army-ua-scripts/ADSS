@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-if [ $? -ne 0 ]; then
-  echo "$(trans "Неправильний вхідний параметр!")"
-  1>&2
-  exit 1
-fi
-
 export SCRIPT_DIR="$(
   cd "$(
     dirname "$(
@@ -15,6 +9,19 @@ export SCRIPT_DIR="$(
   )/.." >/dev/null &&
     pwd
 )"
+
+source "$SCRIPT_DIR/utils/translate.sh"
+
+localization_file=$(apply_localization "$@")
+if [[ -n "$localization_file" ]]; then
+  source "$localization_file"
+fi
+
+if [ $? -ne 0 ]; then
+  echo "$(trans "Неправильний вхідний параметр!")"
+  1>&2
+  exit 1
+fi
 export TOOL_DIR="$SCRIPT_DIR/bin"
 export GREEN='\033[0;32m'
 export GRAY='\033[0;37m'
@@ -34,21 +41,16 @@ source_files_in_directory() {
       fi
     done
   else
-    echo -e "$(trans "${RED}Не знайдено папку '$directory'.${NC}")"
+    echo -e "${RED}$(trans "Не знайдено папку '$directory'.")${NC}"
   fi
 }
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-localization_file=$(apply_localization "$@")
-if [[ -n "$localization_file" ]]; then
-  source "$localization_file"
-fi
-
-check_updates
-apply_patch
-
 if [ "$1" = "--auto-install" ]; then
+  check_updates
+  apply_patch
+
   install_fail2ban
   configure_fail2ban
   install_ufw
@@ -61,6 +63,9 @@ if [ "$1" = "--auto-install" ]; then
   mhddos_auto_enable
   get_ddoss_status
 elif [ "$1" = "--restore" ]; then
+  check_updates
+  apply_patch
+
   mhddos_stop
   mhddos_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
@@ -89,7 +94,10 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
-  echo -e "$(trans "${GREEN}ADSS успішно видалено${NC}")"
+  echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else
+  check_updates
+  apply_patch
+
   main_menu
 fi

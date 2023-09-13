@@ -37,7 +37,7 @@ install_mhddos() {
 configure_mhddos() {
     clear
     declare -A params
-    echo -e "$(trans "${GRAY}Залишіть пустим якщо бажаєте видалити пераметри${NC}")"
+    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
 
     params[user-id]=$user_id
@@ -106,7 +106,7 @@ configure_mhddos() {
     params[proxies]=$proxies
 
     echo -ne "\n"
-    echo -e "$(trans "${ORANGE}IP адреса кожного інтерфейсу через пробіл.${NC}")"
+    echo -e "${ORANGE}$(trans "IP адреса кожного інтерфейсу через пробіл.")${NC}"
     read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_mhddos_variable 'bind')" interface
     if [[ -n "$interface" ]];then
       params[bind]=$interface
@@ -207,7 +207,7 @@ mhddos_stop() {
 mhddos_get_status() {
   clear
   sudo systemctl status mhddos.service
-  echo -e "$(trans "${GRAY}Нажміть будь яку клавішу щоб продовжити${NC}")"
+  echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_mhddos
 }
