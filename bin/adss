@@ -76,7 +76,7 @@ elif [ "$1" = "--restore" ]; then
   distress_stop
   distress_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/distress >/dev/null 2>&1
-
+  sudo rm -r /var/log/adss.log >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh | bash -s
 elif [ "$1" = "config" ]; then
@@ -93,6 +93,7 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -r /etc/systemd/system/distress.service >/dev/null 2>&1
   sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
+  sudo rm -r /var/log/adss.log >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
   echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else

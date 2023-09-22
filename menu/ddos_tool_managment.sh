@@ -31,6 +31,7 @@ stop_services() {
   sudo systemctl stop distress.service >/dev/null
   sudo systemctl stop db1000n.service >/dev/null
   sudo systemctl stop mhddos.service >/dev/null
+  sudo rm -r /var/log/adss.log
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }
@@ -54,8 +55,9 @@ get_ddoss_status() {
       #https://t.me/c/1764189517/301014
       #https://t.me/c/1764189517/300970
       #tail --lines=20 /var/log/syslog | grep -w "$service"
-
-      journalctl -n 20 -u "$service.service" --no-pager
+	  #Fix Parrot
+      #journalctl -n 20 -u "$service.service" --no-pager
+      tail --lines=20 /var/log/adss.log
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
 
