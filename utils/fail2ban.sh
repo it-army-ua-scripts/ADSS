@@ -3,7 +3,7 @@
 install_fail2ban() {
   adss_dialog "$(trans "Встановлюємо Fail2ban")"
   install() {
-    sudo pacman -Sy fail2ban --noconfirm
+    sudo xbps-install -Su fail2ban -y
   }
   install >/dev/null 2>&1
 

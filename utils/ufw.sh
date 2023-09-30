@@ -5,7 +5,7 @@ install_ufw() {
   install() {
     sudo systemctl stop firewalld
     sudo systemctl disable firewalld
-    sudo pacman -Sy ufw --noconfirm
+    sudo xbps-install -Su ufw -y
     sudo ufw disable
     sudo /bin/systemctl restart ufw.service
   }

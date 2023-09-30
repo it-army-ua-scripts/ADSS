@@ -18,7 +18,7 @@ prepare_for_update() {
   echo -e "${GREEN}$(trans "Перевіряємо наявленість оновлень")${NC}"
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']/}
-  remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/arch/version.txt')
+  remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/void/version.txt')
 
   echo -e "$(trans "Встановлена версія") = ${ORANGE}$current_version${NC}"
   echo -e "$(trans "Актуальна версія") = ${ORANGE}$remote_version${NC}"
