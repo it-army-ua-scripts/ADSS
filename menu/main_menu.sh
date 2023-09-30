@@ -8,10 +8,10 @@ main_menu() {
     extend_ports
     main_menu
     ;;
-  3)
+  2)
     security_settings
     ;;
-  4)
+  3)
     ddos
     ;;
   esac
