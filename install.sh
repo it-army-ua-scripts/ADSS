@@ -20,6 +20,9 @@ if [ -r /etc/os-release ]; then
   centos)
     PACKAGE_MANAGER="yum"
     ;;
+  arch)
+    PACKAGE_MANAGER="pacman"
+  ;;
   *)
     PACKAGE_MANAGER="apt-get"
     ;;
@@ -27,11 +30,20 @@ if [ -r /etc/os-release ]; then
 
   if [[ ! -z "$PACKAGE_MANAGER" ]]; then
     TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog')
-    sudo "$PACKAGE_MANAGER" update -y
-    for i in "${!TOOLS[@]}"; do
-      echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
-      sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
-    done
+
+    if [[ "$PACKAGE_MANAGER" == "pacman" ]]; then
+      for i in "${!TOOLS[@]}"; do
+        echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
+        sudo "$PACKAGE_MANAGER" -Sy ${TOOLS[i]} --noconfirm
+      done
+    else
+      sudo "$PACKAGE_MANAGER" update -y
+      for i in "${!TOOLS[@]}"; do
+        echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
+        sudo "$PACKAGE_MANAGER" install -y ${TOOLS[i]}
+      done
+    fi
+
     if [ -d "$WORKING_DIR" ] && [ "$(ls -A $WORKING_DIR)" ]; then
       source "${WORKING_DIR}/utils/updater.sh"
       export SCRIPT_DIR="${WORKING_DIR}/"
@@ -39,7 +51,11 @@ if [ -r /etc/os-release ]; then
     else
       sudo mkdir -p "$WORKING_DIR"
       sudo chown $(whoami) "$WORKING_DIR"
-      git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+      if [[ "$PACKAGE_MANAGER" == "pacman" ]]; then
+          git clone -b arch https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+      else
+          git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+      fi
     fi
 
     sudo ln -sf "$WORKING_DIR/bin/adss" /usr/local/bin/adss
