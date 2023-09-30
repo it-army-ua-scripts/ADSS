@@ -23,6 +23,9 @@ if [ -r /etc/os-release ]; then
   arch)
     PACKAGE_MANAGER="pacman"
   ;;
+  void)
+    PACKAGE_MANAGER="xbps-install"
+  ;;
   *)
     PACKAGE_MANAGER="apt-get"
     ;;
@@ -36,6 +39,12 @@ if [ -r /etc/os-release ]; then
         echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
         sudo "$PACKAGE_MANAGER" -Sy ${TOOLS[i]} --noconfirm
       done
+    elif [ "$PACKAGE_MANAGER" == "xbps-install"  ]; then
+        sudo "$PACKAGE_MANAGER" -u xbps -y
+        for i in "${!TOOLS[@]}"; do
+          echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
+          sudo "$PACKAGE_MANAGER" -Su ${TOOLS[i]} -y
+        done
     else
       sudo "$PACKAGE_MANAGER" update -y
       for i in "${!TOOLS[@]}"; do
@@ -53,6 +62,8 @@ if [ -r /etc/os-release ]; then
       sudo chown $(whoami) "$WORKING_DIR"
       if [[ "$PACKAGE_MANAGER" == "pacman" ]]; then
           git clone -b arch https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+      elif [ "$PACKAGE_MANAGER" == "xbps-install" ]; then
+          git clone -b void https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       else
           git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       fi
