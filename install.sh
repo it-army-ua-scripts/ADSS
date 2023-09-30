@@ -41,6 +41,7 @@ if [ -r /etc/os-release ]; then
       done
     elif [ "$PACKAGE_MANAGER" == "xbps-install"  ]; then
         sudo "$PACKAGE_MANAGER" -u xbps -y
+        sudo "$PACKAGE_MANAGER" -Su libssh2 -y
         for i in "${!TOOLS[@]}"; do
           echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
           sudo "$PACKAGE_MANAGER" -Su ${TOOLS[i]} -y
