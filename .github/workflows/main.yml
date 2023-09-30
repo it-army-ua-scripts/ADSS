@@ -1,8 +1,0 @@
-on:
-  release:
-    types: [ released ]
-jobs:
-  update_version:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ github.event.release.tag_name }}" > version.txt
