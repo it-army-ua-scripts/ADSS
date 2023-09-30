@@ -2,7 +2,11 @@
 
 install_fail2ban() {
   adss_dialog "$(trans "Встановлюємо Fail2ban")"
-  sudo pacman -Sy fail2ban --noconfirm
+  install() {
+    sudo pacman -Sy fail2ban --noconfirm
+  }
+  install >/dev/null 2>&1
+
   confirm_dialog "$(trans "Fail2ban успішно встановлено")"
 }
 
