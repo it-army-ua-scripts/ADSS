@@ -202,7 +202,6 @@ mhddos_enabled() {
 mhddos_stop() {
   create_symlink
   sudo systemctl stop mhddos.service >/dev/null 2>&1
-  sudo rm -r /var/log/adss.log >/dev/null 2>&1
 }
 
 mhddos_get_status() {

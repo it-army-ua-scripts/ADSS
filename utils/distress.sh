@@ -187,7 +187,6 @@ distress_enabled() {
 
 distress_stop() {
   sudo systemctl stop distress.service >/dev/null 2>&1
-  sudo rm -r /var/log/adss.log >/dev/null 2>&1
 }
 
 distress_get_status() {

@@ -172,7 +172,6 @@ db1000n_run() {
 
 db1000n_stop() {
   sudo systemctl stop db1000n.service >/dev/null 2>&1
-  sudo rm -r /var/log/adss.log >/dev/null 2>&1
 }
 db1000n_auto_enable() {
   sudo systemctl disable mhddos.service >/dev/null 2>&1

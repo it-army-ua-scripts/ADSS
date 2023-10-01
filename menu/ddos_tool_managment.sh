@@ -31,7 +31,6 @@ stop_services() {
   sudo systemctl stop distress.service >/dev/null
   sudo systemctl stop db1000n.service >/dev/null
   sudo systemctl stop mhddos.service >/dev/null
-  sudo rm -r /var/log/adss.log
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }
