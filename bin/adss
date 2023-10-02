@@ -47,6 +47,10 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
+days_to_keep=7
+sudo find "/var/log/"  -name "adss.log" -mtime +"$days_to_keep" -exec rm -f {} \;
+
+
 if [ "$1" = "--auto-install" ]; then
   check_updates
   apply_patch
@@ -76,7 +80,7 @@ elif [ "$1" = "--restore" ]; then
   distress_stop
   distress_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/distress >/dev/null 2>&1
-
+  sudo rm -r /var/log/adss.log >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh | bash -s
 elif [ "$1" = "config" ]; then
@@ -93,6 +97,7 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -r /etc/systemd/system/distress.service >/dev/null 2>&1
   sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
+  sudo rm -r /var/log/adss.log >/dev/null 2>&1
   sudo rm -rf /opt/itarmy
   echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else
