@@ -1,0 +1,4 @@
+#!/bin/sh
+ADSS_LOGDIR=/var/log/adss/
+mkdir -p $ADSS_LOGDIR
+exec svlogd -tt $ADSS_LOGDIR

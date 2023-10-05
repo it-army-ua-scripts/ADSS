@@ -1,0 +1,3 @@
+#!/bin/sh
+exec 2>&1
+exec /opt/itarmy/bin/distress 2>&1
