@@ -20,7 +20,7 @@ if [ -r /etc/os-release ]; then
   centos)
     PACKAGE_MANAGER="yum"
     ;;
-  arch)
+  arch | manjaro)
     PACKAGE_MANAGER="pacman"
   ;;
   void)
