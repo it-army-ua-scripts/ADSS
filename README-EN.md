@@ -3,7 +3,8 @@
 ADSS is a Shell script that automatically updates itself and determines the version, bitness, and distribution of your Linux OS.
 
 Tested support for the current version :
-Ubuntu, Debian, Fedora, Centos, Arch Linux, Kali Linux, Parrot Security OS (х86,х64,arm)
+
+Ubuntu, Debian, Fedora, Centos, Arch Linux, Kali Linux, Parrot Security OS, Rocky Linux, AlmaLinux OS (х86,х64,arm)
 
 #### [Українська версія - нажміть сюди](/README.md)
 #### 💁 [Technical support](https://t.me/+H6PnjkydZX0xNDky)
