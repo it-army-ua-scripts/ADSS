@@ -32,7 +32,7 @@ if [ -r /etc/os-release ]; then
   esac
 
   if [[ ! -z "$PACKAGE_MANAGER" ]]; then
-    TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog')
+    TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog' 'tar')
 
     if [[ "$PACKAGE_MANAGER" == "pacman" ]]; then
       for i in "${!TOOLS[@]}"; do
