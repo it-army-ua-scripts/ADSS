@@ -55,8 +55,8 @@ get_ddoss_status() {
       #https://t.me/c/1764189517/300970
       #tail --lines=20 /var/log/syslog | grep -w "$service"
 	  #Fix Parrot
-      #journalctl -n 20 -u "$service.service" --no-pager
-      tail --lines=20 /var/log/adss.log
+      journalctl -n 20 -u "$service.service" --no-pager
+
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
 
