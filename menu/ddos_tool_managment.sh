@@ -56,7 +56,14 @@ get_ddoss_status() {
       #tail --lines=20 /var/log/syslog | grep -w "$service"
 	  #Fix Parrot
       #journalctl -n 20 -u "$service.service" --no-pager
-      tail --lines=20 /var/log/adss.log
+
+      #Fix Ubuntu 18
+      lsb_version="$(. /etc/os-release && echo "$VERSION_ID")"
+      if [[ "$lsb_version" == "18.04" ]]; then
+        journalctl -n 20 -u "$service.service" --no-pager
+      else
+        tail --lines=20 /var/log/adss.log
+      fi
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
 
