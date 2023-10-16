@@ -14,16 +14,6 @@ install_fail2ban() {
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Fail2ban успішно встановлено")"
     ;;
-  centos)
-    adss_dialog "$(trans "Встановлюємо Fail2ban")"
-    install() {
-      sudo yum update -y
-      sudo yum install -y epel-release
-      sudo yum install -y fail2ban
-    }
-    install >/dev/null 2>&1
-    confirm_dialog "$(trans "Fail2ban успішно встановлено")"
-    ;;
   *)
     adss_dialog "$(trans "Встановлюємо Fail2ban")"
     install() {

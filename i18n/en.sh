@@ -1,7 +1,6 @@
 #!/bin/bash
 
 declare -A localization=(
-  ["Встановити докер"]="Install Docker"
 
   ["Неправильний вхідний параметр!"]="Invalid input parameter!"
   ["Не знайдено папку '$directory'."]="'$directory' folder not found."
