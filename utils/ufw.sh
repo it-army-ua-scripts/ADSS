@@ -14,18 +14,6 @@ install_ufw() {
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Фаєрвол UFW встановлено і деактивовано")"
     ;;
-
-  centos)
-    adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
-    install() {
-      sudo systemctl stop firewalld
-      sudo systemctl disable firewalld
-      sudo yum install epel-release -y && sudo yum install ufw -y && sudo ufw disable
-      sudo /bin/systemctl restart ufw.service
-    }
-    install >/dev/null 2>&1
-    confirm_dialog "$(trans "Фаєрвол UFW встановлено і деактивовано")"
-    ;;
   *)
     adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
     install() {
