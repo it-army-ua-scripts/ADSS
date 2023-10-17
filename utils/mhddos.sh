@@ -174,34 +174,14 @@ regenerate_mhddos_service_file() {
 
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-  sudo systemctl stop distress.service >/dev/null 2>&1
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
-  sudo systemctl start mhddos.service >/dev/null 2>&1
-}
-
-mhddos_auto_enable() {
-  sudo systemctl disable distress.service >/dev/null 2>&1
-  sudo systemctl disable db1000n.service >/dev/null 2>&1
-  sudo systemctl enable mhddos.service >/dev/null 2>&1
-  create_symlink
-  confirm_dialog "$(trans "MHDDOS додано до автозавантаження")"
-}
-mhddos_auto_disable() {
- sudo systemctl disable mhddos >/dev/null 2>&1
- create_symlink
- confirm_dialog "$(trans "MHDDOS видалено з автозавантаження")"
-}
-mhddos_enabled() {
-  if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+  sudo sv down distress.service >/dev/null 2>&1
+  sudo sv down db1000n.service >/dev/null 2>&1
+  sudo sv up mhddos.service >/dev/null 2>&1
 }
 
 mhddos_stop() {
   create_symlink
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
+  sudo sv down mhddos.service >/dev/null 2>&1
 }
 
 mhddos_get_status() {

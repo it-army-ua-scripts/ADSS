@@ -165,34 +165,13 @@ regenerate_db1000n_service_file() {
 }
 
 db1000n_run() {
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
-  sudo systemctl stop distress.service >/dev/null 2>&1
-  sudo systemctl start db1000n.service >/dev/null 2>&1
+  sudo sv down mhddos.service >/dev/null 2>&1
+  sudo sv down distress.service >/dev/null 2>&1
+  sudo sv up db1000n.service >/dev/null 2>&1
 }
 
 db1000n_stop() {
   sudo sv down db1000n.service >/dev/null 2>&1
-}
-db1000n_auto_enable() {
-  sudo systemctl disable mhddos.service >/dev/null 2>&1
-  sudo systemctl disable distress.service >/dev/null 2>&1
-  sudo systemctl enable db1000n >/dev/null 2>&1
-  create_symlink
-  confirm_dialog "$(trans "DB1000N додано до автозавантаження")"
-}
-
-db1000n_auto_disable() {
-  sudo systemctl disable db1000n >/dev/null 2>&1
-  create_symlink
-  confirm_dialog "$(trans "DB1000N видалено з автозавантаження")"
-}
-
-db1000n_enabled() {
-  if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
 }
 
 db1000n_get_status() {

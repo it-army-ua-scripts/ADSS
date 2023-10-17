@@ -79,7 +79,7 @@ ddos_tool_managment() {
   if [[ "$enabled_tool" == 1 ]]; then
     menu_items+=("$(trans "Зупинити атаку")")
   fi
-  menu_items+=("$(trans "Налаштування автозапуску")" "MHDDOS" "DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
+  menu_items+=("MHDDOS" "DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
   display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}"
   status=$?
   if [[ "$enabled_tool" == 1 ]]; then
@@ -91,18 +91,15 @@ ddos_tool_managment() {
       stop_services
       ;;
     3)
-      autoload_configuration
-      ;;
-    4)
       initiate_mhddos
       ;;
-    5)
+    4)
       initiate_db1000n
       ;;
-    6)
+    5)
       initiate_distress
       ;;
-    7)
+    6)
       ddos
       ;;
     esac
@@ -112,18 +109,15 @@ ddos_tool_managment() {
       get_ddoss_status
       ;;
     2)
-      autoload_configuration
-      ;;
-    3)
       initiate_mhddos
       ;;
-    4)
+    3)
       initiate_db1000n
       ;;
-    5)
+    4)
       initiate_distress
       ;;
-    6)
+    5)
       ddos
       ;;
     esac

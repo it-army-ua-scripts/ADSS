@@ -163,28 +163,6 @@ distress_run() {
   sudo sv up distress.service >/dev/null 2>&1
 }
 
-distress_auto_enable() {
-  sudo sv down mhddos.service >/dev/null 2>&1
-  sudo sv down db1000n.service >/dev/null 2>&1
-  sudo sv up distress >/dev/null 2>&1
-  create_symlink
-  confirm_dialog "$(trans "DISTRESS додано до автозавантаження")"
-}
-
-distress_auto_disable() {
-  sudo sv down distress >/dev/null 2>&1
-  create_symlink
-  confirm_dialog "$(trans "DISTRESS видалено з автозавантаження")"
-}
-
-distress_enabled() {
-  if sudo systemctl is-enabled distress >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
-}
-
 distress_stop() {
   sudo sv down distress.service >/dev/null 2>&1
 }
