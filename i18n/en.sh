@@ -34,13 +34,9 @@ declare -A localization=(
   ["Налаштування безпеки"]="Security settings"
   ["Головне меню"]="Main menu"
   ["Налаштування фаєрвола"]="Firewall settings"
-  ["Налаштування захисту від брутфорса"]="Bruteforce protection settings"
   ["Вихід"]="Exit"
   ["Оберіть опцію:"]="Choose an option:"
   ["ДДОС інструменти не встановлено"]="No DDOS tools installed"
-
-  ["Встановлення захисту"]="Install protection"
-  ["Налаштування захисту"]="Protection settings"
 
   ["Налаштування безпеки"]="Security settings"
   ["DB1000N додано до автозавантаження"]="DB1000N added to autostart"
@@ -73,29 +69,6 @@ declare -A localization=(
   ["MHDDOS успішно встановлено"]="MHDDOS installed successfully"
   ["Встановлюємо DISTRESS"]="Installing DISTRESS"
   ["DISTRESS успішно встановлено"]="DISTRESS installed successfully"
-
-  ["Встановлюємо Docker"]="Installing Docker"
-  ["Docker успішно встановлено"]="Docker installed successfully"
-
-  ["Встановлюємо Fail2ban"]="Installing Fail2ban"
-  ["Fail2ban успішно встановлено"]="Fail2ban installed successfully"
-  ["Налаштовуємо Fail2ban"]="Setting Fail2ban"
-  ["Fail2ban успішно налаштовано"]="Fail2ban set up successfully"
-  ["Fail2ban не встановлений, будь ласка встановіть і спробуйте знову"]="Fail2ban is not installed, please install and try again"
-  ["Увімкнути захист від брутфорсу"]="Enable brute force protection"
-  ["Вимкнути захист від брутфорсу"]="Disable brute force protection"
-  ["Fail2ban успішно увімкнено"]="Fail2ban successfully enabled"
-  ["Fail2ban успішно вимкнено"]="Fail2ban successfully disabled"
-
-  ["Встановлюємо UFW фаєрвол"]="Installing UFW firewall"
-  ["Фаєрвол UFW встановлено і деактивовано"]="UFW firewall installed and deactivated"
-  ["Фаєрвол UFW налаштовано і активовано"]="UFW firewall set up and activated"
-  ["UFW не встановлений, будь ласка встановіть і спробуйте знову"]="UFW is not installed, please install and try again"
-  ["Налаштовуємо UFW фаєрвол"]="Setting UFW firewall"
-  ["Увімкнути фаервол"]="Enable UFW firewall"
-  ["Вимкнути фаервол"]="Disable UFW firewall"
-  ["UFW успішно увімкнено"]="UFW successfully enabled"
-  ["UFW успішно вимкнено"]="UFW successfully disabled"
 
   ["Залишіть пустим якщо бажаєте видалити пераметри"]="Leave blank if you want to delete parameters"
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "

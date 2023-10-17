@@ -55,10 +55,6 @@ if [ "$1" = "--auto-install" ]; then
   check_updates
   apply_patch
 
-  install_fail2ban
-  configure_fail2ban
-  install_ufw
-  configure_ufw
   install_db1000n
   install_distress
   install_mhddos

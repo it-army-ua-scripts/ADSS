@@ -171,7 +171,7 @@ db1000n_run() {
 }
 
 db1000n_stop() {
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo sv down db1000n.service >/dev/null 2>&1
 }
 db1000n_auto_enable() {
   sudo systemctl disable mhddos.service >/dev/null 2>&1
@@ -197,7 +197,7 @@ db1000n_enabled() {
 
 db1000n_get_status() {
   clear
-  sudo systemctl status db1000n.service
+  sudo sv status db1000n.service
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_db1000n

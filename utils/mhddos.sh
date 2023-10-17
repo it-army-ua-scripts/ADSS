@@ -206,7 +206,7 @@ mhddos_stop() {
 
 mhddos_get_status() {
   clear
-  sudo systemctl status mhddos.service
+  sudo sv status mhddos.service
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_mhddos

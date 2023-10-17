@@ -158,21 +158,21 @@ regenerate_distress_service_file() {
 
 distress_run() {
   sudo rm -rf /tmp/distress >/dev/null 2>&1
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
-  sudo systemctl start distress.service >/dev/null 2>&1
+  sudo sv down mhddos.service >/dev/null 2>&1
+  sudo sv down db1000n.service >/dev/null 2>&1
+  sudo sv up distress.service >/dev/null 2>&1
 }
 
 distress_auto_enable() {
-  sudo systemctl disable mhddos.service >/dev/null 2>&1
-  sudo systemctl disable db1000n.service >/dev/null 2>&1
-  sudo systemctl enable distress >/dev/null 2>&1
+  sudo sv down mhddos.service >/dev/null 2>&1
+  sudo sv down db1000n.service >/dev/null 2>&1
+  sudo sv up distress >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DISTRESS додано до автозавантаження")"
 }
 
 distress_auto_disable() {
-  sudo systemctl disable distress >/dev/null 2>&1
+  sudo sv down distress >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DISTRESS видалено з автозавантаження")"
 }
@@ -186,12 +186,12 @@ distress_enabled() {
 }
 
 distress_stop() {
-  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo sv down distress.service >/dev/null 2>&1
 }
 
 distress_get_status() {
   clear
-  sudo systemctl status distress.service
+  sudo sv status distress.service
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_distress
