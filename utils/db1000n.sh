@@ -34,7 +34,6 @@ install_db1000n() {
         ;;
       esac
       regenerate_db1000n_service_file
-      create_symlink
     }
     install > /dev/null 2>&1
     confirm_dialog "$(trans "DB1000N успішно встановлено")"
@@ -165,18 +164,17 @@ regenerate_db1000n_service_file() {
 }
 
 db1000n_run() {
-  sudo sv down mhddos
-  sudo sv down distress
+  mhddos_stop
+  distress_stop
   sudo sv up db1000n
+  sudo ln -s "$SCRIPT_DIR"/services/db1000n /etc/runit/runsvdir/default/db1000n
 }
 
 db1000n_stop() {
-  create_symlink
   sudo sv down db1000n
-}
-db1000n_delete_symlink() {
   sudo rm -rf /etc/runit/runsvdir/default/db1000n
 }
+
 db1000n_get_status() {
   clear
   sudo sv status db1000n.service

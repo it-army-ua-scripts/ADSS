@@ -28,7 +28,6 @@ install_mhddos() {
         sudo curl -Lo mhddos_proxy_linux "$package"
         sudo chmod +x mhddos_proxy_linux
         regenerate_mhddos_service_file
-        create_symlink
 	  }
     install > /dev/null 2>&1
     confirm_dialog "$(trans "MHDDOS успішно встановлено")"
@@ -178,14 +177,16 @@ mhddos_delete_symlink() {
 
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-  sudo sv down distress
-  sudo sv down db1000n
+  distress_stop
+  db1000n_stop
+
   sudo sv up mhddos
+  sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos
 }
 
 mhddos_stop() {
-  create_symlink
   sudo sv down mhddos
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos
 }
 
 mhddos_get_status() {

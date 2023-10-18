@@ -29,7 +29,6 @@ install_distress() {
         sudo curl -Lo distress "$package"
         sudo chmod +x distress
         regenerate_distress_service_file
-        create_symlink
     }
     install > /dev/null 2>&1
     confirm_dialog "$(trans "DISTRESS успішно встановлено")"
@@ -156,21 +155,18 @@ regenerate_distress_service_file() {
   sudo sv restart distress
 }
 
-distress_delete_symlink() {
-  sudo rm -rf /etc/runit/runsvdir/default/distress
-}
-
 distress_run() {
   sudo rm -rf /tmp/distress >/dev/null 2>&1
+  mhddos_stop
+  db1000n_stop
 
-  sudo sv down mhddos
-  sudo sv down db1000n
   sudo sv up distress
+  sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress
 }
 
 distress_stop() {
-  create_symlink
   sudo sv down distress
+  sudo rm -rf /etc/runit/runsvdir/default/distress
 }
 
 distress_get_status() {

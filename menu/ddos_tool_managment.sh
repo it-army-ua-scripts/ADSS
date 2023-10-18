@@ -12,20 +12,6 @@ check_enabled() {
   return "$stop_service"
 }
 
-create_symlink() {
-  if [ ! -L "/etc/runit/runsvdir/default/mhddos" ]; then
-    sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
-  fi
-
-  if [ ! -L "/etc/runit/runsvdir/default/distress" ]; then
-    sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress >/dev/null 2>&1
-  fi
-
-  if [ ! -L "/etc/runit/runsvdir/default/db1000n" ]; then
-    sudo ln -s "$SCRIPT_DIR"/services/db1000n /etc/runit/runsvdir/default/db1000n >/dev/null 2>&1
-  fi
-}
-
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
   mhddos_delete_symlink
