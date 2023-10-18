@@ -13,24 +13,24 @@ check_enabled() {
 }
 
 create_symlink() {
-  if [ ! -L "/etc/systemd/system/mhddos.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service >/dev/null 2>&1
+  if [ ! -L "/etc/runit/runsvdir/default/mhddos" ]; then
+    sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
   fi
 
-  if [ ! -L "/etc/systemd/system/distress.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service >/dev/null 2>&1
+  if [ ! -L "/etc/runit/runsvdir/default/distress" ]; then
+    sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress >/dev/null 2>&1
   fi
 
-  if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
+  if [ ! -L "/etc/runit/runsvdir/default/db1000n" ]; then
+    sudo ln -s "$SCRIPT_DIR"/services/db1000n /etc/runit/runsvdir/default/db1000n >/dev/null 2>&1
   fi
 }
 
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
-  sudo rm -rf /etc/runit/runsvdir/default/distress
-  sudo rm -rf /etc/runit/runsvdir/default/db1000n
-  sudo rm -rf /etc/runit/runsvdir/default/mhddos
+  mhddos_delete_symlink
+  distress_delete_symlink
+  db1000n_delete_symlink
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }

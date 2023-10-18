@@ -139,7 +139,7 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
+  start="ExecStart=$SCRIPT_DIR/bin/mhddos_proxy_linux"
   vpn=false
   while read -r line
   do
@@ -169,20 +169,23 @@ regenerate_mhddos_service_file() {
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/mhddos.service
 
-  sudo systemctl daemon-reload
+  sudo sv restart mhddos
+}
+
+mhddos_delete_symlink() {
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos
 }
 
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-  sudo rm -rf /etc/runit/runsvdir/default/distress
-  sudo rm -rf /etc/runit/runsvdir/default/db1000n
-
-  ln -s /opt/itarmy/services/mhddos /etc/runit/runsvdir/default/mhddos
+  sudo sv down distress
+  sudo sv down db1000n
+  sudo sv up mhddos
 }
 
 mhddos_stop() {
   create_symlink
-  sudo rm -rf /etc/runit/runsvdir/default/mhddos
+  sudo sv down mhddos
 }
 
 mhddos_get_status() {

@@ -136,7 +136,7 @@ write_db1000n_variable() {
 regenerate_db1000n_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/db1000n"
+  start="ExecStart=$SCRIPT_DIR/bin/db1000n"
 
   while read -r line
   do
@@ -161,21 +161,22 @@ regenerate_db1000n_service_file() {
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/db1000n.service
 
-  sudo systemctl daemon-reload
+  sudo sv restart db1000n
 }
 
 db1000n_run() {
-
-  sudo rm -rf /etc/runit/runsvdir/default/distress
-  sudo rm -rf /etc/runit/runsvdir/default/mhddos
-
-  ln -s /opt/itarmy/services/db1000n /etc/runit/runsvdir/default/db1000n
+  sudo sv down mhddos
+  sudo sv down distress
+  sudo sv up db1000n
 }
 
 db1000n_stop() {
+  create_symlink
+  sudo sv down db1000n
+}
+db1000n_delete_symlink() {
   sudo rm -rf /etc/runit/runsvdir/default/db1000n
 }
-
 db1000n_get_status() {
   clear
   sudo sv status db1000n.service
