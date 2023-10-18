@@ -165,13 +165,15 @@ regenerate_db1000n_service_file() {
 }
 
 db1000n_run() {
-  sudo sv down mhddos.service >/dev/null 2>&1
-  sudo sv down distress.service >/dev/null 2>&1
-  sudo sv up db1000n.service >/dev/null 2>&1
+
+  sudo rm -rf /etc/runit/runsvdir/default/distress
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos
+
+  ln -s /opt/itarmy/services/db1000n /etc/runit/runsvdir/default/db1000n
 }
 
 db1000n_stop() {
-  sudo sv down db1000n.service >/dev/null 2>&1
+  sudo rm -rf /etc/runit/runsvdir/default/db1000n
 }
 
 db1000n_get_status() {

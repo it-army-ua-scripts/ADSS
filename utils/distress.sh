@@ -158,13 +158,14 @@ regenerate_distress_service_file() {
 
 distress_run() {
   sudo rm -rf /tmp/distress >/dev/null 2>&1
-  sudo sv down mhddos.service >/dev/null 2>&1
-  sudo sv down db1000n.service >/dev/null 2>&1
-  sudo sv up distress.service >/dev/null 2>&1
+  sudo rm -rf /etc/runit/runsvdir/default/db1000n
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos
+
+  ln -s /opt/itarmy/services/distress /etc/runit/runsvdir/default/distress
 }
 
 distress_stop() {
-  sudo sv down distress.service >/dev/null 2>&1
+  sudo rm -rf /etc/runit/runsvdir/default/distress
 }
 
 distress_get_status() {

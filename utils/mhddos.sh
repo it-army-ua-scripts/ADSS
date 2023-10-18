@@ -174,14 +174,15 @@ regenerate_mhddos_service_file() {
 
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-  sudo sv down distress.service >/dev/null 2>&1
-  sudo sv down db1000n.service >/dev/null 2>&1
-  sudo sv up mhddos.service >/dev/null 2>&1
+  sudo rm -rf /etc/runit/runsvdir/default/distress
+  sudo rm -rf /etc/runit/runsvdir/default/db1000n
+
+  ln -s /opt/itarmy/services/mhddos /etc/runit/runsvdir/default/mhddos
 }
 
 mhddos_stop() {
   create_symlink
-  sudo sv down mhddos.service >/dev/null 2>&1
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos
 }
 
 mhddos_get_status() {

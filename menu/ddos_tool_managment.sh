@@ -28,9 +28,9 @@ create_symlink() {
 
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
-  sudo systemctl stop distress.service >/dev/null
-  sudo systemctl stop db1000n.service >/dev/null
-  sudo systemctl stop mhddos.service >/dev/null
+  sudo rm -rf /etc/runit/runsvdir/default/distress
+  sudo rm -rf /etc/runit/runsvdir/default/db1000n
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }
