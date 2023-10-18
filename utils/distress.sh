@@ -161,7 +161,7 @@ distress_run() {
   db1000n_stop
 
   sudo sv up distress
-  sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress
+  sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress >/dev/null 2>&1
 }
 
 distress_stop() {

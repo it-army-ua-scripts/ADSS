@@ -181,7 +181,7 @@ mhddos_run() {
   db1000n_stop
 
   sudo sv up mhddos
-  sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos
+  sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
 }
 
 mhddos_stop() {

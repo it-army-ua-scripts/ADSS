@@ -167,7 +167,7 @@ db1000n_run() {
   mhddos_stop
   distress_stop
   sudo sv up db1000n
-  sudo ln -s "$SCRIPT_DIR"/services/db1000n /etc/runit/runsvdir/default/db1000n
+  sudo ln -s "$SCRIPT_DIR"/services/db1000n /etc/runit/runsvdir/default/db1000n >/dev/null 2>&1
 }
 
 db1000n_stop() {
