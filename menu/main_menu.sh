@@ -1,7 +1,7 @@
 #!/bin/bash
 
 main_menu() {
-  menu_items=("$(trans "Розширення портів")" "$(trans "Налаштування безпеки")" "DDOS")
+  menu_items=("$(trans "Розширення портів")" "DDOS")
   display_menu "$(trans "Головне меню")" "${menu_items[@]}"
   case $? in
   1)
@@ -9,9 +9,6 @@ main_menu() {
     main_menu
     ;;
   2)
-    security_settings
-    ;;
-  3)
     ddos
     ;;
   esac
