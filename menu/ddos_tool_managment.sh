@@ -57,9 +57,12 @@ get_ddoss_status() {
 	  #Fix Parrot
       #journalctl -n 20 -u "$service.service" --no-pager
 
-      #Fix Ubuntu 18
+      #Fix Ubuntu < 19
       lsb_version="$(. /etc/os-release && echo "$VERSION_ID")"
-      if [[ "$lsb_version" == "18.04" ]]; then
+      lsb_id="$(. /etc/os-release && echo "$ID")"
+	  
+      if [[ "$lsb_id" == "ubuntu" ]] &&
+         [[ "$lsb_version" < 19* ]]; then
         journalctl -n 20 -u "$service.service" --no-pager
       else
         tail --lines=20 /var/log/adss.log
