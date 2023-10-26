@@ -21,7 +21,7 @@ apply_patch() {
 
   # for 1.1.3
   if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'source='; then
-    sed -i 's/\[\/mhddos\]/source=1\n\[\/mhddos\]/g' "$envFile"
+    sed -i 's/\[\/mhddos\]/source=adss\n\[\/mhddos\]/g' "$envFile"
     regenerate_mhddos_service_file
   fi
   # end 1.1.3
