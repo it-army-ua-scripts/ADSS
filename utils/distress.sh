@@ -74,12 +74,12 @@ configure_distress() {
           packageSize=4096
         fi
 
-        read -e -p "$(trans "Розмір UDP пакунку: ")" -i $packageSize udp_packet_size
+        read -e -p "$(trans "Розмір UDP пакунку: ")" -i "$packageSize" udp_packet_size
         if [[ -n "$udp_packet_size" ]];then
           while [[ ! $udp_packet_size =~ ^[0-9]+$ ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"
-            read -e -p "$(trans "Розмір UDP пакунку: ")" -i $packageSize udp_packet_size
+            read -e -p "$(trans "Розмір UDP пакунку: ")" -i "$packageSize" udp_packet_size
           done
         fi
 
