@@ -70,7 +70,7 @@ configure_distress() {
       if [[ $direct_udp_failover > 0 ]]; then
 
         packageSize = "$(get_distress_variable 'udp-packet-size')"
-        if -z $packageSize; then
+        if [[ -z $packageSize  ]];then
           packageSize = 4096
         fi
 
@@ -86,7 +86,7 @@ configure_distress() {
         params[udp-packet-size]=$udp_packet_size
 
         connCount = "$(get_distress_variable 'direct-udp-mixed-flood-packets-per-conn')"
-        if -z $connCount; then
+        if [[ -z $connCount ]];then
           connCount = 30
         fi
 
