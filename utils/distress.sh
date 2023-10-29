@@ -68,23 +68,34 @@ configure_distress() {
       params[direct-udp-mixed-flood]=$direct_udp_failover
 
       if [[ $direct_udp_failover > 0 ]]; then
-        read -e -p "$(trans "Розмір UDP пакунку: ")" -i "$(get_distress_variable 'udp-packet-size')" udp_packet_size
+
+        packageSize="$(get_distress_variable 'udp-packet-size')"
+        if [[ -z $packageSize || $packageSize == " "  ]];then
+          packageSize=4096
+        fi
+
+        read -e -p "$(trans "Розмір UDP пакунку: ")" -i "$packageSize" udp_packet_size
         if [[ -n "$udp_packet_size" ]];then
           while [[ ! $udp_packet_size =~ ^[0-9]+$ ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"
-            read -e -p "$(trans "Розмір UDP пакунку: ")" -i "$(get_distress_variable 'udp-packet-size')" udp_packet_size
+            read -e -p "$(trans "Розмір UDP пакунку: ")" -i "$packageSize" udp_packet_size
           done
         fi
 
         params[udp-packet-size]=$udp_packet_size
 
-        read -e -p "$(trans "Кількість пакетів: ")" -i "$(get_distress_variable 'direct-udp-mixed-flood-packets-per-conn')" direct_udp_mixed_flood_packets_per_conn
+        connCount="$(get_distress_variable 'direct-udp-mixed-flood-packets-per-conn')"
+        if [[ -z $connCount || $connCount == " " ]];then
+          connCount=30
+        fi
+
+        read -e -p "$(trans "Кількість пакетів: ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
         if [[ -n "$direct_udp_mixed_flood_packets_per_conn" ]];then
           while [[ ! $direct_udp_mixed_flood_packets_per_conn =~ ^[0-9]+$ ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"
-            read -e -p "$(trans "Кількість пакетів: ")" -i "$(get_distress_variable 'direct-udp-mixed-flood-packets-per-conn')" direct_udp_mixed_flood_packets_per_conn
+            read -e -p "$(trans "Кількість пакетів: ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
           done
         fi
 
