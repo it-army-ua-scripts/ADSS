@@ -62,8 +62,6 @@ if [ "$1" = "--auto-install" ]; then
   mhddos_run
   get_ddoss_status
 elif [ "$1" = "--restore" ]; then
-  check_updates
-  apply_patch
 
   mhddos_stop
   mhddos_delete_symlink
