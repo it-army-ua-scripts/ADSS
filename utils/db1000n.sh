@@ -166,18 +166,16 @@ regenerate_db1000n_service_file() {
 db1000n_run() {
   mhddos_stop
   distress_stop
-  sudo sv up db1000n
   sudo ln -s "$SCRIPT_DIR"/services/db1000n /etc/runit/runsvdir/default/db1000n >/dev/null 2>&1
 }
 
 db1000n_stop() {
-  sudo sv down db1000n
   sudo rm -rf /etc/runit/runsvdir/default/db1000n
 }
 
 db1000n_get_status() {
   clear
-  sudo sv status db1000n.service
+  sudo sv status db1000n
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_db1000n

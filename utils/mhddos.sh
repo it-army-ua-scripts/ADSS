@@ -180,18 +180,16 @@ mhddos_run() {
   distress_stop
   db1000n_stop
 
-  sudo sv up mhddos
   sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
 }
 
 mhddos_stop() {
-  sudo sv down mhddos
   sudo rm -rf /etc/runit/runsvdir/default/mhddos
 }
 
 mhddos_get_status() {
   clear
-  sudo sv status mhddos.service
+  sudo sv status mhddos
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_mhddos

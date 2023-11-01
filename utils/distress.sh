@@ -160,18 +160,16 @@ distress_run() {
   mhddos_stop
   db1000n_stop
 
-  sudo sv up distress
   sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress >/dev/null 2>&1
 }
 
 distress_stop() {
-  sudo sv down distress
   sudo rm -rf /etc/runit/runsvdir/default/distress
 }
 
 distress_get_status() {
   clear
-  sudo sv status distress.service
+  sudo sv status distress
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_distress
