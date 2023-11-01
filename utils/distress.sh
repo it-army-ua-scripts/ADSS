@@ -107,9 +107,9 @@ configure_distress() {
     	  write_distress_variable "$i" "$value"
     done
     regenerate_distress_service_file
-    if systemctl is-active --quiet distress.service; then
+    if sudo sv status distress; then
         sudo rm -rf /tmp/distress >/dev/null 2>&1
-        sudo systemctl restart distress.service >/dev/null 2>&1
+        sudo sv restart distress >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
@@ -189,7 +189,7 @@ initiate_distress() {
    if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo systemctl is-active distress >/dev/null 2>&1; then
+      if sudo sv status distress >/dev/null 2>&1; then
         active_disactive="$(trans "Зупинка DISTRESS")"
       else
         active_disactive="$(trans "Запуск DISTRESS")"
@@ -199,7 +199,7 @@ initiate_distress() {
 
       case $? in
         1)
-          if sudo systemctl is-active distress >/dev/null 2>&1; then
+          if sudo sv status distress >/dev/null 2>&1; then
              distress_stop
              distress_get_status
           else

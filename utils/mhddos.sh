@@ -118,9 +118,9 @@ configure_mhddos() {
     	  write_mhddos_variable "$i" "$value"
     done
     regenerate_mhddos_service_file
-    if systemctl is-active --quiet mhddos.service; then
+    if sudo sv status mhddos; then
         sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-        sudo systemctl restart mhddos.service >/dev/null 2>&1
+        sudo sudo sv restart mhddos >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
@@ -171,10 +171,6 @@ regenerate_mhddos_service_file() {
   sudo sv restart mhddos
 }
 
-mhddos_delete_symlink() {
-  sudo rm -rf /etc/runit/runsvdir/default/mhddos
-}
-
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
   distress_stop
@@ -207,7 +203,7 @@ initiate_mhddos() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo systemctl is-active mhddos >/dev/null 2>&1; then
+      if sudo sv status mhddos >/dev/null 2>&1; then
         active_disactive="$(trans "Зупинка MHDDOS")"
       else
         active_disactive="$(trans "Запуск MHDDOS")"
@@ -217,7 +213,7 @@ initiate_mhddos() {
 
       case $? in
         1)
-          if sudo systemctl is-active mhddos >/dev/null 2>&1; then
+          if sudo sv status mhddos >/dev/null 2>&1; then
             mhddos_stop
             mhddos_get_status
           else

@@ -4,7 +4,7 @@ check_enabled() {
   services=("mhddos" "distress" "db1000n")
   stop_service=0
   for service in "${services[@]}"; do
-    if sudo systemctl is-active "$service" >/dev/null; then
+    if sudo sv status "$service" >/dev/null; then
       stop_service=1
       break
     fi
@@ -14,9 +14,9 @@ check_enabled() {
 
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
-  mhddos_delete_symlink
-  distress_delete_symlink
-  db1000n_delete_symlink
+  mhddos_stop
+  distress_stop
+  db1000n_stop
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }
@@ -26,7 +26,7 @@ get_ddoss_status() {
   service=""
 
   for element in "${services[@]}"; do
-    if systemctl is-active --quiet "$element.service"; then
+    if sudo sv status "$element"; then
       service="$element"
       break
     fi

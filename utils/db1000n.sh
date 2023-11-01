@@ -116,8 +116,8 @@ configure_db1000n() {
         write_db1000n_variable "$i" "$value"
     done
     regenerate_db1000n_service_file
-    if systemctl is-active --quiet db1000n.service; then
-        sudo systemctl restart db1000n.service >/dev/null 2>&1
+    if sudo sv status db1000n; then
+        sudo sv restart db1000n >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
@@ -195,7 +195,7 @@ initiate_db1000n() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-        if sudo systemctl is-active db1000n >/dev/null 2>&1; then
+        if sudo sv status db1000n >/dev/null 2>&1; then
           active_disactive="$(trans "Зупинка DB1000N")"
         else
           active_disactive="$(trans "Запуск DB1000N")"
@@ -205,7 +205,7 @@ initiate_db1000n() {
 
         case $? in
           1)
-            if sudo systemctl is-active db1000n >/dev/null 2>&1; then
+            if sudo sv status >/dev/null 2>&1; then
               db1000n_stop
               db1000n_get_status
             else
