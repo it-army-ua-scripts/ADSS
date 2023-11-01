@@ -187,7 +187,7 @@ mhddos_get_status() {
   clear
   sudo sv status mhddos >/dev/null 2>&1
 
-  if $? > 0; then
+  if [[ $? > 0 ]]; then
     echo -e "${GRAY}$(trans "MHDDOS вимкнений")${NC}"
   else
     sudo sv status mhddos
@@ -210,7 +210,7 @@ initiate_mhddos() {
     ddos_tool_managment
   else
     sudo sv status mhddos >/dev/null 2>&1
-    if $? == 0; then
+    if [[ $? == 0 ]]; then
       active_disactive="$(trans "Зупинка MHDDOS")"
     else
       active_disactive="$(trans "Запуск MHDDOS")"

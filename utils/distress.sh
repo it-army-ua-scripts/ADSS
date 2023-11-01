@@ -171,7 +171,7 @@ distress_get_status() {
   clear
   sudo sv status distress >/dev/null 2>&1
 
-  if $? > 0; then
+  if [[ $? > 0 ]]; then
     echo -e "${GRAY}$(trans "DISTRESS вимкнений")${NC}"
   else
     sudo sv status distress
@@ -197,7 +197,7 @@ initiate_distress() {
     ddos_tool_managment
   else
     sudo sv status distress >/dev/null 2>&1
-    if $? == 0; then
+    if [[ $? == 0 ]]; then
       active_disactive="$(trans "Зупинка DISTRESS")"
     else
       active_disactive="$(trans "Запуск DISTRESS")"
