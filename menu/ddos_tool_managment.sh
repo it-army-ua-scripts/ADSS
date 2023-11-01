@@ -4,7 +4,8 @@ check_enabled() {
   services=("mhddos" "distress" "db1000n")
   stop_service=0
   for service in "${services[@]}"; do
-    if sudo sv status "$service" >/dev/null; then
+    sudo sv status "$service" >/dev/null
+    if $? == 0; then
       stop_service=1
       break
     fi
