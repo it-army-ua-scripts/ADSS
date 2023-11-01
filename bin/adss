@@ -68,7 +68,7 @@ elif [ "$1" = "--restore" ]; then
   db1000n_stop
   distress_stop
   sudo rm -rf /tmp/distress >/dev/null 2>&1
-  sudo rm -r /var/log/adss.log >/dev/null 2>&1
+  sudo rm -r /var/log/adss/current >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh | bash -s
 elif [ "$1" = "config" ]; then
@@ -80,7 +80,7 @@ elif [ "$1" = "--uninstall" ]; then
   db1000n_stop
   distress_stop
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
-  sudo rm -r /var/log/adss.log >/dev/null 2>&1
+  sudo rm -r /var/log/adss/current >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"
   echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else
