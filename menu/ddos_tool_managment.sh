@@ -5,7 +5,7 @@ check_enabled() {
   stop_service=0
   for service in "${services[@]}"; do
     sudo sv status "$service" >/dev/null
-    if $? == 0; then
+    if [[ $? == 0 ]]; then
       stop_service=1
       break
     fi
@@ -62,7 +62,6 @@ get_ddoss_status() {
 ddos_tool_managment() {
   menu_items=("$(trans "Статус атаки")")
   check_enabled
-  sleep 10
   enabled_tool=$?
   if [[ "$enabled_tool" == 1 ]]; then
     menu_items+=("$(trans "Зупинити атаку")")
