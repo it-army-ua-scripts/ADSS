@@ -169,7 +169,14 @@ distress_stop() {
 
 distress_get_status() {
   clear
-  sudo sv status distress
+  sudo sv status distress >/dev/null 2>&1
+
+  if $? > 0; then
+    echo -e "${GRAY}$(trans "DISTRESS вимкнений")${NC}"
+  else
+    sudo sv status distress
+  fi
+
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_distress
@@ -189,34 +196,35 @@ initiate_distress() {
    if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo sv status distress >/dev/null 2>&1; then
-        active_disactive="$(trans "Зупинка DISTRESS")"
-      else
-        active_disactive="$(trans "Запуск DISTRESS")"
-      fi
-      menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
-      display_menu "DISTRESS" "${menu_items[@]}"
+    sudo sv status distress >/dev/null 2>&1
+    if $? == 0; then
+      active_disactive="$(trans "Зупинка DISTRESS")"
+    else
+      active_disactive="$(trans "Запуск DISTRESS")"
+    fi
+    menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
+    display_menu "DISTRESS" "${menu_items[@]}"
 
-      case $? in
-        1)
-          if sudo sv status distress >/dev/null 2>&1; then
-             distress_stop
-             distress_get_status
-          else
-            distress_run
-            distress_get_status
-          fi
-        ;;
-        2)
-          configure_distress
-          initiate_distress
-        ;;
-        3)
+    case $? in
+      1)
+        if sudo sv status distress >/dev/null 2>&1; then
+           distress_stop
+           distress_get_status
+        else
+          distress_run
           distress_get_status
-        ;;
-        4)
-          ddos_tool_managment
-        ;;
-      esac
+        fi
+      ;;
+      2)
+        configure_distress
+        initiate_distress
+      ;;
+      3)
+        distress_get_status
+      ;;
+      4)
+        ddos_tool_managment
+      ;;
+    esac
   fi
 }

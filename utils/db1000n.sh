@@ -175,7 +175,14 @@ db1000n_stop() {
 
 db1000n_get_status() {
   clear
-  sudo sv status db1000n
+  sudo sv status db1000n >/dev/null 2>&1
+
+  if $? > 0; then
+    echo -e "${GRAY}$(trans "DB1000N вимкнений")${NC}"
+  else
+    sudo sv status db1000n
+  fi
+
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_db1000n
@@ -195,34 +202,35 @@ initiate_db1000n() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-        if sudo sv status db1000n >/dev/null 2>&1; then
-          active_disactive="$(trans "Зупинка DB1000N")"
-        else
-          active_disactive="$(trans "Запуск DB1000N")"
-        fi
-        menu_items=("$active_disactive" "$(trans "Налаштування DB1000N")" "$(trans "Статус DB1000N")" "$(trans "Повернутись назад")")
-        display_menu "DB1000N" "${menu_items[@]}"
+    sudo sv status db1000n >/dev/null 2>&1
+    if $? == 0; then
+      active_disactive="$(trans "Зупинка DB1000N")"
+    else
+      active_disactive="$(trans "Запуск DB1000N")"
+    fi
+    menu_items=("$active_disactive" "$(trans "Налаштування DB1000N")" "$(trans "Статус DB1000N")" "$(trans "Повернутись назад")")
+    display_menu "DB1000N" "${menu_items[@]}"
 
-        case $? in
-          1)
-            if sudo sv status >/dev/null 2>&1; then
-              db1000n_stop
-              db1000n_get_status
-            else
-              db1000n_run
-              db1000n_get_status
-            fi
-          ;;
-          2)
-            configure_db1000n
-            initiate_db1000n
-          ;;
-          3)
-            db1000n_get_status
-          ;;
-          4)
-            ddos_tool_managment
-          ;;
-        esac
+    case $? in
+      1)
+        if sudo sv status >/dev/null 2>&1; then
+          db1000n_stop
+          db1000n_get_status
+        else
+          db1000n_run
+          db1000n_get_status
+        fi
+      ;;
+      2)
+        configure_db1000n
+        initiate_db1000n
+      ;;
+      3)
+        db1000n_get_status
+      ;;
+      4)
+        ddos_tool_managment
+      ;;
+    esac
   fi
 }

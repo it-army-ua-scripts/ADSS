@@ -185,7 +185,13 @@ mhddos_stop() {
 
 mhddos_get_status() {
   clear
-  sudo sv status mhddos
+  sudo sv status mhddos >/dev/null 2>&1
+
+  if $? > 0; then
+    echo -e "${GRAY}$(trans "MHDDOS вимкнений")${NC}"
+  else
+    sudo sv status mhddos
+  fi
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_mhddos
@@ -203,34 +209,35 @@ initiate_mhddos() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo sv status mhddos >/dev/null 2>&1; then
-        active_disactive="$(trans "Зупинка MHDDOS")"
-      else
-        active_disactive="$(trans "Запуск MHDDOS")"
-      fi
-      menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
-      display_menu "MHDDOS" "${menu_items[@]}"
+    sudo sv status mhddos >/dev/null 2>&1
+    if $? == 0; then
+      active_disactive="$(trans "Зупинка MHDDOS")"
+    else
+      active_disactive="$(trans "Запуск MHDDOS")"
+    fi
+    menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
+    display_menu "MHDDOS" "${menu_items[@]}"
 
-      case $? in
-        1)
-          if sudo sv status mhddos >/dev/null 2>&1; then
-            mhddos_stop
-            mhddos_get_status
-          else
-            mhddos_run
-            mhddos_get_status
-          fi
-        ;;
-        2)
-          configure_mhddos
-          initiate_mhddos
-        ;;
-        3)
+    case $? in
+      1)
+        if sudo sv status mhddos >/dev/null 2>&1; then
+          mhddos_stop
           mhddos_get_status
-        ;;
-        4)
-          ddos_tool_managment
-        ;;
-      esac
+        else
+          mhddos_run
+          mhddos_get_status
+        fi
+      ;;
+      2)
+        configure_mhddos
+        initiate_mhddos
+      ;;
+      3)
+        mhddos_get_status
+      ;;
+      4)
+        ddos_tool_managment
+      ;;
+    esac
   fi
 }
