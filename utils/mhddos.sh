@@ -225,6 +225,10 @@ initiate_mhddos() {
           mhddos_get_status
         else
           mhddos_run
+          while ! sudo sv status mhddos >/dev/null 2>&1; do
+             confirm_dialog "$(trans "Wait for service...")"
+             sleep 1
+          done
           mhddos_get_status
         fi
       ;;
