@@ -213,6 +213,10 @@ initiate_distress() {
            distress_get_status
         else
           distress_run
+          while ! sudo sv status distress >/dev/null 2>&1; do
+             confirm_dialog "$(trans "Wait for the service...")"
+             sleep 1
+          done
           distress_get_status
         fi
       ;;
