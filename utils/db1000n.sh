@@ -213,7 +213,8 @@ initiate_db1000n() {
 
     case $? in
       1)
-        if sudo sv status >/dev/null 2>&1; then
+        sudo sv status db1000n >/dev/null 2>&1
+        if [[ $? == 0 ]]; then
           db1000n_stop
           db1000n_get_status
         else

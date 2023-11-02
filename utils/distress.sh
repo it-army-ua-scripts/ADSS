@@ -207,7 +207,8 @@ initiate_distress() {
 
     case $? in
       1)
-        if sudo sv status distress >/dev/null 2>&1; then
+        sudo sv status distress >/dev/null 2>&1
+        if [[ $? == 0 ]]; then
            distress_stop
            distress_get_status
         else

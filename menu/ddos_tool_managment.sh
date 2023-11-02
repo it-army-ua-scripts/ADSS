@@ -27,7 +27,8 @@ get_ddoss_status() {
   service=""
 
   for element in "${services[@]}"; do
-    if sudo sv status "$element"; then
+    sudo sv status "$element" >/dev/null 2>&1
+    if [[ $? == 0 ]]; then
       service="$element"
       break
     fi

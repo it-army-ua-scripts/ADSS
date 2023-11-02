@@ -220,7 +220,8 @@ initiate_mhddos() {
 
     case $? in
       1)
-        if sudo sv status mhddos >/dev/null 2>&1; then
+        sudo sv status mhddos >/dev/null 2>&1
+        if [[ $? == 0 ]]; then
           mhddos_stop
           mhddos_get_status
         else
