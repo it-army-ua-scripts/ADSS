@@ -203,7 +203,7 @@ initiate_db1000n() {
     ddos_tool_managment
   else
     sudo sv status db1000n >/dev/null 2>&1
-    if [[ $? == 0]]; then
+    if [[ $? == 0 ]]; then
       active_disactive="$(trans "Зупинка DB1000N")"
     else
       active_disactive="$(trans "Запуск DB1000N")"
