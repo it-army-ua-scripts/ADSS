@@ -220,7 +220,7 @@ initiate_db1000n() {
         else
           db1000n_run
           while ! sudo sv status db1000n >/dev/null 2>&1; do
-             confirm_dialog "$(trans "Wait for service...")"
+             confirm_dialog "$(trans "Чекаємо на сервіс...")"
              sleep 1
           done
           db1000n_get_status

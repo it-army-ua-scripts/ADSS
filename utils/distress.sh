@@ -214,7 +214,7 @@ initiate_distress() {
         else
           distress_run
           while ! sudo sv status distress >/dev/null 2>&1; do
-             confirm_dialog "$(trans "Wait for the service...")"
+             confirm_dialog "$(trans "Чекаємо на сервіс...")"
              sleep 1
           done
           distress_get_status

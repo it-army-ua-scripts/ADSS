@@ -61,7 +61,7 @@ if [ "$1" = "--auto-install" ]; then
   extend_ports
   mhddos_run
   while ! sudo sv status mhddos >/dev/null 2>&1; do
-     echo -e "${GREEN}$(trans "Wait for the service...")${NC}"
+     echo -e "${GREEN}$(trans "Чекаємо на сервіс...")${NC}"
      sleep 1
   done
   get_ddoss_status

@@ -108,6 +108,8 @@ declare -A localization=(
   ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
   ["Інтерфейси: "]="Interfaces: "
   ["ADSS успішно видалено"]="ADSS was deleted successfully"
+
+  ["Чекаємо на сервіс..."]="Wait for the service..."
 )
 
 export localization
