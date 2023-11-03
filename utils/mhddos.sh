@@ -181,6 +181,7 @@ mhddos_run() {
 }
 
 mhddos_stop() {
+  sudo sv stop mhddos/log
   sudo rm -rf /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
   sudo rm -rf /opt/itarmy/services/mhddos/log/supervise >/dev/null 2>&1
   sudo rm -rf /opt/itarmy/services/mhddos/supervise >/dev/null 2>&1
