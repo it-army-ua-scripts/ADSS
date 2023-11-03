@@ -138,7 +138,7 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=$SCRIPT_DIR/bin/mhddos_proxy_linux"
+  start="mhddos_proxy_linux"
   vpn=false
   while read -r line
   do
@@ -166,7 +166,7 @@ regenerate_mhddos_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/mhddos.service
+  sed -i  "s/mhddos_proxy_linux.*/$start/g" "${SCRIPT_DIR}"/services/mhddos/run
 
   sudo sv restart mhddos
 }
@@ -177,10 +177,13 @@ mhddos_run() {
   db1000n_stop
 
   sudo ln -s "$SCRIPT_DIR"/services/mhddos /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
+  sudo sv up mhddos/log >/dev/null 2>&1
 }
 
 mhddos_stop() {
-  sudo rm -rf /etc/runit/runsvdir/default/mhddos
+  sudo rm -rf /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy/services/mhddos/log/supervise >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy/services/mhddos/supervise >/dev/null 2>&1
 }
 
 mhddos_get_status() {

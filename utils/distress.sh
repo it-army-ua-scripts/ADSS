@@ -127,7 +127,7 @@ write_distress_variable() {
 regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=$SCRIPT_DIR/bin/distress"
+  start="distress"
 
   while read -r line
   do
@@ -150,7 +150,7 @@ regenerate_distress_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/distress.service
+  sed -i  "s/distress.*/$start/g" "${SCRIPT_DIR}"/services/distress/run
 
   sudo sv restart distress
 }
@@ -161,10 +161,13 @@ distress_run() {
   db1000n_stop
 
   sudo ln -s "$SCRIPT_DIR"/services/distress /etc/runit/runsvdir/default/distress >/dev/null 2>&1
+  sudo sv up distress/log >/dev/null 2>&1
 }
 
 distress_stop() {
-  sudo rm -rf /etc/runit/runsvdir/default/distress
+  sudo rm -rf /etc/runit/runsvdir/default/distress >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy/services/distress/log/supervise >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy/services/distress/supervise >/dev/null 2>&1
 }
 
 distress_get_status() {

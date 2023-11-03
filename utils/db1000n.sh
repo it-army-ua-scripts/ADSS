@@ -135,7 +135,7 @@ write_db1000n_variable() {
 regenerate_db1000n_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=$SCRIPT_DIR/bin/db1000n"
+  start="db1000n"
 
   while read -r line
   do
@@ -158,7 +158,7 @@ regenerate_db1000n_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/db1000n.service
+  sed -i  "s/db1000n.*/$start/g" "${SCRIPT_DIR}"/services/db1000n/run
 
   sudo sv restart db1000n
 }
@@ -170,7 +170,9 @@ db1000n_run() {
 }
 
 db1000n_stop() {
-  sudo rm -rf /etc/runit/runsvdir/default/db1000n
+  sudo rm -rf /etc/runit/runsvdir/default/db1000n >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy/services/db1000n/log/supervise >/dev/null 2>&1
+  sudo rm -rf /opt/itarmy/services/db1000n/supervise >/dev/null 2>&1
 }
 
 db1000n_get_status() {
