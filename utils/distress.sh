@@ -178,7 +178,7 @@ regenerate_distress_service_file() {
     if [[ "$key" = "[distress]" || "$key" = "[/distress]" ]]; then
       continue
     fi
-    if [[ "$key" == 'direct-udp-failover' ]];then
+    if [[ "$key" == 'direct-udp-mixed-flood' ]];then
       if [[ "$value" == 0 ]]; then
         continue
       elif [[ "$value" == 1 ]]; then
