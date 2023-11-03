@@ -4,7 +4,7 @@ ADSS - це скрипт, написаний на Shell, який автомат
 
 Протестована підтримка поточної версії :
 
-Ubuntu, Debian, Fedora, Centos, Arch Linux, Kali Linux, Parrot Security OS, Rocky Linux, AlmaLinux OS, Manjaro (х86,х64,arm)
+Ubuntu, Debian, Fedora, Centos, Arch Linux, Kali Linux, Parrot Security OS, Rocky Linux, AlmaLinux OS, Manjaro, Oracle Linux, Void Linux (х86,х64,arm)
 
 #### [English version - click here](/README-EN.md)
 #### 💁 [Технічна підтримка](https://t.me/+H6PnjkydZX0xNDky)
