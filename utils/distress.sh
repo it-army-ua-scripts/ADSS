@@ -186,6 +186,12 @@ regenerate_distress_service_file() {
         value=" "
       fi
     fi
+    if [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'direct-udp-mixed-flood')" == 0 ]];then
+        continue
+    fi
+    if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'direct-udp-mixed-flood')" == 0 ]];then
+        continue
+    fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
     fi
