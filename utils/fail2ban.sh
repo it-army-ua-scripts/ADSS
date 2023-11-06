@@ -4,9 +4,19 @@ source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
   case $(get_distribution) in
-  fedora | rocky)
+  fedora | rocky | ol | centos)
     adss_dialog "$(trans "Встановлюємо Fail2ban")"
     install() {
+      if [ $lsb_dist == "ol" ]; then 
+        sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      else
+        return 0
+      fi
+      if [ $lsb_dist == "centos" ]; then
+        udo dnf install epel-release
+      else
+        return 0
+      fi
       sudo dnf update -y
       sudo dnf upgrade -y
       sudo dnf install -y fail2ban
