@@ -3,14 +3,21 @@
 source "${SCRIPT_DIR}/utils/definitions.sh"
 install_ufw() {
   case $(get_distribution) in
-  fedora | rocky | ol)
+  fedora | rocky)
     adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
     install() {
-      if [ $lsb_dist == "ol" ]; then 
-        sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-      else
-        return 0
-      fi
+      sudo systemctl stop firewalld
+      sudo systemctl disable firewalld
+      sudo dnf install ufw -y && sudo ufw disable
+      sudo /bin/systemctl restart ufw.service
+    }
+    install >/dev/null 2>&1
+    confirm_dialog "$(trans "Фаєрвол UFW встановлено і деактивовано")"
+    ;;
+  ol)
+    adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
+    install() {
+      sudo dnf install epel-release -y
       sudo systemctl stop firewalld
       sudo systemctl disable firewalld
       sudo dnf install ufw -y && sudo ufw disable
