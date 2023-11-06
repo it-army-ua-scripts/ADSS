@@ -14,6 +14,17 @@ install_fail2ban() {
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Fail2ban успішно встановлено")"
     ;;
+  ol)
+    adss_dialog "$(trans "Встановлюємо Fail2ban")"
+    install() {
+      sudo dnf install epel-release -y
+      sudo dnf update -y
+      sudo dnf upgrade -y
+      sudo dnf install fail2ban fail2ban-firewalld -y
+    }
+    install >/dev/null 2>&1
+    confirm_dialog "$(trans "Fail2ban успішно встановлено")"
+    ;;
   *)
     adss_dialog "$(trans "Встановлюємо Fail2ban")"
     install() {
