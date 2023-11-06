@@ -4,17 +4,23 @@ source "${SCRIPT_DIR}/utils/definitions.sh"
 
 install_fail2ban() {
   case $(get_distribution) in
-  fedora | rocky | ol)
+  fedora | rocky)
     adss_dialog "$(trans "Встановлюємо Fail2ban")"
     install() {
-      if [ $lsb_dist == "ol" ]; then 
-        sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-      else
-        return 0
-      fi
       sudo dnf update -y
       sudo dnf upgrade -y
       sudo dnf install -y fail2ban
+    }
+    install >/dev/null 2>&1
+    confirm_dialog "$(trans "Fail2ban успішно встановлено")"
+    ;;
+  ol)
+    adss_dialog "$(trans "Встановлюємо Fail2ban")"
+    install() {
+      sudo dnf install epel-release -y
+      sudo dnf update -y
+      sudo dnf upgrade -y
+      sudo dnf install fail2ban fail2ban-firewalld -y
     }
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Fail2ban успішно встановлено")"
