@@ -3,16 +3,11 @@
 source "${SCRIPT_DIR}/utils/definitions.sh"
 install_ufw() {
   case $(get_distribution) in
-  fedora | rocky | ol | centos)
+  fedora | rocky | ol)
     adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
     install() {
       if [ $lsb_dist == "ol" ]; then 
         sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-      else
-        return 0
-      fi
-      if [ $lsb_dist == "centos" ]; then
-        udo dnf install epel-release
       else
         return 0
       fi
