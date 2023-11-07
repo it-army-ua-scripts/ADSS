@@ -54,7 +54,7 @@ if [ -r /etc/os-release ]; then
         sudo "$PACKAGE_MANAGER" -vuDN @world
         for i in "${!GENTOO_TOOLS[@]}"; do
           echo -e "${GREEN}Встановлюємо/Installing ${GENTOO_TOOLS[i]}${NC}"
-          sudo "$PACKAGE_MANAGER" ${GENTOO_TOOLS[i]}
+          sudo "$PACKAGE_MANAGER" -n ${GENTOO_TOOLS[i]}
         done
     else
       sudo "$PACKAGE_MANAGER" update -y
