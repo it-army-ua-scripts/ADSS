@@ -4,6 +4,7 @@ check_enabled() {
   services=("mhddos" "distress" "db1000n")
   stop_service=0
   for service in "${services[@]}"; do
+#TODO sudo rc-service "$service" status
     if sudo systemctl is-active "$service" >/dev/null; then
       stop_service=1
       break
@@ -13,24 +14,43 @@ check_enabled() {
 }
 
 create_symlink() {
-  if [ ! -L "/etc/systemd/system/mhddos.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service >/dev/null 2>&1
+#TODO
+#  if [ ! -L "/etc/systemd/system/mhddos.service" ]; then
+#    sudo ln -sf "$SCRIPT_DIR"/services/systemd/mhddos.service /etc/systemd/system/mhddos.service >/dev/null 2>&1
+#  fi
+
+#  if [ ! -L "/etc/systemd/system/distress.service" ]; then
+#    sudo ln -sf "$SCRIPT_DIR"/services/systemd/distress.service /etc/systemd/system/distress.service >/dev/null 2>&1
+#  fi
+
+#  if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
+#    sudo ln -sf "$SCRIPT_DIR"/services/systemd/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
+#  fi
+
+  if [ ! -L "/etc/init.d/mhddos" ]; then
+    sudo ln -sf "$SCRIPT_DIR"/services/openrc/mhddos /etc/init.d/mhddos >/dev/null 2>&1
   fi
 
-  if [ ! -L "/etc/systemd/system/distress.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service >/dev/null 2>&1
+  if [ ! -L "/etc/init.d/distress" ]; then
+    sudo ln -sf "$SCRIPT_DIR"/services/openrc/distress /etc/init.d/distress >/dev/null 2>&1
   fi
 
-  if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
+  if [ ! -L "/etc/init.d/db1000n" ]; then
+    sudo ln -sf "$SCRIPT_DIR"/services/openrc/db1000n /etc/init.d/db1000n >/dev/null 2>&1
   fi
 }
 
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
-  sudo systemctl stop distress.service >/dev/null
-  sudo systemctl stop db1000n.service >/dev/null
-  sudo systemctl stop mhddos.service >/dev/null
+#TODO
+  #sudo systemctl stop distress.service >/dev/null
+  #sudo systemctl stop db1000n.service >/dev/null
+  #sudo systemctl stop mhddos.service >/dev/null
+  
+  sudo rc-service distress stop >/dev/null
+  sudo rc-service db1000n stop >/dev/null
+  sudo rc-service mhddos stop >/dev/null
+  
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
 }

@@ -139,7 +139,9 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
+#TODO
+  #start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
+  start="args="
   vpn=false
   while read -r line
   do
@@ -167,30 +169,50 @@ regenerate_mhddos_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/mhddos.service
+#TODO
+  #sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/mhddos.service
 
-  sudo systemctl daemon-reload
+  #sudo systemctl daemon-reload
+  
+  sed -i  "s/args=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/mhddos
+
 }
 
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-  sudo systemctl stop distress.service >/dev/null 2>&1
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
-  sudo systemctl start mhddos.service >/dev/null 2>&1
+#TODO
+  #sudo systemctl stop distress.service >/dev/null 2>&1
+  #sudo systemctl stop db1000n.service >/dev/null 2>&1
+  #sudo systemctl start mhddos.service >/dev/null 2>&1
+  
+  sudo rc-service distress stop >/dev/null 2>&1
+  sudo rc-service db1000n stop >/dev/null 2>&1
+  sudo rc-service mhddos start >/dev/null 2>&1
+  
+  
 }
 
 mhddos_auto_enable() {
-  sudo systemctl disable distress.service >/dev/null 2>&1
-  sudo systemctl disable db1000n.service >/dev/null 2>&1
-  sudo systemctl enable mhddos.service >/dev/null 2>&1
+#TODO
+  #sudo systemctl disable distress.service >/dev/null 2>&1
+  #sudo systemctl disable db1000n.service >/dev/null 2>&1
+  #sudo systemctl enable mhddos.service >/dev/null 2>&1
+  
+  sudo rc-update del distress >/dev/null 2>&1
+  sudo rc-update del db1000n >/dev/null 2>&1
+  sudo rc-update add mhddos default >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "MHDDOS додано до автозавантаження")"
 }
 mhddos_auto_disable() {
- sudo systemctl disable mhddos >/dev/null 2>&1
+#TODO
+ #sudo systemctl disable mhddos >/dev/null 2>&1
+
+ sudo rc-update del mhddos >/dev/null 2>&1
  create_symlink
  confirm_dialog "$(trans "MHDDOS видалено з автозавантаження")"
 }
+
 mhddos_enabled() {
   if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
     return 0
@@ -201,12 +223,19 @@ mhddos_enabled() {
 
 mhddos_stop() {
   create_symlink
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
+#TODO
+  #sudo systemctl stop mhddos.service >/dev/null 2>&1
+  
+  sudo rc-service mhddos stop >/dev/null 2>&1
 }
 
 mhddos_get_status() {
   clear
-  sudo systemctl status mhddos.service
+#TODO
+  #sudo systemctl status mhddos.service
+  
+  sudo rc-service mhddos status
+  
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_mhddos

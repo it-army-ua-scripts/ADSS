@@ -1,18 +1,9 @@
 #!/sbin/openrc-run
 
-name="db1000n"
-pidfile="/run/${name}.pid"
-tool_bin="/opt/itarmy/bin/${name}"
+name="Start db1000n ddos tool"
+pidfile="/run/db1000n.pid"
 output_log="/var/log/adss.log"
-args=""
-
-depend()
-{
-        after net
-}
-
-start() {
-        ebegin "Start ${name} ddos tool"
-        ${tool_bin} ${args} > ${output_log} 2>&1
-        eend $?
-}
+error_log="/var/log/adss.log"
+command="/opt/itarmy/bin/db1000n"
+command_background="true"
+command_args=""

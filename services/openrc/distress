@@ -1,18 +1,9 @@
 #!/sbin/openrc-run
 
-name="distress"
-pidfile="/run/${name}.pid"
-tool_bin="/opt/itarmy/bin/${name}"
+name="Start distress ddos tool"
+pidfile="/run/distress.pid"
 output_log="/var/log/adss.log"
-args=""
-
-depend()
-{
-        after net
-}
-
-start() {
-        ebegin "Start ${name} ddos tool"
-        ${tool_bin} ${args} > ${output_log} 2>&1
-        eend $?
-}
+error_log="/var/log/adss.log"
+command="/opt/itarmy/bin/distress"
+command_background="true"
+command_args=""

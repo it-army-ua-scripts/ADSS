@@ -1,18 +1,10 @@
 #!/sbin/openrc-run
 
-name="mhddos_proxy_linux"
-pidfile="/run/${name}.pid"
-tool_bin="/opt/itarmy/bin/${name}"
+name="Start mhddos_proxy_linux ddos tool"
+pidfile="/run/mhddos_proxy_linux.pid"
 output_log="/var/log/adss.log"
-args=""
+error_log="/var/log/adss.log"
+command="/opt/itarmy/bin/mhddos_proxy_linux"
+command_background="true"
+command_args=""
 
-depend()
-{
-        after net
-}
-
-start() {
-        ebegin "Start ${name} ddos tool"
-        ${tool_bin} ${args} > ${output_log} 2>&1
-        eend $?
-}
