@@ -26,6 +26,9 @@ if [ -r /etc/os-release ]; then
   void)
     PACKAGE_MANAGER="xbps-install"
   ;;
+  gentoo)
+    PACKAGE_MANAGER="emerge"
+  ;;
   *)
     PACKAGE_MANAGER="apt-get"
     ;;
@@ -67,6 +70,8 @@ if [ -r /etc/os-release ]; then
           git clone -b void https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       elif [ "$PACKAGE_MANAGER" == "yum" ]; then
           git clone -b centos https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+      elif [ "$PACKAGE_MANAGER" == "emerge" ]; then
+          git clone -b gentoo https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       else
           git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       fi
