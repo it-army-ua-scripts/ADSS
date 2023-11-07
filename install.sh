@@ -36,6 +36,7 @@ if [ -r /etc/os-release ]; then
 
   if [[ ! -z "$PACKAGE_MANAGER" ]]; then
     TOOLS=('zip' 'unzip' 'gnupg' 'ca-certificates' 'curl' 'git' 'dialog' 'tar')
+    GENTOO_TOOLS=('app-shells/bash-completion' 'zip' 'unzip' 'app-crypt/gnupg' 'ca-certificates' 'curl' 'dev-vcs/git' 'dialog' 'app-arch/tar')
 
     if [[ "$PACKAGE_MANAGER" == "pacman" ]]; then
       for i in "${!TOOLS[@]}"; do
@@ -48,6 +49,12 @@ if [ -r /etc/os-release ]; then
         for i in "${!TOOLS[@]}"; do
           echo -e "${GREEN}Встановлюємо/Installing ${TOOLS[i]}${NC}"
           sudo "$PACKAGE_MANAGER" -Su ${TOOLS[i]} -y
+        done
+    elif [ "$PACKAGE_MANAGER" == "emerge"  ]; then
+        sudo "$PACKAGE_MANAGER" -vuDN @world
+        for i in "${!GENTOO_TOOLS[@]}"; do
+          echo -e "${GREEN}Встановлюємо/Installing ${GENTOO_TOOLS[i]}${NC}"
+          sudo "$PACKAGE_MANAGER" ${GENTOO_TOOLS[i]}
         done
     else
       sudo "$PACKAGE_MANAGER" update -y
