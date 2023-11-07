@@ -1,5 +1,5 @@
 [Unit]
-Description=db1000n
+Description=mhddos_proxy
 After=network.target
 StartLimitIntervalSec=0
 
@@ -7,9 +7,9 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=on-failure
 RestartSec=10
-ExecStart=/opt/itarmy/bin/db1000n
+ExecStart=/opt/itarmy/bin/mhddos_proxy_linux --lang ua --copies auto --threads 8000 --source adss
 WorkingDirectory=/opt/itarmy/bin
-SyslogIdentifier=db1000n
+SyslogIdentifier=mhddos
 SyslogFacility=daemon
 StandardOutput=append:/var/log/adss.log
 StandardError=append:/var/log/adss.log

@@ -1,5 +1,5 @@
 [Unit]
-Description=mhddos_proxy
+Description=db1000n
 After=network.target
 StartLimitIntervalSec=0
 
@@ -7,9 +7,9 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=on-failure
 RestartSec=10
-ExecStart=/opt/itarmy/bin/mhddos_proxy_linux
+ExecStart=/opt/itarmy/bin/db1000n --enable-self-update --scale 1
 WorkingDirectory=/opt/itarmy/bin
-SyslogIdentifier=mhddos
+SyslogIdentifier=db1000n
 SyslogFacility=daemon
 StandardOutput=append:/var/log/adss.log
 StandardError=append:/var/log/adss.log

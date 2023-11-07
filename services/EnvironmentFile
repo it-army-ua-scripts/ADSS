@@ -7,6 +7,7 @@ vpn-percents=20
 threads=8000
 proxies=
 bind=
+source=adss
 [/mhddos]
 
 [distress]
@@ -14,8 +15,10 @@ user-id=
 use-my-ip=0
 use-tor=0
 concurrency=4096
-direct-udp-failover=0
+direct-udp-mixed-flood=0
 interface=
+udp-packet-size=4096
+direct-udp-mixed-flood-packets-per-conn=30
 [/distress]
 
 [db1000n]

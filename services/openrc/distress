@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+
+name="distress"
+pidfile="/run/${name}.pid"
+tool_bin="/opt/itarmy/bin/${name}"
+output_log="/var/log/adss.log"
+args=""
+
+depend()
+{
+        after net
+}
+
+start() {
+        ebegin "Start ${name} ddos tool"
+        ${tool_bin} ${args} > ${output_log} 2>&1
+        eend $?
+}
