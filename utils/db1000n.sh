@@ -63,7 +63,7 @@ configure_db1000n() {
 
     read -e -p "$(trans "Масштабування (1 | X): ")"  -i "$(get_db1000n_variable 'scale')" scale
     if [[ -n "$scale" ]];then
-      while [[ ! $scale =~ ^[0-9]+$ && "$scale" != "1" ]]
+      while [[ ! $scale =~ ^[0-9]+$ && ! $scale =~ ^[+-]?[0-9]+([.][0-9]+)?$ ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
        read -e -p "$(trans "Масштабування (1 | X): ")"  -i "$(get_db1000n_variable 'scale')" scale
