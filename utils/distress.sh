@@ -12,7 +12,7 @@ install_distress() {
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
           ;;
 
-          armv7l*)
+          armv6* | armv7* | armv8*)
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_arm-unknown-linux-musleabi
           ;;
 

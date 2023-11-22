@@ -11,6 +11,9 @@ install_mhddos() {
             package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux_arm64
           ;;
 
+          armv6* | armv7* | armv8*)
+          ;;
+
           x86_64*)
             package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
           ;;
@@ -31,7 +34,11 @@ install_mhddos() {
         create_symlink
 	  }
     install > /dev/null 2>&1
-    confirm_dialog "$(trans "MHDDOS успішно встановлено")"
+    if [[ package='' ]];then
+      confirm_dialog "MHDDOS_PROXY does not support ARM32"
+    else
+      confirm_dialog "$(trans "MHDDOS успішно встановлено")"
+    fi
 }
 
 configure_mhddos() {
