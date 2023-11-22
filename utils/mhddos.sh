@@ -34,7 +34,7 @@ install_mhddos() {
         create_symlink
 	  }
     install > /dev/null 2>&1
-    if [[ package='' ]];then
+    if [[ $package == '' ]];then
       confirm_dialog "MHDDOS_PROXY does not support ARM32"
     else
       confirm_dialog "$(trans "MHDDOS успішно встановлено")"
