@@ -14,6 +14,13 @@ install_db1000n() {
           sudo rm db1000n_linux_arm64.tar.gz
         ;;
 
+        armv7l*)
+          sudo curl -Lo db1000n_linux_armv6.tar.gz  https://github.com/Arriven/db1000n/releases/latest/download/db1000n_linux_armv6.tar.gz
+          sudo tar -xf db1000n_linux_armv6.tar.gz
+          sudo chmod +x db1000n
+          sudo rm db1000n_linux_armv6.tar.gz
+        ;;
+
         x86_64*)
           sudo curl -Lo db1000n_linux_amd64.tar.gz  https://github.com/Arriven/db1000n/releases/latest/download/db1000n_linux_amd64.tar.gz
           sudo tar -xf db1000n_linux_amd64.tar.gz
