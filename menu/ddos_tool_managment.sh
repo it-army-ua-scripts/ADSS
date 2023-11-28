@@ -87,7 +87,7 @@ ddos_tool_installed() {
     return 1
   fi
 
-  if [[ ! -f "$TOOL_DIR/distress"]]; then
+  if [[ ! -f "$TOOL_DIR/distress" ]]; then
     return 1
   fi
 
