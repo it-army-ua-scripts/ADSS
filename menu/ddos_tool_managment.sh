@@ -82,6 +82,25 @@ get_ddoss_status() {
   ddos_tool_managment
 }
 
+ddos_tool_installed() {
+  if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
+    return 1
+  fi
+
+  if [[ ! -f "$TOOL_DIR/distress" ]]; then
+    return 1
+  fi
+
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
+      return 1
+    fi
+  fi
+
+  return 0
+}
+
 ddos_tool_managment() {
   menu_items=("$(trans "Статус атаки")")
   check_enabled
@@ -89,53 +108,35 @@ ddos_tool_managment() {
   if [[ "$enabled_tool" == 1 ]]; then
     menu_items+=("$(trans "Зупинити атаку")")
   fi
-  menu_items+=("$(trans "Налаштування автозапуску")" "MHDDOS" "DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
-  display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}"
-  status=$?
-  if [[ "$enabled_tool" == 1 ]]; then
-    case $status in
-    1)
-      get_ddoss_status
-      ;;
-    2)
-      stop_services
-      ;;
-    3)
-      autoload_configuration
-      ;;
-    4)
-      initiate_mhddos
-      ;;
-    5)
-      initiate_db1000n
-      ;;
-    6)
-      initiate_distress
-      ;;
-    7)
-      ddos
-      ;;
-    esac
-  else
-    case $status in
-    1)
-      get_ddoss_status
-      ;;
-    2)
-      autoload_configuration
-      ;;
-    3)
-      initiate_mhddos
-      ;;
-    4)
-      initiate_db1000n
-      ;;
-    5)
-      initiate_distress
-      ;;
-    6)
-      ddos
-      ;;
-    esac
+
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    menu_items+=("MHDDOS")
   fi
+  menu_items+=("DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
+  res=$(display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}")
+
+  case "$res" in
+  "$(trans "Статус атаки")")
+    get_ddoss_status
+    ;;
+  "$(trans "Зупинити атаку")")
+    stop_services
+    ;;
+  "$(trans "Налаштування автозапуску")")
+    autoload_configuration
+    ;;
+  "MHDDOS")
+    initiate_mhddos
+    ;;
+  "DB1000N")
+    initiate_db1000n
+    ;;
+  "DISTRESS")
+    initiate_distress
+    ;;
+  "$(trans "Повернутись назад")")
+    ddos
+    ;;
+  esac
 }

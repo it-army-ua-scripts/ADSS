@@ -5,7 +5,6 @@ install_distress() {
 
     install() {
         cd $TOOL_DIR
-        OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
           aarch64*)
@@ -268,26 +267,25 @@ initiate_distress() {
         active_disactive="$(trans "Запуск DISTRESS")"
       fi
       menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
-      display_menu "DISTRESS" "${menu_items[@]}"
+      res=$(display_menu "DISTRESS" "${menu_items[@]}")
 
-      case $? in
-        1)
-          if sudo systemctl is-active distress >/dev/null 2>&1; then
-             distress_stop
-             distress_get_status
-          else
+      case "$res" in
+        "$(trans "Зупинка DISTRESS")")
+           distress_stop
+           distress_get_status
+        ;;
+        "$(trans "Запуск DISTRESS")")
             distress_run
             distress_get_status
-          fi
         ;;
-        2)
+        "$(trans "Налаштування DISTRESS")")
           configure_distress
           initiate_distress
         ;;
-        3)
+        "$(trans "Статус DISTRESS")")
           distress_get_status
         ;;
-        4)
+        "$(trans "Повернутись назад")")
           ddos_tool_managment
         ;;
       esac

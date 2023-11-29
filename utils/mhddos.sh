@@ -4,7 +4,6 @@ install_mhddos() {
     adss_dialog "$(trans "Встановлюємо MHDDOS")"
 	  install() {
         cd $TOOL_DIR
-        OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
           aarch64*)
@@ -226,6 +225,15 @@ mhddos_installed() {
       return 0
   fi
 }
+
+is_not_arm_arch() {
+  if [[ "$OSARCH" != armv6* && "$OSARCH" != armv7* && $OSARCH != armv8* ]]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
 initiate_mhddos() {
   mhddos_installed
   if [[ $? == 1 ]]; then
@@ -237,26 +245,25 @@ initiate_mhddos() {
         active_disactive="$(trans "Запуск MHDDOS")"
       fi
       menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
-      display_menu "MHDDOS" "${menu_items[@]}"
+      res=$(display_menu "MHDDOS" "${menu_items[@]}")
 
-      case $? in
-        1)
-          if sudo systemctl is-active mhddos >/dev/null 2>&1; then
-            mhddos_stop
-            mhddos_get_status
-          else
-            mhddos_run
-            mhddos_get_status
-          fi
+      case "$res" in
+        "$(trans "Зупинка MHDDOS")")
+          mhddos_stop
+          mhddos_get_status
         ;;
-        2)
+        "$(trans "Запуск MHDDOS")")
+          mhddos_run
+          mhddos_get_status
+        ;;
+        "$(trans "Налаштування MHDDOS")")
           configure_mhddos
           initiate_mhddos
         ;;
-        3)
+        "$(trans "Статус MHDDOS")")
           mhddos_get_status
         ;;
-        4)
+        "$(trans "Повернутись назад")")
           ddos_tool_managment
         ;;
       esac
