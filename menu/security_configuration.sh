@@ -44,8 +44,8 @@ security_configuration() {
       security_configuration
       ;;
     "$(trans "Увімкнути захист від брутфорсу")")
-      configure_fail2ban
       enable_fail2ban
+      security_configuration
       ;;
     "$(trans "Налаштування фаєрвола")")
         configure_ufw
