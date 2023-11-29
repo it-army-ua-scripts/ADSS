@@ -108,7 +108,7 @@ ddos_tool_managment() {
   if [[ "$enabled_tool" == 1 ]]; then
     menu_items+=("$(trans "Зупинити атаку")")
   fi
-
+  menu_items+=("$(trans "Налаштування автозапуску")")
   is_not_arm_arch
   if [[ $? == 1 ]]; then
     menu_items+=("MHDDOS")
