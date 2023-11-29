@@ -13,7 +13,7 @@ display_menu() {
     --menu "$(trans "Оберіть опцію:")" 0 0 0 "${dialog_args[@]}")
 
   if [[ -z "$selection" ]]; then
-    clear
+    clear >$(tty)
     echo "Exiting..."
     exit 0
   fi
