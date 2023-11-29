@@ -227,7 +227,7 @@ mhddos_installed() {
 }
 
 is_not_arm_arch() {
-  if [[ "$OSARCH" != "armv6*" && "$OSARCH" != "armv7*" && "$OSARCH" != "armv8*" ]]; then
+  if [[ "$OSARCH" != armv6* && "$OSARCH" != armv7* && $OSARCH != armv8* ]]; then
     return 1
   else
     return 0
