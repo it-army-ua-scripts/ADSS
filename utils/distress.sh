@@ -5,11 +5,14 @@ install_distress() {
 
     install() {
         cd $TOOL_DIR
-        OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
           aarch64*)
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
+          ;;
+
+          armv6* | armv7* | armv8*)
+            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_arm-unknown-linux-musleabi
           ;;
 
           x86_64*)
@@ -169,7 +172,7 @@ write_distress_variable() {
 regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/distress"
+  start="ExecStart=$SCRIPT_DIR/bin/distress"
 
   while read -r line
   do
@@ -264,26 +267,25 @@ initiate_distress() {
         active_disactive="$(trans "Запуск DISTRESS")"
       fi
       menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
-      display_menu "DISTRESS" "${menu_items[@]}"
+      res=$(display_menu "DISTRESS" "${menu_items[@]}")
 
-      case $? in
-        1)
-          if sudo systemctl is-active distress >/dev/null 2>&1; then
-             distress_stop
-             distress_get_status
-          else
+      case "$res" in
+        "$(trans "Зупинка DISTRESS")")
+           distress_stop
+           distress_get_status
+        ;;
+        "$(trans "Запуск DISTRESS")")
             distress_run
             distress_get_status
-          fi
         ;;
-        2)
+        "$(trans "Налаштування DISTRESS")")
           configure_distress
           initiate_distress
         ;;
-        3)
+        "$(trans "Статус DISTRESS")")
           distress_get_status
         ;;
-        4)
+        "$(trans "Повернутись назад")")
           ddos_tool_managment
         ;;
       esac
