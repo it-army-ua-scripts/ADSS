@@ -4,7 +4,6 @@ install_db1000n() {
     adss_dialog "$(trans "Встановлюємо DB1000N")"
     install() {
       cd $TOOL_DIR
-      OSARCH=$(uname -m)
 
       case "$OSARCH" in
         aarch64*)
@@ -12,6 +11,13 @@ install_db1000n() {
           sudo tar -xf db1000n_linux_arm64.tar.gz
           sudo chmod +x db1000n
           sudo rm db1000n_linux_arm64.tar.gz
+        ;;
+
+        armv6* | armv7* | armv8*)
+          sudo curl -Lo db1000n_linux_armv6.tar.gz  https://github.com/Arriven/db1000n/releases/latest/download/db1000n_linux_armv6.tar.gz
+          sudo tar -xf db1000n_linux_armv6.tar.gz
+          sudo chmod +x db1000n
+          sudo rm db1000n_linux_armv6.tar.gz
         ;;
 
         x86_64*)
@@ -212,33 +218,31 @@ initiate_db1000n() {
       active_disactive="$(trans "Запуск DB1000N")"
     fi
     menu_items=("$active_disactive" "$(trans "Налаштування DB1000N")" "$(trans "Статус DB1000N")" "$(trans "Повернутись назад")")
-    display_menu "DB1000N" "${menu_items[@]}"
+    res=$(display_menu "DB1000N" "${menu_items[@]}")
 
-    case $? in
-      1)
-        sudo sv status db1000n >/dev/null 2>&1
-        if [[ $? == 0 ]]; then
+      case "$res" in
+        "$(trans "Зупинка DB1000N")")
           db1000n_stop
           db1000n_get_status
-        else
+        ;;
+        "$(trans "Запуск DB1000N")")
           db1000n_run
           while ! sudo sv status db1000n >/dev/null 2>&1; do
              confirm_dialog "$(trans "Чекаємо на сервіс...")"
              sleep 1
           done
           db1000n_get_status
-        fi
-      ;;
-      2)
-        configure_db1000n
-        initiate_db1000n
-      ;;
-      3)
-        db1000n_get_status
-      ;;
-      4)
-        ddos_tool_managment
-      ;;
-    esac
+        ;;
+        "$(trans "Налаштування DB1000N")")
+          configure_db1000n
+          initiate_db1000n
+        ;;
+        "$(trans "Статус DB1000N")")
+          db1000n_get_status
+        ;;
+        "$(trans "Повернутись назад")")
+          ddos_tool_managment
+        ;;
+      esac
   fi
 }

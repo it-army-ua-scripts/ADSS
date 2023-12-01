@@ -2,10 +2,10 @@
 
 ddos() {
   menu_items=("$(trans "Встановлення ддос інструментів")" "$(trans "Управління ддос інструментами")" "$(trans "Повернутись назад")")
-  display_menu "DDOS" "${menu_items[@]}"
+  res=$(display_menu "DDOS" "${menu_items[@]}")
 
-  case $? in
-  1)
+  case "$res" in
+  "$(trans "Встановлення ддос інструментів")")
     clear
     echo -ne "\n"
     echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
@@ -19,15 +19,19 @@ ddos() {
       sed -i "s/user-id=.*/user-id=$user_id/g" ${SCRIPT_DIR}/services/EnvironmentFile
     fi
 
-    install_mhddos
+    is_not_arm_arch
+    if [[ $? == 1 ]]; then
+      install_mhddos
+    fi
+
     install_db1000n
     install_distress
     ddos
     ;;
-  2)
+  "$(trans "Управління ддос інструментами")")
     ddos_tool_managment
     ;;
-  3)
+  "$(trans "Повернутись назад")")
     main_menu
     ;;
   esac

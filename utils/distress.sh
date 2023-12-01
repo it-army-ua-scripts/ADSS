@@ -12,6 +12,10 @@ install_distress() {
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
           ;;
 
+          armv6* | armv7* | armv8*)
+            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_arm-unknown-linux-musleabi
+          ;;
+
           x86_64*)
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_x86_64-unknown-linux-musl
           ;;
@@ -254,33 +258,31 @@ initiate_distress() {
       active_disactive="$(trans "Запуск DISTRESS")"
     fi
     menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
-    display_menu "DISTRESS" "${menu_items[@]}"
+    res=$(display_menu "DISTRESS" "${menu_items[@]}")
 
-    case $? in
-      1)
-        sudo sv status distress >/dev/null 2>&1
-        if [[ $? == 0 ]]; then
+      case "$res" in
+        "$(trans "Зупинка DISTRESS")")
            distress_stop
            distress_get_status
-        else
+        ;;
+        "$(trans "Запуск DISTRESS")")
           distress_run
           while ! sudo sv status distress >/dev/null 2>&1; do
              confirm_dialog "$(trans "Чекаємо на сервіс...")"
              sleep 1
           done
           distress_get_status
-        fi
-      ;;
-      2)
-        configure_distress
-        initiate_distress
-      ;;
-      3)
-        distress_get_status
-      ;;
-      4)
-        ddos_tool_managment
-      ;;
-    esac
+        ;;
+        "$(trans "Налаштування DISTRESS")")
+          configure_distress
+          initiate_distress
+        ;;
+        "$(trans "Статус DISTRESS")")
+          distress_get_status
+        ;;
+        "$(trans "Повернутись назад")")
+          ddos_tool_managment
+        ;;
+      esac
   fi
 }

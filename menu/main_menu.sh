@@ -2,14 +2,15 @@
 
 main_menu() {
   menu_items=("$(trans "Розширення портів")" "DDOS")
-  display_menu "$(trans "Головне меню")" "${menu_items[@]}"
-  case $? in
-  1)
-    extend_ports
-    main_menu
-    ;;
-  2)
-    ddos
-    ;;
+  res=$(display_menu "$(trans "Головне меню")" "${menu_items[@]}")
+
+  case "$res" in
+    "$(trans "Розширення портів")")
+      extend_ports
+      main_menu
+      ;;
+    "DDOS")
+      ddos
+      ;;
   esac
 }

@@ -15,7 +15,10 @@ check_enabled() {
 
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
-  mhddos_stop
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    mhddos_stop
+  fi
   distress_stop
   db1000n_stop
   confirm_dialog "$(trans "Атака зупинена")"
@@ -67,47 +70,31 @@ ddos_tool_managment() {
   if [[ "$enabled_tool" == 1 ]]; then
     menu_items+=("$(trans "Зупинити атаку")")
   fi
-  menu_items+=("MHDDOS" "DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
-  display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}"
-  status=$?
-  if [[ "$enabled_tool" == 1 ]]; then
-    case $status in
-    1)
-      get_ddoss_status
-      ;;
-    2)
-      stop_services
-      ;;
-    3)
-      initiate_mhddos
-      ;;
-    4)
-      initiate_db1000n
-      ;;
-    5)
-      initiate_distress
-      ;;
-    6)
-      ddos
-      ;;
-    esac
-  else
-    case $status in
-    1)
-      get_ddoss_status
-      ;;
-    2)
-      initiate_mhddos
-      ;;
-    3)
-      initiate_db1000n
-      ;;
-    4)
-      initiate_distress
-      ;;
-    5)
-      ddos
-      ;;
-    esac
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    menu_items+=("MHDDOS")
   fi
+  menu_items+=("DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
+  res=$(display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}")
+
+  case "$res" in
+  "$(trans "Статус атаки")")
+    get_ddoss_status
+    ;;
+  "$(trans "Зупинити атаку")")
+    stop_services
+    ;;
+  "MHDDOS")
+    initiate_mhddos
+    ;;
+  "DB1000N")
+    initiate_db1000n
+    ;;
+  "DISTRESS")
+    initiate_distress
+    ;;
+  "$(trans "Повернутись назад")")
+    ddos
+    ;;
+  esac
 }

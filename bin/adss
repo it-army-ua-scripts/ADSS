@@ -9,7 +9,7 @@ export SCRIPT_DIR="$(
   )/.." >/dev/null &&
     pwd
 )"
-
+OSARCH=$(uname -m)
 source "$SCRIPT_DIR/utils/translate.sh"
 
 localization_file=$(apply_localization "$@")
@@ -48,7 +48,7 @@ source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
 days_to_keep=7
-sudo find "/var/log/adss/"  -name "current" -mtime +"$days_to_keep" -exec rm -f {} \;
+sudo find "/var/log/adss/"  -name "current" -mtime +"$days_to_keep" -exec rm -f {} \ >/dev/null 2>&1;
 
 
 if [ "$1" = "--auto-install" ]; then
@@ -57,9 +57,13 @@ if [ "$1" = "--auto-install" ]; then
 
   install_db1000n
   install_distress
-  install_mhddos
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    install_mhddos
+    mhddos_run
+  fi
   extend_ports
-  mhddos_run
+
   while ! sudo sv status mhddos >/dev/null 2>&1; do
      echo -e "${GREEN}$(trans "Чекаємо на сервіс...")${NC}"
      sleep 1
@@ -67,8 +71,11 @@ if [ "$1" = "--auto-install" ]; then
   get_ddoss_status
 elif [ "$1" = "--restore" ]; then
 
-  mhddos_stop
-  sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    mhddos_stop
+    sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
+  fi
   db1000n_stop
   distress_stop
   sudo rm -rf /tmp/distress >/dev/null 2>&1
@@ -79,8 +86,11 @@ elif [ "$1" = "config" ]; then
   clear
   cat "$SCRIPT_DIR"/services/EnvironmentFile && echo ""
 elif [ "$1" = "--uninstall" ]; then
+  is_not_arm_arch
+  if [[ $? == 1 ]]; then
+    mhddos_stop
+  fi
 
-  mhddos_stop
   db1000n_stop
   distress_stop
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
