@@ -8,8 +8,8 @@ check_updates() {
   else
     timestamp=$(date +%s)
     diff=$((timestamp - ADSS_DEPLOYMENT_VERSION))
-    one_hour=300
-    if [[ $diff -gt $one_hour ]]; then
+    five_minutes=300
+    if [[ $diff -gt $five_minutes ]]; then
       prepare_for_update
     fi
   fi
@@ -38,9 +38,8 @@ write_version() {
 update_adss() {
   echo -e "${GREEN}$(trans "Оновляємо ADSS")${NC}"
   cd $SCRIPT_DIR &&
-    git checkout services/db1000n.service >/dev/null 2>&1 &&
-    git checkout services/distress.service >/dev/null 2>&1 &&
-    git checkout services/mhddos.service >/dev/null 2>&1 &&
+    git checkout services/openrc >/dev/null 2>&1 &&
+    git checkout services/systemd >/dev/null 2>&1 &&
 #    git checkout services/EnvironmentFile >/dev/null 2>&1 &&
     git pull --all || adss --restore
 

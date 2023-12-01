@@ -6,5 +6,5 @@ output_log="/var/log/adss.log"
 error_log="/var/log/adss.log"
 command="/opt/itarmy/bin/mhddos_proxy_linux"
 command_background="true"
-command_args=""
+command_args= --lang ua --copies auto --threads 8000 --source adss
 
