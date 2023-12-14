@@ -70,30 +70,17 @@ configure_mhddos() {
     fi
 
     params[copies]=$copies
-    read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
-    if [[ -n "$vpn" ]];then
-      while [[ $vpn != false && $vpn != true ]]
+
+    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
+    if [[ -n "$use_my_ip" ]];then
+      while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
-          echo "$(trans "Будь ласка введіть правильні значення")"
-          read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
       done
-    	params[vpn]=$vpn
     fi
 
-    if [[ $vpn == true ]]; then
-      read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
-      if [[ -n "$vpn_percents" ]];then
-        while [[ $vpn_percents -lt 1 || $vpn_percents -gt 100 ]]
-        do
-          echo "$(trans "Будь ласка введіть правильні значення")"
-          read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
-        done
-      fi
-
-      params[vpn-percents]=$vpn_percents
-    else
-      params[vpn-percents]=" "
-    fi
+    params[use-my-ip]=$use_my_ip
 
     read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
     if [[ -n "$threads" ]];then
