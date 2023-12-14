@@ -44,7 +44,7 @@ apply_patch() {
 
   # for 1.1.7.3
   if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'vpn='; then
-    sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/^vpn=.*// '"$envFile"
+    sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/^vpn=.*//' "$envFile"
     regenerate_mhddos_service_file
   fi
   if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'vpn-percents='; then
