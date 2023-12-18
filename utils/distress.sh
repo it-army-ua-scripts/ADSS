@@ -54,9 +54,9 @@ configure_distress() {
         echo "$(trans "Будь ласка введіть правильні значення")"
         read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
+      params[use-my-ip]=$use_my_ip
     fi
 
-    params[use-my-ip]=$use_my_ip
 
     if [[ $use_my_ip > 0 ]]; then
       read -e -p "$(trans "Увімкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'direct-udp-mixed-flood')" direct_udp_failover

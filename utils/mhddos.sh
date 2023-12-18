@@ -78,9 +78,8 @@ configure_mhddos() {
         echo "$(trans "Будь ласка введіть правильні значення")"
         read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
       done
+      params[use-my-ip]=$use_my_ip
     fi
-
-    params[use-my-ip]=$use_my_ip
 
     read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
     if [[ -n "$threads" ]];then
