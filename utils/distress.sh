@@ -47,12 +47,12 @@ configure_distress() {
 
     params[user-id]=$user_id
 
-    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (1-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
     if [[ -n "$use_my_ip" ]];then
       while [[ $use_my_ip -lt 1 || $use_my_ip -gt 100 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (1-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
     fi
 
