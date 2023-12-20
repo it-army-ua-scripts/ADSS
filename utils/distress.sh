@@ -47,15 +47,16 @@ configure_distress() {
 
     params[user-id]=$user_id
 
-    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (1-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
-    if [[ -n "$use_my_ip" ]];then
-      while [[ $use_my_ip -lt 1 || $use_my_ip -gt 100 ]]
+    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+
+    if [[ -n "$use_my_ip" ]]; then
+      while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (1-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
-    fi
 
+    fi
     params[use-my-ip]=$use_my_ip
 
     if [[ $use_my_ip > 0 ]]; then
@@ -172,7 +173,7 @@ write_distress_variable() {
 regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/distress"
+  start="ExecStart=${SCRIPT_DIR}/bin/distress"
 
   while read -r line
   do
@@ -194,6 +195,9 @@ regenerate_distress_service_file() {
     fi
     if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'direct-udp-mixed-flood')" == 0 ]];then
         continue
+    fi
+    if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
+      continue
     fi
     if [[ "$value" ]]; then
       start="$start --$key $value"

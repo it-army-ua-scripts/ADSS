@@ -71,12 +71,12 @@ configure_mhddos() {
 
     params[copies]=$copies
 
-    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (1-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
+    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
     if [[ -n "$use_my_ip" ]];then
-      while [[ $use_my_ip -lt 1 || $use_my_ip -gt 100 ]]
+      while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (1-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
+        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
       done
     fi
 
@@ -132,7 +132,7 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
+  start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
   vpn=false
   while read -r line
   do
@@ -152,6 +152,9 @@ regenerate_mhddos_service_file() {
     	fi
     fi
     if [[ "$key" == 'vpn-percents' && "$vpn" == false ]];then
+      continue
+    fi
+    if [[ "$key" == 'use-my-ip' && "$(get_mhddos_variable 'use-my-ip')" == 0 ]];then
       continue
     fi
     if [[ "$value" ]]; then
