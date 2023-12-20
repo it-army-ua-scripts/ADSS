@@ -100,14 +100,13 @@ configure_db1000n() {
     if [[ -n "$proxylist" ]];then
         echo -ne "\n"
         echo -e "$(trans "Укажіть протокол, якщо формат") ${ORANGE}ip:port${NC}"
-        read -e -p "$(trans "Протокол проксі (socks5, socks4, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+        read -e -p "$(trans "Протокол проксі (socks5, socks4): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
         if [[ -n "$default_proxy_proto" ]];then
           while [[
           "$default_proxy_proto" != "socks5"
           && "$default_proxy_proto" != "socks5h"
           && "$default_proxy_proto" != "socks4"
           && "$default_proxy_proto" != "socks4a"
-          && "$default_proxy_proto" != "http"
           ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"
