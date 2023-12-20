@@ -133,7 +133,7 @@ regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
-  vpn=false
+
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
@@ -143,17 +143,6 @@ regenerate_mhddos_service_file() {
       continue
     fi
 
-    if [[ "$key" == 'vpn' ]];then
-      vpn=$value
-    	if [[ "$value" == false ]]; then
-    		continue
-    	elif [[ "$value" == true ]]; then
-    		value=" "
-    	fi
-    fi
-    if [[ "$key" == 'vpn-percents' && "$vpn" == false ]];then
-      continue
-    fi
     if [[ "$key" == 'use-my-ip' && "$(get_mhddos_variable 'use-my-ip')" == 0 ]];then
       continue
     fi
