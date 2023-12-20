@@ -199,6 +199,9 @@ regenerate_distress_service_file() {
     if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
       continue
     fi
+    if [[ "$key" == 'use-tor' && "$(get_distress_variable 'use-tor')" == 0 ]];then
+      continue
+    fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
     fi
