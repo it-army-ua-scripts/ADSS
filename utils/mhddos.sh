@@ -145,7 +145,7 @@ regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="mhddos_proxy_linux"
-  vpn=false
+
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
