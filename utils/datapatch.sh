@@ -42,7 +42,7 @@ apply_patch() {
   fi
   # for 1.1.4
 
-  # for 1.1.7.3
+  # for 1.1.8
   if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'vpn='; then
     sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/^vpn=.*//' "$envFile"
     regenerate_mhddos_service_file
@@ -70,5 +70,5 @@ apply_patch() {
     sed -i 's/\[\/db1000n\]/source=adss\n\[\/db1000n\]/g' "$envFile"
     regenerate_db1000n_service_file
   fi
-  # for 1.1.7.3
+  # for 1.1.8
 }
