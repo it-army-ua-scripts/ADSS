@@ -42,10 +42,23 @@ install_mhddos() {
 configure_mhddos() {
     clear
     declare -A params
-    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
+
+    echo -e "${ORANGE}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
+    echo -ne "\n"
+    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
+    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
+    echo -ne "\n"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
+    if [[ -n "$user_id" ]];then
+      while [[ ! $user_id =~ ^[0-9]+$ ]]
+      do
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
+      done
+    fi
 
     params[user-id]=$user_id
+
     read -e -p "$(trans "Мова (ua | en | es | de | pl | it): ")" -i "$(get_mhddos_variable 'lang')" lang
 
     languages=("ua" "en" "es" "de" "pl" "it")
@@ -69,30 +82,17 @@ configure_mhddos() {
     fi
 
     params[copies]=$copies
-    read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
-    if [[ -n "$vpn" ]];then
-      while [[ $vpn != false && $vpn != true ]]
+	
+    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
+    if [[ -n "$use_my_ip" ]];then
+      while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
-          echo "$(trans "Будь ласка введіть правильні значення")"
-          read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
       done
-    	params[vpn]=$vpn
     fi
 
-    if [[ $vpn == true ]]; then
-      read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
-      if [[ -n "$vpn_percents" ]];then
-        while [[ $vpn_percents -lt 1 || $vpn_percents -gt 100 ]]
-        do
-          echo "$(trans "Будь ласка введіть правильні значення")"
-          read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
-        done
-      fi
-
-      params[vpn-percents]=$vpn_percents
-    else
-      params[vpn-percents]=" "
-    fi
+    params[use-my-ip]=$use_my_ip
 
     read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
     if [[ -n "$threads" ]];then
@@ -155,15 +155,7 @@ regenerate_mhddos_service_file() {
       continue
     fi
 
-    if [[ "$key" == 'vpn' ]];then
-      vpn=$value
-    	if [[ "$value" == false ]]; then
-    		continue
-    	elif [[ "$value" == true ]]; then
-    		value=" "
-    	fi
-    fi
-    if [[ "$key" == 'vpn-percents' && "$vpn" == false ]];then
+    if [[ "$key" == 'use-my-ip' && "$(get_mhddos_variable 'use-my-ip')" == 0 ]];then
       continue
     fi
     if [[ "$value" ]]; then
