@@ -49,9 +49,20 @@ install_db1000n() {
 configure_db1000n() {
     clear
     declare -A params;
-    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
 
+    echo -e "${ORANGE}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
+    echo -ne "\n"
+    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
+    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
+    echo -ne "\n"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_db1000n_variable 'user-id')" user_id
+    if [[ -n "$user_id" ]];then
+      while [[ ! $user_id =~ ^[0-9]+$ ]]
+      do
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Юзер ІД: ")" -i "$(get_db1000n_variable 'user-id')" user_id
+      done
+    fi
 
     params[user-id]=$user_id
 
@@ -90,14 +101,13 @@ configure_db1000n() {
     if [[ -n "$proxylist" ]];then
         echo -ne "\n"
         echo -e "$(trans "Укажіть протокол, якщо формат") ${ORANGE}ip:port${NC}"
-        read -e -p "$(trans "Протокол проксі (socks5, socks4, http): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
+        read -e -p "$(trans "Протокол проксі (socks5, socks4): ")" -i "$(get_db1000n_variable 'default-proxy-proto')" default_proxy_proto
         if [[ -n "$default_proxy_proto" ]];then
           while [[
           "$default_proxy_proto" != "socks5"
           && "$default_proxy_proto" != "socks5h"
           && "$default_proxy_proto" != "socks4"
           && "$default_proxy_proto" != "socks4a"
-          && "$default_proxy_proto" != "http"
           ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"

@@ -42,8 +42,19 @@ configure_distress() {
     clear
     declare -A params;
 
-    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
+    echo -e "${ORANGE}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
+    echo -ne "\n"
+    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
+    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
+    echo -ne "\n"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
+    if [[ -n "$user_id" ]];then
+      while [[ ! $user_id =~ ^[0-9]+$ ]]
+      do
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
+      done
+    fi
 
     params[user-id]=$user_id
 
@@ -194,6 +205,12 @@ regenerate_distress_service_file() {
     fi
     if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'direct-udp-mixed-flood')" == 0 ]];then
         continue
+    fi
+    if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
+      continue
+    fi
+    if [[ "$key" == 'use-tor' && "$(get_distress_variable 'use-tor')" == 0 ]];then
+      continue
     fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
