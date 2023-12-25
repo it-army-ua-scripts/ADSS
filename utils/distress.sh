@@ -203,7 +203,7 @@ regenerate_distress_service_file() {
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/distress
 
-  sudo rc-service daemon-reload
+  sudo rc-service distress.service restart  >/dev/null 2>&1
 }
 
 distress_run() {

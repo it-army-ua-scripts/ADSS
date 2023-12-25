@@ -167,7 +167,7 @@ regenerate_db1000n_service_file() {
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/db1000n
 
-  sudo rc-service daemon-reload
+  sudo rc-service db1000n.service restart  >/dev/null 2>&1
 }
 
 db1000n_run() {
