@@ -233,7 +233,7 @@ distress_run() {
 }
 
 distress_stop() {
-  sudo sv stop "$SCRIPT_DIR"/services/distress/log
+  sudo sv stop "$SCRIPT_DIR"/services/distress/log >/dev/null 2>&1
   sudo rm -rf /etc/runit/runsvdir/default/distress >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"/services/distress/log/supervise >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"/services/distress/supervise >/dev/null 2>&1
