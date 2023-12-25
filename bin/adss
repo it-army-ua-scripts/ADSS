@@ -92,9 +92,9 @@ elif [ "$1" = "config" ]; then
   clear
   cat "$SCRIPT_DIR"/services/EnvironmentFile && echo ""
 elif [ "$1" = "--uninstall" ]; then
-  sudo systemctl stop distress.service >/dev/null 2>&1
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
+  sudo rc-service  distress.service stop  >/dev/null 2>&1
+  sudo rc-service  db1000n.service stop  >/dev/null 2>&1
+  sudo rc-service  mhddos.service stop  >/dev/null 2>&1
   mhddos_auto_disable >/dev/null 2>&1
   db1000n_auto_disable >/dev/null 2>&1
   distress_auto_disable >/dev/null 2>&1

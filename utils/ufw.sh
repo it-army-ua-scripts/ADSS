@@ -6,10 +6,10 @@ install_ufw() {
   fedora | rocky)
     adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
     install() {
-      sudo systemctl stop firewalld
-      sudo systemctl disable firewalld
+      sudo rc-service firewalld stop
+      sudo rc-update del firewalld
       sudo dnf install ufw -y && sudo ufw disable
-      sudo /bin/systemctl restart ufw.service
+      sudo /bin/rc-service ufw.service restart
     }
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Фаєрвол UFW встановлено і деактивовано")"
@@ -18,10 +18,10 @@ install_ufw() {
     adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
     install() {
       sudo dnf install epel-release -y
-      sudo systemctl stop firewalld
-      sudo systemctl disable firewalld
+      sudo rc-service firewalld stop
+      sudo rc-update del firewalld
       sudo dnf install ufw -y && sudo ufw disable
-      sudo /bin/systemctl restart ufw.service
+      sudo /bin/rc-service ufw.service restart
     }
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Фаєрвол UFW встановлено і деактивовано")"
@@ -30,7 +30,7 @@ install_ufw() {
     adss_dialog "$(trans "Встановлюємо UFW фаєрвол")"
     install() {
       sudo apt-get update -y && sudo apt-get install ufw -y && sudo ufw disable
-      sudo /bin/systemctl restart ufw.service
+      sudo /bin/rc-service ufw.service restart
     }
     install >/dev/null 2>&1
     confirm_dialog "$(trans "Фаєрвол UFW встановлено і деактивовано")"
@@ -38,20 +38,20 @@ install_ufw() {
   esac
 }
 ufw_is_active() {
-  if systemctl is-active --quiet ufw; then
+  if rc-service is-active --quiet ufw; then
     return 1
   else
     return 0
   fi
 }
 enable_ufw() {
-  sudo systemctl enable ufw >/dev/null 2>&1
-  sudo systemctl start ufw >/dev/null 2>&1
+  sudo rc-update add ufw  >/dev/null 2>&1
+  sudo rc-service ufw start  >/dev/null 2>&1
   confirm_dialog "$(trans "UFW успішно увімкнено")"
 }
 disable_ufw() {
-  sudo systemctl disable ufw >/dev/null 2>&1
-  sudo systemctl stop ufw >/dev/null 2>&1
+  sudo rc-update del ufw  >/dev/null 2>&1
+  sudo rc-service ufw stop  >/dev/null 2>&1
   confirm_dialog "$(trans "UFW успішно вимкнено")"
 }
 ufw_installed() {

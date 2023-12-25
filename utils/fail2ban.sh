@@ -38,20 +38,20 @@ install_fail2ban() {
 }
 
 fail2ban_is_active() {
-  if systemctl is-active --quiet fail2ban; then
+  if rc-service is-active --quiet fail2ban; then
     return 1
   else
     return 0
   fi
 }
 enable_fail2ban() {
-  sudo systemctl enable fail2ban >/dev/null 2>&1
-  sudo systemctl start fail2ban >/dev/null 2>&1
+  sudo rc-update add fail2ban  >/dev/null 2>&1
+  sudo rc-service fail2ban start  >/dev/null 2>&1
   confirm_dialog "$(trans "Fail2ban успішно увімкнено")"
 }
 disable_fail2ban() {
-  sudo systemctl disable fail2ban >/dev/null 2>&1
-  sudo systemctl stop fail2ban >/dev/null 2>&1
+  sudo rc-update del fail2ban  >/dev/null 2>&1
+  sudo rc-service fail2ban stop  >/dev/null 2>&1
   confirm_dialog "$(trans "Fail2ban успішно вимкнено")"
 }
 
@@ -82,7 +82,7 @@ configure_fail2ban() {
         maxretry = 3
         bantime = 600' >> /etc/fail2ban/jail.local"
 
-      sudo /bin/systemctl restart fail2ban.service
+      sudo /bin/rc-service fail2ban.service restart
     }
     configure >/dev/null 2>&1
     confirm_dialog "$(trans "Fail2ban успішно налаштовано")"

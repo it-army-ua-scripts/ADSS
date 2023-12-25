@@ -123,8 +123,8 @@ configure_db1000n() {
         write_db1000n_variable "$i" "$value"
     done
     regenerate_db1000n_service_file
-    if systemctl is-active --quiet db1000n.service; then
-        sudo systemctl restart db1000n.service >/dev/null 2>&1
+    if rc-service is-active --quiet db1000n.service; then
+        sudo rc-service db1000n.service restart  >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
@@ -167,34 +167,34 @@ regenerate_db1000n_service_file() {
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/db1000n
 
-  sudo systemctl daemon-reload
+  sudo rc-service daemon-reload
 }
 
 db1000n_run() {
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
-  sudo systemctl stop distress.service >/dev/null 2>&1
-  sudo systemctl start db1000n.service >/dev/null 2>&1
+  sudo rc-service mhddos.service stop  >/dev/null 2>&1
+  sudo rc-service distress.service stop  >/dev/null 2>&1
+  sudo rc-service db1000n.service start  >/dev/null 2>&1
 }
 
 db1000n_stop() {
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo rc-service  db1000n.service stop  >/dev/null 2>&1
 }
 db1000n_auto_enable() {
-  sudo systemctl disable mhddos.service >/dev/null 2>&1
-  sudo systemctl disable distress.service >/dev/null 2>&1
-  sudo systemctl enable db1000n >/dev/null 2>&1
+  sudo rc-update del mhddos.service >/dev/null 2>&1
+  sudo rc-update del distress.service >/dev/null 2>&1
+  sudo rc-update add db1000n >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DB1000N додано до автозавантаження")"
 }
 
 db1000n_auto_disable() {
-  sudo systemctl disable db1000n >/dev/null 2>&1
+  sudo rc-update del db1000n >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DB1000N видалено з автозавантаження")"
 }
 
 db1000n_enabled() {
-  if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
+  if sudo rc-service is-enabled db1000n >/dev/null 2>&1; then
     return 0
   else
     return 1
@@ -203,7 +203,7 @@ db1000n_enabled() {
 
 db1000n_get_status() {
   clear
-  sudo systemctl status db1000n.service
+  sudo rc-service status db1000n.service
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_db1000n
@@ -223,7 +223,7 @@ initiate_db1000n() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo systemctl is-active db1000n >/dev/null 2>&1; then
+      if sudo rc-service is-active db1000n >/dev/null 2>&1; then
         active_disactive="$(trans "Зупинка DB1000N")"
       else
         active_disactive="$(trans "Запуск DB1000N")"

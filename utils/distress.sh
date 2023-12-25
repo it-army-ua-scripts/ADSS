@@ -152,9 +152,9 @@ configure_distress() {
     	  write_distress_variable "$i" "$value"
     done
     regenerate_distress_service_file
-    if systemctl is-active --quiet distress.service; then
+    if rc-service is-active --quiet distress.service; then
         sudo rm -rf /tmp/distress >/dev/null 2>&1
-        sudo systemctl restart distress.service >/dev/null 2>&1
+        sudo rc-service distress.service restart  >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
@@ -203,32 +203,32 @@ regenerate_distress_service_file() {
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/distress
 
-  sudo systemctl daemon-reload
+  sudo rc-service daemon-reload
 }
 
 distress_run() {
   sudo rm -rf /tmp/distress >/dev/null 2>&1
-  sudo systemctl stop mhddos.service >/dev/null 2>&1
-  sudo systemctl stop db1000n.service >/dev/null 2>&1
-  sudo systemctl start distress.service >/dev/null 2>&1
+  sudo rc-service  mhddos.service stop  >/dev/null 2>&1
+  sudo rc-service  db1000n.service stop  >/dev/null 2>&1
+  sudo rc-servic distress.servicee start >/dev/null 2>&1
 }
 
 distress_auto_enable() {
-  sudo systemctl disable mhddos.service >/dev/null 2>&1
-  sudo systemctl disable db1000n.service >/dev/null 2>&1
-  sudo systemctl enable distress >/dev/null 2>&1
+  sudo rc-update del mhddos.service >/dev/null 2>&1
+  sudo rc-update del db1000n.service >/dev/null 2>&1
+  sudo rc-update add distress >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DISTRESS додано до автозавантаження")"
 }
 
 distress_auto_disable() {
-  sudo systemctl disable distress >/dev/null 2>&1
+  sudo rc-update del distress >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DISTRESS видалено з автозавантаження")"
 }
 
 distress_enabled() {
-  if sudo systemctl is-enabled distress >/dev/null 2>&1; then
+  if sudo rc-service is-enabled distress >/dev/null 2>&1; then
     return 0
   else
     return 1
@@ -236,12 +236,12 @@ distress_enabled() {
 }
 
 distress_stop() {
-  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo rc-service  distress.service stop  >/dev/null 2>&1
 }
 
 distress_get_status() {
   clear
-  sudo systemctl status distress.service
+  sudo rc-service status distress.service
   echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
   read -s -n 1 key
   initiate_distress
@@ -261,7 +261,7 @@ initiate_distress() {
    if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo systemctl is-active distress >/dev/null 2>&1; then
+      if sudo rc-service is-active distress >/dev/null 2>&1; then
         active_disactive="$(trans "Зупинка DISTRESS")"
       else
         active_disactive="$(trans "Запуск DISTRESS")"

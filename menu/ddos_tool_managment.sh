@@ -5,7 +5,7 @@ check_enabled() {
   stop_service=0
   for service in "${services[@]}"; do
 #TODO sudo rc-service "$service" status
-    if sudo systemctl is-active "$service" >/dev/null; then
+    if sudo rc-service is-active "$service" >/dev/null; then
       stop_service=1
       break
     fi
@@ -43,9 +43,9 @@ create_symlink() {
 stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
 #TODO
-  #sudo systemctl stop distress.service >/dev/null
-  #sudo systemctl stop db1000n.service >/dev/null
-  #sudo systemctl stop mhddos.service >/dev/null
+  #sudo rc-service  distress.service stop  >/dev/null
+  #sudo rc-service  db1000n.service stop  >/dev/null
+  #sudo rc-service  mhddos.service stop  >/dev/null
   
   sudo rc-service distress stop >/dev/null
   sudo rc-service db1000n stop >/dev/null
@@ -60,7 +60,7 @@ get_ddoss_status() {
   service=""
 
   for element in "${services[@]}"; do
-    if systemctl is-active --quiet "$element.service"; then
+    if rc-service is-active --quiet "$element.service"; then
       service="$element"
       break
     fi

@@ -125,9 +125,9 @@ configure_mhddos() {
     	  write_mhddos_variable "$i" "$value"
     done
     regenerate_mhddos_service_file
-    if systemctl is-active --quiet mhddos.service; then
+    if rc-service is-active --quiet mhddos.service; then
         sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-        sudo systemctl restart mhddos.service >/dev/null 2>&1
+        sudo rc-service mhddos.service restart  >/dev/null 2>&1
     fi
     confirm_dialog "$(trans "Успішно виконано")"
 }
@@ -178,7 +178,7 @@ regenerate_mhddos_service_file() {
 #TODO
   #sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/mhddos.service
 
-  #sudo systemctl daemon-reload
+  #sudo rc-service daemon-reload
   
   sed -i  "s/args=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/mhddos
 
@@ -187,9 +187,9 @@ regenerate_mhddos_service_file() {
 mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
 #TODO
-  #sudo systemctl stop distress.service >/dev/null 2>&1
-  #sudo systemctl stop db1000n.service >/dev/null 2>&1
-  #sudo systemctl start mhddos.service >/dev/null 2>&1
+  #sudo rc-service  distress.service stop  >/dev/null 2>&1
+  #sudo rc-service  db1000n.service stop  >/dev/null 2>&1
+  #sudo rc-service start mhddos.service >/dev/null 2>&1
   
   sudo rc-service distress stop >/dev/null 2>&1
   sudo rc-service db1000n stop >/dev/null 2>&1
@@ -200,9 +200,9 @@ mhddos_run() {
 
 mhddos_auto_enable() {
 #TODO
-  #sudo systemctl disable distress.service >/dev/null 2>&1
-  #sudo systemctl disable db1000n.service >/dev/null 2>&1
-  #sudo systemctl enable mhddos.service >/dev/null 2>&1
+  #sudo rc-update del distress.service >/dev/null 2>&1
+  #sudo rc-update del db1000n.service >/dev/null 2>&1
+  #sudo rc-update add mhddos.service >/dev/null 2>&1
   
   sudo rc-update del distress >/dev/null 2>&1
   sudo rc-update del db1000n >/dev/null 2>&1
@@ -212,7 +212,7 @@ mhddos_auto_enable() {
 }
 mhddos_auto_disable() {
 #TODO
- #sudo systemctl disable mhddos >/dev/null 2>&1
+ #sudo rc-update del mhddos >/dev/null 2>&1
 
  sudo rc-update del mhddos >/dev/null 2>&1
  create_symlink
@@ -220,7 +220,7 @@ mhddos_auto_disable() {
 }
 
 mhddos_enabled() {
-  if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
+  if sudo rc-service is-enabled mhddos >/dev/null 2>&1; then
     return 0
   else
     return 1
@@ -230,7 +230,7 @@ mhddos_enabled() {
 mhddos_stop() {
   create_symlink
 #TODO
-  #sudo systemctl stop mhddos.service >/dev/null 2>&1
+  #sudo rc-service  mhddos.service stop  >/dev/null 2>&1
   
   sudo rc-service mhddos stop >/dev/null 2>&1
 }
@@ -238,7 +238,7 @@ mhddos_stop() {
 mhddos_get_status() {
   clear
 #TODO
-  #sudo systemctl status mhddos.service
+  #sudo rc-service status mhddos.service
   
   sudo rc-service mhddos status
   
@@ -268,7 +268,7 @@ initiate_mhddos() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-      if sudo systemctl is-active mhddos >/dev/null 2>&1; then
+      if sudo rc-service is-active mhddos >/dev/null 2>&1; then
         active_disactive="$(trans "Зупинка MHDDOS")"
       else
         active_disactive="$(trans "Запуск MHDDOS")"
