@@ -165,7 +165,7 @@ regenerate_db1000n_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/db1000n.service
+  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/db1000n
 
   sudo systemctl daemon-reload
 }

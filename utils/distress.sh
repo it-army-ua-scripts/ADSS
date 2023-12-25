@@ -201,7 +201,7 @@ regenerate_distress_service_file() {
   done <<< "$lines"
   start=$(echo $start  | sed 's/\//\\\//g')
 
-  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/distress.service
+  sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/openrc/distress
 
   sudo systemctl daemon-reload
 }
