@@ -186,7 +186,7 @@ db1000n_run() {
 }
 
 db1000n_stop() {
-  sudo sv stop db1000n/log
+  sudo sv stop "$SCRIPT_DIR"/db1000n/log
   sudo rm -rf /etc/runit/runsvdir/default/db1000n >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"/services/db1000n/log/supervise >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"/services/db1000n/supervise >/dev/null 2>&1

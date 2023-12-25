@@ -179,7 +179,7 @@ mhddos_run() {
 }
 
 mhddos_stop() {
-  sudo sv stop mhddos/log
+  sudo sv stop "$SCRIPT_DIR"/mhddos/log
   sudo rm -rf /etc/runit/runsvdir/default/mhddos >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"/services/mhddos/log/supervise >/dev/null 2>&1
   sudo rm -rf "$SCRIPT_DIR"/services/mhddos/supervise >/dev/null 2>&1
