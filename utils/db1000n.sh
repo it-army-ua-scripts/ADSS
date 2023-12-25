@@ -176,7 +176,7 @@ regenerate_db1000n_service_file() {
 
   sed -i  "s/db1000n.*/$start/g" "${SCRIPT_DIR}"/services/db1000n/run
 
-  sudo sv restart db1000n
+  sudo sv restart db1000n >/dev/null 2>&1
 }
 
 db1000n_run() {

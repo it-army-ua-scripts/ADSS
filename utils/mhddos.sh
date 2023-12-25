@@ -166,7 +166,7 @@ regenerate_mhddos_service_file() {
 
   sed -i  "s/mhddos_proxy_linux.*/$start/g" "${SCRIPT_DIR}"/services/mhddos/run
 
-  sudo sv restart mhddos
+  sudo sv restart mhddos >/dev/null 2>&1
 }
 
 mhddos_run() {

@@ -88,7 +88,7 @@ elif [ "$1" = "config" ]; then
 elif [ "$1" = "--uninstall" ]; then
   is_not_arm_arch
   if [[ $? == 1 ]]; then
-    mhddos_stop
+      mhddos_stop
   fi
 
   db1000n_stop

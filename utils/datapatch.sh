@@ -4,7 +4,7 @@ apply_patch() {
   envFile="$SCRIPT_DIR/services/EnvironmentFile"
 
   # for 1.1.0
-    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'interface='; then
+  if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'interface='; then
     sed -i 's/\[\/distress\]/interface=\n\[\/distress\]/g' "$envFile"
   fi
 

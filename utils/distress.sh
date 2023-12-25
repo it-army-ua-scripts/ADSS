@@ -220,7 +220,7 @@ regenerate_distress_service_file() {
 
   sed -i  "s/distress.*/$start/g" "${SCRIPT_DIR}"/services/distress/run
 
-  sudo sv restart distress
+  sudo sv restart distress >/dev/null 2>&1
 }
 
 distress_run() {
