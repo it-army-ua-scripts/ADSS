@@ -1,8 +1,8 @@
 #!/bin/bash
 
 extend_ports() {
-  port_range_string="net.ipv4.ip_local_port_range=16384 65535"
-  specified_file="/etc/sysctl.conf"
+  port_range_string="16384 65535"
+  specified_file="/proc/sys/net/ipv4/ip_local_port_range"
 
   if [[ -f "$specified_file" ]]; then
     if [[ $(grep -L "$port_range_string" "$specified_file") ]]; then
