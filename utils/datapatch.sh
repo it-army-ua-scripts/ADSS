@@ -41,34 +41,4 @@ apply_patch() {
     regenerate_distress_service_file
   fi
   # for 1.1.4
-
-  # for 1.1.8
-  if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'vpn='; then
-    sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/^vpn=.*//' "$envFile"
-    regenerate_mhddos_service_file
-  fi
-  if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'vpn-percents='; then
-    sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/^vpn-percents=.*//' "$envFile"
-    regenerate_mhddos_service_file
-  fi
-
-  sed -i '/\[mhddos\]/,/\[\/mhddos\]/ {
-            /^\[mhddos\]/b
-            /^\[\/mhddos\]/b
-            /^[[:space:]]*$/d
-          }' "$envFile"
-
-  if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'use-my-ip='; then
-    sed -i 's/\[\/mhddos\]/use-my-ip=0\n\[\/mhddos\]/g' "$envFile"
-    regenerate_mhddos_service_file
-  fi
-  if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'source='; then
-    sed -i 's/\[\/distress\]/source=adss\n\[\/distress\]/g' "$envFile"
-    regenerate_distress_service_file
-  fi
-  if ! awk '/\[db1000n\]/,/\[\/db1000n\]/' "$envFile" | grep -q 'source='; then
-    sed -i 's/\[\/db1000n\]/source=adss\n\[\/db1000n\]/g' "$envFile"
-    regenerate_db1000n_service_file
-  fi
-  # for 1.1.8
 }

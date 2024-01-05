@@ -1,40 +1,13 @@
 #!/bin/bash
 
-source "${SCRIPT_DIR}/utils/definitions.sh"
-
 install_fail2ban() {
-  case $(get_distribution) in
-  fedora | rocky)
-    adss_dialog "$(trans "Встановлюємо Fail2ban")"
-    install() {
-      sudo dnf update -y
-      sudo dnf upgrade -y
-      sudo dnf install -y fail2ban
-    }
-    install >/dev/null 2>&1
-    confirm_dialog "$(trans "Fail2ban успішно встановлено")"
-    ;;
-  ol)
-    adss_dialog "$(trans "Встановлюємо Fail2ban")"
-    install() {
-      sudo dnf install epel-release -y
-      sudo dnf update -y
-      sudo dnf upgrade -y
-      sudo dnf install fail2ban fail2ban-firewalld -y
-    }
-    install >/dev/null 2>&1
-    confirm_dialog "$(trans "Fail2ban успішно встановлено")"
-    ;;
-  *)
-    adss_dialog "$(trans "Встановлюємо Fail2ban")"
-    install() {
-      sudo apt-get update -y
-      sudo apt-get install -y fail2ban
-    }
-    install >/dev/null 2>&1
-    confirm_dialog "$(trans "Fail2ban успішно встановлено")"
-    ;;
-  esac
+  adss_dialog "$(trans "Встановлюємо Fail2ban")"
+  install() {
+    sudo pacman -Sy fail2ban --noconfirm
+  }
+  install >/dev/null 2>&1
+
+  confirm_dialog "$(trans "Fail2ban успішно встановлено")"
 }
 
 fail2ban_is_active() {

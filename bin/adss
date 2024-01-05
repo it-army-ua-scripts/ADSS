@@ -9,7 +9,7 @@ export SCRIPT_DIR="$(
   )/.." >/dev/null &&
     pwd
 )"
-OSARCH=$(uname -m)
+
 source "$SCRIPT_DIR/utils/translate.sh"
 
 localization_file=$(apply_localization "$@")
@@ -47,7 +47,7 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-days_to_keep=2
+days_to_keep=7
 sudo find "/var/log/"  -name "adss.log" -mtime +"$days_to_keep" -exec rm -f {} \;
 
 
@@ -61,23 +61,16 @@ if [ "$1" = "--auto-install" ]; then
   configure_ufw
   install_db1000n
   install_distress
-
-  is_not_arm_arch
-  if [[ $? == 1 ]]; then
-    install_mhddos
-    mhddos_run
-    mhddos_auto_enable
-  fi
+  install_mhddos
   extend_ports
+  mhddos_run
+  mhddos_auto_enable
   get_ddoss_status
 elif [ "$1" = "--restore" ]; then
 
-  is_not_arm_arch
-  if [[ $? == 1 ]]; then
-    mhddos_stop
-    mhddos_auto_disable >/dev/null 2>&1
-    sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
-  fi
+  mhddos_stop
+  mhddos_auto_disable >/dev/null 2>&1
+  sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
 
   db1000n_stop
   db1000n_auto_disable >/dev/null 2>&1
@@ -86,11 +79,11 @@ elif [ "$1" = "--restore" ]; then
   distress_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/distress >/dev/null 2>&1
   sudo rm -r /var/log/adss.log >/dev/null 2>&1
-  sudo rm -rf "${SCRIPT_DIR}"
+  sudo rm -rf /opt/itarmy
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh | bash -s
 elif [ "$1" = "config" ]; then
   clear
-  cat "${SCRIPT_DIR}"/services/EnvironmentFile && echo ""
+  cat /opt/itarmy/services/EnvironmentFile && echo ""
 elif [ "$1" = "--uninstall" ]; then
   sudo systemctl stop distress.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
@@ -103,7 +96,7 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
   sudo rm -r /var/log/adss.log >/dev/null 2>&1
-  sudo rm -rf "${SCRIPT_DIR}"
+  sudo rm -rf /opt/itarmy
   echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else
   check_updates

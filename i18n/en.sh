@@ -104,7 +104,7 @@ declare -A localization=(
   ["Список проксі у форматі"]="List of proxies in format"
   ["або"]="or"
   ["Укажіть протокол, якщо формат"]="Specify the protocol if the format is"
-  ["Протокол проксі (socks5, socks4): "]="Proxy protocol (socks5, socks4): "
+  ["Протокол проксі (socks5, socks4, http): "]="Proxy protocol (socks5, socks4, http): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
   ["Увімкнути UDP flood (1 | 0): "]="Enable UDP flood (1 | 0): "

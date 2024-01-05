@@ -7,15 +7,15 @@ display_menu() {
   local dialog_args=()
   local index
   for index in "${!options[@]}"; do
-    dialog_args+=("${options[index]}" "")
+    dialog_args+=("$((index + 1))" "${options[index]}")
   done
   local selection=$(dialog --ascii-lines --clear --stdout --cancel-label "$(trans "Вихід")" --title "$title" \
     --menu "$(trans "Оберіть опцію:")" 0 0 0 "${dialog_args[@]}")
 
   if [[ -z "$selection" ]]; then
-    clear >$(tty)
+    clear
     echo "Exiting..."
     exit 0
   fi
-  echo "$selection"
+  return "$selection"
 }

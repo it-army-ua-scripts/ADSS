@@ -4,13 +4,11 @@ install_mhddos() {
     adss_dialog "$(trans "Встановлюємо MHDDOS")"
 	  install() {
         cd $TOOL_DIR
+        OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
           aarch64*)
             package=https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux_arm64
-          ;;
-
-          armv6* | armv7* | armv8*)
           ;;
 
           x86_64*)
@@ -33,32 +31,16 @@ install_mhddos() {
         create_symlink
 	  }
     install > /dev/null 2>&1
-    if [[ $package == '' ]];then
-      confirm_dialog "MHDDOS_PROXY does not support ARM32"
-    else
-      confirm_dialog "$(trans "MHDDOS успішно встановлено")"
-    fi
+    confirm_dialog "$(trans "MHDDOS успішно встановлено")"
 }
 
 configure_mhddos() {
     clear
     declare -A params
-    echo -e "${ORANGE}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
-    echo -ne "\n"
-    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
-    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
-    echo -ne "\n"
+    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
-    if [[ -n "$user_id" ]];then
-      while [[ ! $user_id =~ ^[0-9]+$ ]]
-      do
-        echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Юзер ІД: ")" -i "$(get_mhddos_variable 'user-id')" user_id
-      done
-    fi
 
     params[user-id]=$user_id
-
     read -e -p "$(trans "Мова (ua | en | es | de | pl | it): ")" -i "$(get_mhddos_variable 'lang')" lang
 
     languages=("ua" "en" "es" "de" "pl" "it")
@@ -82,17 +64,30 @@ configure_mhddos() {
     fi
 
     params[copies]=$copies
-
-    read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
-    if [[ -n "$use_my_ip" ]];then
-      while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
+    read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
+    if [[ -n "$vpn" ]];then
+      while [[ $vpn != false && $vpn != true ]]
       do
-        echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_mhddos_variable 'use-my-ip')" use_my_ip
+          echo "$(trans "Будь ласка введіть правильні значення")"
+          read -e -p "VPN (false | true): " -i "$(get_mhddos_variable 'vpn')" vpn
       done
+    	params[vpn]=$vpn
     fi
 
-    params[use-my-ip]=$use_my_ip
+    if [[ $vpn == true ]]; then
+      read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
+      if [[ -n "$vpn_percents" ]];then
+        while [[ $vpn_percents -lt 1 || $vpn_percents -gt 100 ]]
+        do
+          echo "$(trans "Будь ласка введіть правильні значення")"
+          read -e -p "VPN percents (1-100): " -i "$(get_mhddos_variable 'vpn-percents')" vpn_percents
+        done
+      fi
+
+      params[vpn-percents]=$vpn_percents
+    else
+      params[vpn-percents]=" "
+    fi
 
     read -e -p "Threads: " -i "$(get_mhddos_variable 'threads')" threads
     if [[ -n "$threads" ]];then
@@ -144,8 +139,8 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
-
+  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
+  vpn=false
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
@@ -155,7 +150,15 @@ regenerate_mhddos_service_file() {
       continue
     fi
 
-    if [[ "$key" == 'use-my-ip' && "$(get_mhddos_variable 'use-my-ip')" == 0 ]];then
+    if [[ "$key" == 'vpn' ]];then
+      vpn=$value
+    	if [[ "$value" == false ]]; then
+    		continue
+    	elif [[ "$value" == true ]]; then
+    		value=" "
+    	fi
+    fi
+    if [[ "$key" == 'vpn-percents' && "$vpn" == false ]];then
       continue
     fi
     if [[ "$value" ]]; then
@@ -216,15 +219,6 @@ mhddos_installed() {
       return 0
   fi
 }
-
-is_not_arm_arch() {
-  if [[ "$OSARCH" != armv6* && "$OSARCH" != armv7* && $OSARCH != armv8* ]]; then
-    return 1
-  else
-    return 0
-  fi
-}
-
 initiate_mhddos() {
   mhddos_installed
   if [[ $? == 1 ]]; then
@@ -236,25 +230,26 @@ initiate_mhddos() {
         active_disactive="$(trans "Запуск MHDDOS")"
       fi
       menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
-      res=$(display_menu "MHDDOS" "${menu_items[@]}")
+      display_menu "MHDDOS" "${menu_items[@]}"
 
-      case "$res" in
-        "$(trans "Зупинка MHDDOS")")
-          mhddos_stop
-          mhddos_get_status
+      case $? in
+        1)
+          if sudo systemctl is-active mhddos >/dev/null 2>&1; then
+            mhddos_stop
+            mhddos_get_status
+          else
+            mhddos_run
+            mhddos_get_status
+          fi
         ;;
-        "$(trans "Запуск MHDDOS")")
-          mhddos_run
-          mhddos_get_status
-        ;;
-        "$(trans "Налаштування MHDDOS")")
+        2)
           configure_mhddos
           initiate_mhddos
         ;;
-        "$(trans "Статус MHDDOS")")
+        3)
           mhddos_get_status
         ;;
-        "$(trans "Повернутись назад")")
+        4)
           ddos_tool_managment
         ;;
       esac

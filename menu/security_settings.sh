@@ -2,18 +2,18 @@
 
 security_settings() {
   menu_items=("$(trans "Встановлення захисту")" "$(trans "Налаштування захисту")" "$(trans "Повернутись назад")")
-  res=$(display_menu "$(trans "Налаштування безпеки")" "${menu_items[@]}")
+  display_menu "$(trans "Налаштування безпеки")" "${menu_items[@]}"
 
-  case "$res" in
-  "$(trans "Встановлення захисту")")
+  case $? in
+  1)
     install_ufw
     install_fail2ban
     security_settings
     ;;
-  "$(trans "Налаштування захисту")")
+  2)
     security_configuration
     ;;
-  "$(trans "Повернутись назад")")
+  3)
     main_menu
     ;;
   esac

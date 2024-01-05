@@ -8,8 +8,8 @@ check_updates() {
   else
     timestamp=$(date +%s)
     diff=$((timestamp - ADSS_DEPLOYMENT_VERSION))
-    five_minutes=300
-    if [[ $diff -gt $five_minutes ]]; then
+    one_hour=300
+    if [[ $diff -gt $one_hour ]]; then
       prepare_for_update
     fi
   fi
@@ -18,7 +18,7 @@ prepare_for_update() {
   echo -e "${GREEN}$(trans "Перевіряємо наявленість оновлень")${NC}"
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']/}
-  remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
+  remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/arch/version.txt')
 
   echo -e "$(trans "Встановлена версія") = ${ORANGE}$current_version${NC}"
   echo -e "$(trans "Актуальна версія") = ${ORANGE}$remote_version${NC}"
@@ -41,7 +41,6 @@ update_adss() {
     git checkout services/db1000n.service >/dev/null 2>&1 &&
     git checkout services/distress.service >/dev/null 2>&1 &&
     git checkout services/mhddos.service >/dev/null 2>&1 &&
-#    git checkout services/EnvironmentFile >/dev/null 2>&1 &&
     git pull --all || adss --restore
 
   SERVICES=('mhddos' 'distress' 'db1000n')

@@ -6,7 +6,6 @@ vpn=false
 vpn-percents=20
 threads=8000
 proxies=
-bind=
 [/mhddos]
 
 [distress]
@@ -15,7 +14,6 @@ use-my-ip=0
 use-tor=0
 concurrency=4096
 direct-udp-failover=0
-interface=
 [/distress]
 
 [db1000n]
@@ -24,5 +22,4 @@ enable-self-update=1
 scale=1
 proxylist=
 default-proxy-proto=
-interface=
 [/db1000n]

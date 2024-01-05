@@ -5,14 +5,11 @@ install_distress() {
 
     install() {
         cd $TOOL_DIR
+        OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
           aarch64*)
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
-          ;;
-
-          armv6* | armv7* | armv8*)
-            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_arm-unknown-linux-musleabi
           ;;
 
           x86_64*)
@@ -42,32 +39,20 @@ configure_distress() {
     clear
     declare -A params;
 
-    echo -e "${ORANGE}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
-    echo -ne "\n"
-    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
-    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
-    echo -ne "\n"
+    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
-    if [[ -n "$user_id" ]];then
-      while [[ ! $user_id =~ ^[0-9]+$ ]]
-      do
-        echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
-      done
-    fi
 
     params[user-id]=$user_id
 
     read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
-
-    if [[ -n "$use_my_ip" ]]; then
+    if [[ -n "$use_my_ip" ]];then
       while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
         read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
-
     fi
+
     params[use-my-ip]=$use_my_ip
 
     if [[ $use_my_ip > 0 ]]; then
@@ -184,7 +169,7 @@ write_distress_variable() {
 regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=${SCRIPT_DIR}/bin/distress"
+  start="ExecStart=/opt/itarmy/bin/distress"
 
   while read -r line
   do
@@ -206,12 +191,6 @@ regenerate_distress_service_file() {
     fi
     if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'direct-udp-mixed-flood')" == 0 ]];then
         continue
-    fi
-    if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
-      continue
-    fi
-    if [[ "$key" == 'use-tor' && "$(get_distress_variable 'use-tor')" == 0 ]];then
-      continue
     fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
@@ -285,25 +264,26 @@ initiate_distress() {
         active_disactive="$(trans "Запуск DISTRESS")"
       fi
       menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
-      res=$(display_menu "DISTRESS" "${menu_items[@]}")
+      display_menu "DISTRESS" "${menu_items[@]}"
 
-      case "$res" in
-        "$(trans "Зупинка DISTRESS")")
-           distress_stop
-           distress_get_status
-        ;;
-        "$(trans "Запуск DISTRESS")")
+      case $? in
+        1)
+          if sudo systemctl is-active distress >/dev/null 2>&1; then
+             distress_stop
+             distress_get_status
+          else
             distress_run
             distress_get_status
+          fi
         ;;
-        "$(trans "Налаштування DISTRESS")")
+        2)
           configure_distress
           initiate_distress
         ;;
-        "$(trans "Статус DISTRESS")")
+        3)
           distress_get_status
         ;;
-        "$(trans "Повернутись назад")")
+        4)
           ddos_tool_managment
         ;;
       esac
