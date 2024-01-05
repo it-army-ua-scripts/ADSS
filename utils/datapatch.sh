@@ -59,7 +59,7 @@ apply_patch() {
           }' "$envFile"
 
   if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'use-my-ip='; then
-    sed -i 's/\[\/mhddos\]/use-my-ip=5\n\[\/mhddos\]/g' "$envFile"
+    sed -i 's/\[\/mhddos\]/use-my-ip=0\n\[\/mhddos\]/g' "$envFile"
     regenerate_mhddos_service_file
   fi
   if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'source='; then
