@@ -47,7 +47,7 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-days_to_keep=7
+days_to_keep=2
 sudo find "/var/log/"  -name "adss.log" -mtime +"$days_to_keep" -exec rm -f {} \ >/dev/null 2>&1;
 
 
