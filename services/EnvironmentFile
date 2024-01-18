@@ -2,11 +2,11 @@
 user-id=
 lang=ua
 copies=auto
-vpn=false
-vpn-percents=20
 threads=8000
 proxies=
 bind=
+source=adss
+use-my-ip=0
 [/mhddos]
 
 [distress]
@@ -14,8 +14,11 @@ user-id=
 use-my-ip=0
 use-tor=0
 concurrency=4096
-direct-udp-failover=0
+direct-udp-mixed-flood=0
 interface=
+udp-packet-size=4096
+direct-udp-mixed-flood-packets-per-conn=30
+source=adss
 [/distress]
 
 [db1000n]
@@ -25,4 +28,5 @@ scale=1
 proxylist=
 default-proxy-proto=
 interface=
+source=adss
 [/db1000n]
