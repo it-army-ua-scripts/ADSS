@@ -65,11 +65,9 @@ get_ddoss_status() {
         break
       fi
     done
-    ddos_tool_managment
   else
     confirm_dialog "$(trans "Немає запущених процесів")"
   fi
-  ddos_tool_managment
 }
 
 ddos_tool_installed() {
@@ -109,6 +107,7 @@ ddos_tool_managment() {
   case "$res" in
   "$(trans "Статус атаки")")
     get_ddoss_status
+    ddos_tool_managment
     ;;
   "$(trans "Зупинити атаку")")
     stop_services
