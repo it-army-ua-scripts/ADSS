@@ -136,7 +136,7 @@ write_db1000n_variable() {
 regenerate_db1000n_service_file() {
   lines=$(sed -n "/\[db1000n\]/,/\[\/db1000n\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/db1000n"
+  start="ExecStart=${SCRIPT_DIR}/bin/db1000n"
 
   while read -r line
   do
@@ -217,34 +217,33 @@ initiate_db1000n() {
   if [[ $? == 1 ]]; then
     ddos_tool_managment
   else
-        if sudo systemctl is-active db1000n >/dev/null 2>&1; then
-          active_disactive="$(trans "Зупинка DB1000N")"
-        else
-          active_disactive="$(trans "Запуск DB1000N")"
-        fi
-        menu_items=("$active_disactive" "$(trans "Налаштування DB1000N")" "$(trans "Статус DB1000N")" "$(trans "Повернутись назад")")
-        display_menu "DB1000N" "${menu_items[@]}"
+      if sudo systemctl is-active db1000n >/dev/null 2>&1; then
+        active_disactive="$(trans "Зупинка DB1000N")"
+      else
+        active_disactive="$(trans "Запуск DB1000N")"
+      fi
+      menu_items=("$active_disactive" "$(trans "Налаштування DB1000N")" "$(trans "Статус DB1000N")" "$(trans "Повернутись назад")")
+      res=$(display_menu "DB1000N" "${menu_items[@]}")
 
-        case $? in
-          1)
-            if sudo systemctl is-active db1000n >/dev/null 2>&1; then
-              db1000n_stop
-              db1000n_get_status
-            else
-              db1000n_run
-              db1000n_get_status
-            fi
-          ;;
-          2)
-            configure_db1000n
-            initiate_db1000n
-          ;;
-          3)
-            db1000n_get_status
-          ;;
-          4)
-            ddos_tool_managment
-          ;;
-        esac
+      case "$res" in
+        "$(trans "Зупинка DB1000N")")
+          db1000n_stop
+          db1000n_get_status
+        ;;
+        "$(trans "Запуск DB1000N")")
+          db1000n_run
+          db1000n_get_status
+        ;;
+        "$(trans "Налаштування DB1000N")")
+          configure_db1000n
+          initiate_db1000n
+        ;;
+        "$(trans "Статус DB1000N")")
+          db1000n_get_status
+        ;;
+        "$(trans "Повернутись назад")")
+          ddos_tool_managment
+        ;;
+      esac
   fi
 }

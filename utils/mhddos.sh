@@ -139,8 +139,8 @@ write_mhddos_variable() {
 regenerate_mhddos_service_file() {
   lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=/opt/itarmy/bin/mhddos_proxy_linux"
-  vpn=false
+  start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
+
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
@@ -230,26 +230,25 @@ initiate_mhddos() {
         active_disactive="$(trans "Запуск MHDDOS")"
       fi
       menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
-      display_menu "MHDDOS" "${menu_items[@]}"
+      res=$(display_menu "MHDDOS" "${menu_items[@]}")
 
-      case $? in
-        1)
-          if sudo systemctl is-active mhddos >/dev/null 2>&1; then
-            mhddos_stop
-            mhddos_get_status
-          else
-            mhddos_run
-            mhddos_get_status
-          fi
+      case "$res" in
+        "$(trans "Зупинка MHDDOS")")
+          mhddos_stop
+          mhddos_get_status
         ;;
-        2)
+        "$(trans "Запуск MHDDOS")")
+          mhddos_run
+          mhddos_get_status
+        ;;
+        "$(trans "Налаштування MHDDOS")")
           configure_mhddos
           initiate_mhddos
         ;;
-        3)
+        "$(trans "Статус MHDDOS")")
           mhddos_get_status
         ;;
-        4)
+        "$(trans "Повернутись назад")")
           ddos_tool_managment
         ;;
       esac

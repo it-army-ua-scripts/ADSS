@@ -47,7 +47,7 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-days_to_keep=7
+days_to_keep=2
 sudo find "/var/log/"  -name "adss.log" -mtime +"$days_to_keep" -exec rm -f {} \;
 
 
@@ -79,11 +79,11 @@ elif [ "$1" = "--restore" ]; then
   distress_auto_disable >/dev/null 2>&1
   sudo rm -rf /tmp/distress >/dev/null 2>&1
   sudo rm -r /var/log/adss.log >/dev/null 2>&1
-  sudo rm -rf /opt/itarmy
+  sudo rm -rf "${SCRIPT_DIR}"
   curl -sL https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/install/install.sh | bash -s
 elif [ "$1" = "config" ]; then
   clear
-  cat /opt/itarmy/services/EnvironmentFile && echo ""
+  cat "${SCRIPT_DIR}"/services/EnvironmentFile && echo ""
 elif [ "$1" = "--uninstall" ]; then
   sudo systemctl stop distress.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
@@ -96,7 +96,7 @@ elif [ "$1" = "--uninstall" ]; then
   sudo rm -r /etc/systemd/system/mhddos.service >/dev/null 2>&1
   sudo rm -r /usr/local/bin/adss >/dev/null 2>&1
   sudo rm -r /var/log/adss.log >/dev/null 2>&1
-  sudo rm -rf /opt/itarmy
+  sudo rm -rf "${SCRIPT_DIR}"
   echo -e "${GREEN}$(trans "ADSS успішно видалено")${NC}"
 else
   check_updates

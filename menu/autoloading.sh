@@ -24,35 +24,34 @@ autoload_configuration() {
     distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
   fi
   menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" "$(trans "Повернутись назад")")
-  display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}"
-  status=$?
+  res=$(display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}")
 
-  case $status in
-  1)
-    if mhddos_enabled; then
-      mhddos_auto_disable
-    else
-      mhddos_auto_enable
-    fi
+  case "$res" in
+  "$(trans "Вимкнути автозапуск MHDDOS")")
+    mhddos_auto_disable
     autoload_configuration
     ;;
-  2)
-    if db1000n_enabled; then
-      db1000n_auto_disable
-    else
-      db1000n_auto_enable
-    fi
+  "$(trans "Увімкнути автозапуск MHDDOS")")
+    mhddos_auto_enable
     autoload_configuration
     ;;
-  3)
-    if distress_enabled; then
-      distress_auto_disable
-    else
-      distress_auto_enable
-    fi
+  "$(trans "Вимкнути автозапуск DB1000N")")
+    db1000n_auto_disable
     autoload_configuration
     ;;
-  4)
+  "$(trans "Увімкнути автозапуск DB1000N")")
+    db1000n_auto_enable
+    autoload_configuration
+    ;;
+  "$(trans "Вимкнути автозапуск DISTRESS")")
+    distress_auto_disable
+    autoload_configuration
+    ;;
+  "$(trans "Увімкнути автозапуск DISTRESS")")
+    distress_auto_enable
+    autoload_configuration
+    ;;
+  "$(trans "Повернутись назад")")
     ddos_tool_managment
     ;;
   esac
