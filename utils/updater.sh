@@ -15,7 +15,7 @@ check_updates() {
   fi
 }
 prepare_for_update() {
-  echo -e "${GREEN}$(trans "Перевіряємо наявленість оновлень")${NC}"
+  echo -e "${GREEN}$(trans "Перевіряємо наявність оновлень")${NC}"
   current_version=$(<"$SCRIPT_DIR"/version.txt)
   current_version=${current_version//[$'\t\r\n']/}
   remote_version=$(curl -s 'https://raw.githubusercontent.com/it-army-ua-scripts/ADSS/main/version.txt')
