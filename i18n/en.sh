@@ -125,7 +125,7 @@ declare -A localization=(
   ["Наразі всі порти розширено"]="All ports are currently extended"
   ["Не можливо виконати дію"]="Unable to perform the action"
 
-  ["Перевіряємо наявленість оновлень"]="Checking for updates"
+  ["Перевіряємо наявність оновлень"]="Checking for updates"
   ["Оновляємо ADSS"]="Updating ADSS"
   ["ADSS успішно оновлено"]="ADSS updated successfully"
   ["Встановлена версія"]="Installed Version"
