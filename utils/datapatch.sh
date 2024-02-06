@@ -41,4 +41,9 @@ apply_patch() {
     regenerate_distress_service_file
   fi
   # for 1.1.4
+
+  # for 1.1.3.3
+  sed -i '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=[0-9]\+/udp-packet-size=1420/g' "$envFile"
+  regenerate_distress_service_file
+  # for 1.1.3.3
 }
