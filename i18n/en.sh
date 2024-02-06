@@ -82,7 +82,7 @@ declare -A localization=(
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
   ["Увімкнути UDP flood (1 | 0): "]="Enable UDP flood (1 | 0): "
-  ["Розмір UDP пакунку: "]="UDP packet size: "
+  ["Розмір UDP пакунку (576-1420): "]="UDP packet size (576-1420): "
   ["Кількість пакетів: "]="Number of packets: "
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
   ["Кількість створювачів завдань (4096): "]="Number of task creators (4096): "
