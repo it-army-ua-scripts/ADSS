@@ -71,4 +71,12 @@ apply_patch() {
     regenerate_db1000n_service_file
   fi
   # for 1.1.8
+
+  # for 1.2.1
+  udpPackageSize=$(sed -n '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=\([0-9]\+\)/\1/p' "$envFile")
+  if [[ $udpPackageSize -gt 1420 ]]; then
+    sed -i '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=[0-9]\+/udp-packet-size=1252/g' "$envFile"
+      regenerate_distress_service_file
+  fi
+  # for 1.2.1
 }
