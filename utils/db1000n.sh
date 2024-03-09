@@ -203,7 +203,11 @@ db1000n_auto_disable() {
 }
 
 db1000n_enabled() {
-  sudo systemctl is-enabled db1000n >/dev/null 2>&1 && exit 0 || exit 1
+  if sudo systemctl is-enabled db1000n >/dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 db1000n_get_status() {
