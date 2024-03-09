@@ -76,7 +76,14 @@ apply_patch() {
   udpPackageSize=$(sed -n '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=\([0-9]\+\)/\1/p' "$envFile")
   if [[ $udpPackageSize -gt 1420 ]]; then
     sed -i '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=[0-9]\+/udp-packet-size=1252/g' "$envFile"
-      regenerate_distress_service_file
+    regenerate_distress_service_file
   fi
   # for 1.2.1
+
+  # for 1.2.2
+  if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
+    sed -i '/^\[mhddos\]/,/^\[\/mhddos\]/{s/bind=/ifaces=/g}' "$envFile"
+    regenerate_distress_service_file
+  fi
+  # for 1.2.2
 }
