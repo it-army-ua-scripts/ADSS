@@ -132,6 +132,7 @@ declare -A localization=(
   ["Актуальна версія"]="Latest Version"
 
   ["Назва інтерфейсу (ensXXX, ethX, тощо.)"]="Interface name (ensXXX, ethX, etc.)"
+  ["Мережеві інтерфейси (через кому: eth0,eth1,тощо.)"]="Interface names (Comma separated: eth0,eth1,etc.)"
   ["Інтерфейс: "]="Interface: "
   ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
   ["Інтерфейси: "]="Interfaces: "
