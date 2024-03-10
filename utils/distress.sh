@@ -70,7 +70,7 @@ configure_distress() {
     fi
     params[use-my-ip]=$use_my_ip
 
-    if [[ $use_my_ip > 0 ]]; then
+    if [[ $use_my_ip -gt 0 ]]; then
       read -e -p "$(trans "Увімкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'direct-udp-mixed-flood')" direct_udp_failover
       if [[ -n "$direct_udp_failover" ]];then
         while [[ "$direct_udp_failover" != "1" && "$direct_udp_failover" != "0" ]]
@@ -82,7 +82,7 @@ configure_distress() {
 
       params[direct-udp-mixed-flood]=$direct_udp_failover
 
-      if [[ $direct_udp_failover > 0 ]]; then
+      if [[ $direct_udp_failover -gt 0 ]]; then
 
         packageSize="$(get_distress_variable 'udp-packet-size')"
         if [[ -z $packageSize || $packageSize == " "  ]];then
