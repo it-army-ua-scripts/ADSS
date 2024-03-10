@@ -113,11 +113,11 @@ configure_mhddos() {
 
     echo -ne "\n"
     echo -e "${ORANGE}$(trans "IP адреса кожного інтерфейсу через пробіл.")${NC}"
-    read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_mhddos_variable 'bind')" interface
+    read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_mhddos_variable 'ifaces')" interface
     if [[ -n "$interface" ]];then
-      params[bind]=$interface
+      params[ifaces]=$interface
     else
-      params[bind]=" "
+      params[ifaces]=" "
     fi
 
     for i in "${!params[@]}"; do
@@ -220,11 +220,7 @@ mhddos_auto_disable() {
 }
 
 mhddos_enabled() {
-  if sudo rc-service is-enabled mhddos >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+  sudo rc-service is-enabled mhddos >/dev/null 2>&1  && return 0 || return 1
 }
 
 mhddos_stop() {
