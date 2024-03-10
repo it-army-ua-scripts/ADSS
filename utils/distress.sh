@@ -69,7 +69,7 @@ configure_distress() {
 
     params[use-my-ip]=$use_my_ip
 
-    if [[ $use_my_ip > 0 ]]; then
+    if [[ $use_my_ip -gt 0 ]]; then
       read -e -p "$(trans "Увімкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'direct-udp-mixed-flood')" direct_udp_failover
       if [[ -n "$direct_udp_failover" ]];then
         while [[ "$direct_udp_failover" != "1" && "$direct_udp_failover" != "0" ]]
@@ -81,7 +81,7 @@ configure_distress() {
 
       params[direct-udp-mixed-flood]=$direct_udp_failover
 
-      if [[ $direct_udp_failover > 0 ]]; then
+      if [[ $direct_udp_failover -gt 0 ]]; then
 
         packageSize="$(get_distress_variable 'udp-packet-size')"
         if [[ -z $packageSize || $packageSize == " "  ]];then
@@ -150,8 +150,8 @@ configure_distress() {
     params[concurrency]=$concurrency
 
     echo -ne "\n"
-    echo -e "${ORANGE}$(trans "Назва інтерфейсу (ensXXX, ethX, тощо.)")${NC}"
-    read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_distress_variable 'interface')" interface
+    echo -e "${ORANGE}$(trans "Мережеві інтерфейси (через кому: eth0,eth1,тощо.)")${NC}"
+    read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_distress_variable 'interface')" interface
     if [[ -n "$interface" ]];then
       params[interface]=$interface
     else
@@ -184,7 +184,7 @@ regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=$SCRIPT_DIR/bin/distress"
-
+  declare -A data
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
@@ -199,6 +199,7 @@ regenerate_distress_service_file() {
       elif [[ "$value" == 1 ]]; then
         value=" "
       fi
+      data["$key"]="$value"
     fi
     if [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'direct-udp-mixed-flood')" == 0 ]];then
         continue
@@ -208,14 +209,20 @@ regenerate_distress_service_file() {
     fi
     if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
       continue
+    elif [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" -gt 0 ]]; then
+      data["enable-packet-flood"]=" "
+      data["enable-icmp-flood"]=" "
     fi
     if [[ "$key" == 'use-tor' && "$(get_distress_variable 'use-tor')" == 0 ]];then
       continue
     fi
     if [[ "$value" ]]; then
-      start="$start --$key $value"
+      data["$key"]="$value"
     fi
   done <<< "$lines"
+  for key in "${!data[@]}"; do
+    start="$start --$key ${data[$key]}"
+  done
   start=$(echo $start  | sed 's/\//\\\//g')
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/distress.service
@@ -245,11 +252,7 @@ distress_auto_disable() {
 }
 
 distress_enabled() {
-  if sudo systemctl is-enabled distress >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+  sudo systemctl is-enabled distress >/dev/null 2>&1 && return 0 || return 1
 }
 
 distress_stop() {
