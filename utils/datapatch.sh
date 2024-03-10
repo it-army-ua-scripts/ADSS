@@ -82,7 +82,10 @@ apply_patch() {
 
   # for 1.2.2
   if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
-    sed -i '/^\[mhddos\]/,/^\[\/mhddos\]/{s/bind=/ifaces=/g}' "$envFile"
+    sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/bind=/ifaces=/g' "$envFile"
+    regenerate_distress_service_file
+  elif ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'ifaces='; then
+    sed -i 's/\[\/mhddos\]/ifaces=\n\[\/mhddos\]/g' "$envFile"
     regenerate_distress_service_file
   fi
   # for 1.2.2
