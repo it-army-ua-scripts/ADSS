@@ -256,7 +256,7 @@ distress_auto_disable() {
 }
 
 distress_enabled() {
-  sudo systemctl is-enabled distress >/dev/null 2>&1 && exit 0 || exit 1
+  sudo systemctl is-enabled distress >/dev/null 2>&1 && return 0 || return 1
 }
 
 distress_stop() {

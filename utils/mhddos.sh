@@ -189,7 +189,7 @@ mhddos_auto_disable() {
  confirm_dialog "$(trans "MHDDOS видалено з автозавантаження")"
 }
 mhddos_enabled() {
-  sudo systemctl is-enabled mhddos >/dev/null 2>&1  && exit 0 || exit 1
+  sudo systemctl is-enabled mhddos >/dev/null 2>&1  && return 0 || return 1
 }
 
 mhddos_stop() {
