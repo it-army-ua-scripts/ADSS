@@ -49,4 +49,11 @@ apply_patch() {
       regenerate_distress_service_file
   fi
   # for 1.1.3.3
+
+  # for 1.1.3.5
+    if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
+      sed -i '/^\[mhddos\]/,/^\[\/mhddos\]/{s/bind=/ifaces=/g}' "$envFile"
+      regenerate_distress_service_file
+    fi
+  # for 1.1.3.5
 }

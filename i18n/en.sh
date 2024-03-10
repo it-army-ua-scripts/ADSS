@@ -133,6 +133,7 @@ declare -A localization=(
 
   ["Назва інтерфейсу (ensXXX, ethX, тощо.)"]="Interface name (ensXXX, ethX, etc.)"
   ["Інтерфейс: "]="Interface: "
+  ["Мережеві інтерфейси (через кому: eth0,eth1,тощо.)"]="Interface names (Comma separated: eth0,eth1,etc.)"
   ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
   ["Інтерфейси: "]="Interfaces: "
   ["ADSS успішно видалено"]="ADSS was deleted successfully"
