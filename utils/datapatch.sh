@@ -8,9 +8,10 @@ apply_patch() {
     sed -i 's/\[\/distress\]/interface=\n\[\/distress\]/g' "$envFile"
   fi
 
-  if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
-    sed -i 's/\[\/mhddos\]/bind=\n\[\/mhddos\]/g' "$envFile"
-  fi
+  # commented for 1.1.7.2
+  #  if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
+  #    sed -i 's/\[\/mhddos\]/bind=\n\[\/mhddos\]/g' "$envFile"
+  #  fi
   # end 1.1.0
 
   # for 1.1.1
@@ -74,7 +75,17 @@ apply_patch() {
     udpPackageSize=$(sed -n '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=\([0-9]\+\)/\1/p' "$envFile")
     if [[ $udpPackageSize -gt 1420 ]]; then
       sed -i '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=[0-9]\+/udp-packet-size=1252/g' "$envFile"
-        regenerate_distress_service_file
+      regenerate_distress_service_file
     fi
   # for 1.1.7
+
+  # for 1.1.7.2
+    if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
+      sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/bind=/ifaces=/g' "$envFile"
+      regenerate_distress_service_file
+    elif ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'ifaces='; then
+      sed -i 's/\[\/mhddos\]/ifaces=\n\[\/mhddos\]/g' "$envFile"
+      regenerate_distress_service_file
+    fi
+  # for 1.1.7.2
 }
