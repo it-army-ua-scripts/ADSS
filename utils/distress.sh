@@ -86,7 +86,7 @@ configure_distress() {
 
         packageSize="$(get_distress_variable 'udp-packet-size')"
         if [[ -z $packageSize || $packageSize == " "  ]];then
-          packageSize=1420
+          packageSize=4096
         fi
 
         read -e -p "$(trans "Розмір UDP пакунку (576-1420): ")" -i "$packageSize" udp_packet_size
@@ -105,12 +105,12 @@ configure_distress() {
           connCount=30
         fi
 
-        read -e -p "$(trans "Кількість пакетів (1-100): ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
+        read -e -p "$(trans "Кількість пакетів: ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
         if [[ -n "$direct_udp_mixed_flood_packets_per_conn" ]];then
-          while [[ "$direct_udp_mixed_flood_packets_per_conn" -lt 1 || "$direct_udp_mixed_flood_packets_per_conn" -gt 100 ]]
+          while [[ ! $direct_udp_mixed_flood_packets_per_conn =~ ^[0-9]+$ ]]
           do
             echo "$(trans "Будь ласка введіть правильні значення")"
-            read -e -p "$(trans "Кількість пакетів (1-100): ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
+            read -e -p "$(trans "Кількість пакетів: ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
           done
         fi
 
@@ -139,12 +139,12 @@ configure_distress() {
 
     params[use-tor]=$use_tor
 
-    read -e -p "$(trans "Кількість створювачів завдань (50-100000): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
+    read -e -p "$(trans "Кількість створювачів завдань (4096): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
     if [[ -n "$concurrency" ]];then
-      while [[ "$concurrency" -lt 50 || "$concurrency" -gt 100000 ]]
+      while [[ ! $concurrency =~ ^[0-9]+$ ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Кількість створювачів завдань (50-100000): ")" -i "$(get_distress_variable 'concurrency')" concurrency
+        read -e -p "$(trans "Кількість створювачів завдань (4096): ")" -i "$(get_distress_variable 'concurrency')" concurrency
       done
     fi
 
