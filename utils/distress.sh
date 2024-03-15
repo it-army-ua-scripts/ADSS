@@ -107,7 +107,7 @@ configure_distress() {
 
       params[disable-udp-flood]=$disable_udp_flood
 
-      if [[ $disable_udp_flood -gt 1 ]]; then
+      if [[ $disable_udp_flood -gt 0 ]]; then
 
         packageSize="$(get_distress_variable 'udp-packet-size')"
         if [[ -z $packageSize || $packageSize == " "  ]];then
