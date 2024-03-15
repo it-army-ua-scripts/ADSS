@@ -100,6 +100,7 @@ declare -A localization=(
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
+  ["Проксі (шлях до файлу): "]="Proxy (path to file): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
   ["Список проксі у форматі"]="List of proxies in format"
   ["або"]="or"
@@ -111,7 +112,7 @@ declare -A localization=(
   ["Увімкнути ICMP флуд (1 | 0): "]="Enable ICMP flood (1 | 0): "
   ["Увімкнути packet флуд (1 | 0): "]="Enable packet flood (1 | 0): "
   ["Вимкнути UDP флуд (1 | 0): "]="Disable UDP flood (1 | 0): "
-  ["Кількість пакетів (1-100): "]="Number of packets (1 | 0): "
+  ["Кількість пакетів (1-100): "]="Number of packets (1-100): "
 
 
   ["Розмір UDP пакунку (576-1420): "]="UDP packet size (576-1420): "
@@ -138,8 +139,8 @@ declare -A localization=(
 
   ["Назва інтерфейсу (ensXXX, ethX, тощо.)"]="Interface name (ensXXX, ethX, etc.)"
   ["Мережеві інтерфейси (через кому: eth0,eth1,тощо.)"]="Interface names (Comma separated: eth0,eth1,etc.)"
+  ["Мережеві інтерфейси (через пробіл: eth0 eth1 тощо.)"]="Interface names (Space separated: eth0 eth1 etc.)"
   ["Інтерфейс: "]="Interface: "
-  ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
   ["Інтерфейси: "]="Interfaces: "
   ["ADSS успішно видалено"]="ADSS was deleted successfully"
 )

@@ -104,14 +104,18 @@ apply_patch() {
       sed -i '/^\[distress\]/,/^\[\/distress\]/{/direct-udp-mixed-flood=/d}'  "$envFile"
       regenerate_distress_service_file
     fi
-    if ! awk '/\[db1000n\]/,/\[\/db1000n\]/' "$envFile" | grep -q 'disable-udp-flood='; then
+    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'disable-udp-flood='; then
       use_my_ip=$(sed -n '/\[distress\]/,/\[\/distress\]/ s/use-my-ip=\([0-9]\+\)/\1/p' "$envFile")
       if [[ $use_my_ip -eq 0 ]]; then
-        sed -i 's/\[\/db1000n\]/disable-udp-flood=0\n\[\/db1000n\]/g' "$envFile"
+        sed -i 's/\[\/distress\]/disable-udp-flood=0\n\[\/distress\]/g' "$envFile"
       else
-        sed -i 's/\[\/db1000n\]/disable-udp-flood=1\n\[\/db1000n\]/g' "$envFile"
+        sed -i 's/\[\/distress\]/disable-udp-flood=1\n\[\/distress\]/g' "$envFile"
       fi
-      regenerate_db1000n_service_file
+      regenerate_distress_service_file
+    fi
+    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'proxies-path='; then
+      sed -i 's/\[\/distress\]/proxies-path=\n\[\/distress\]/g' "$envFile"
+      regenerate_distress_service_file
     fi
   # for 1.2.2
 }

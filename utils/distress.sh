@@ -161,6 +161,11 @@ configure_distress() {
 
     params[concurrency]=$concurrency
 
+    read -e -p "$(trans "Проксі (шлях до файлу): ")" -i "$(get_distress_variable 'proxies-path')" proxies
+    proxies=$(echo $proxies  | sed 's/\//\\\//g')
+
+    params[proxies-path]=$proxies
+
     echo -ne "\n"
     echo -e "${ORANGE}$(trans "Мережеві інтерфейси (через кому: eth0,eth1,тощо.)")${NC}"
     read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_distress_variable 'interface')" interface
