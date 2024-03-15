@@ -111,7 +111,7 @@ configure_mhddos() {
     params[proxies]=$proxies
 
     echo -ne "\n"
-    echo -e "${ORANGE}$(trans "IP адреса кожного інтерфейсу через пробіл.")${NC}"
+    echo -e "${ORANGE}$(trans "Мережеві інтерфейси (через кому: eth0,eth1,тощо.)")${NC}"
     read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_mhddos_variable 'ifaces')" interface
     if [[ -n "$interface" ]];then
       params[ifaces]=$interface
