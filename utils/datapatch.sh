@@ -8,9 +8,9 @@ apply_patch() {
     sed -i 's/\[\/distress\]/interface=\n\[\/distress\]/g' "$envFile"
   fi
 
-  if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
-    sed -i 's/\[\/mhddos\]/bind=\n\[\/mhddos\]/g' "$envFile"
-  fi
+#  if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
+#    sed -i 's/\[\/mhddos\]/bind=\n\[\/mhddos\]/g' "$envFile"
+#  fi
   # end 1.1.0
 
   # for 1.1.1
@@ -27,10 +27,10 @@ apply_patch() {
   # end 1.1.3
 
   # for 1.1.4
-  if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-failover='; then
-    sed -i 's/direct-udp-failover/direct-udp-mixed-flood/g' "$envFile"
-    regenerate_distress_service_file
-  fi
+#  if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-failover='; then
+#    sed -i 's/direct-udp-failover/direct-udp-mixed-flood/g' "$envFile"
+#    regenerate_distress_service_file
+#  fi
 
   if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'udp-packet-size='; then
     sed -i 's/\[\/distress\]/udp-packet-size=4096\n\[\/distress\]/g' "$envFile"
@@ -79,4 +79,43 @@ apply_patch() {
       regenerate_distress_service_file
   fi
   # for 1.2.1
+
+  # for 1.2.3
+    if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
+      sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/bind=/ifaces=/g' "$envFile"
+      regenerate_mhddos_service_file
+    elif ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'ifaces='; then
+      sed -i 's/\[\/mhddos\]/ifaces=\n\[\/mhddos\]/g' "$envFile"
+      regenerate_mhddos_service_file
+    fi
+    if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-failover='; then
+      sed -i '/\[distress\]/,/\[\/distress\]/ s/direct-udp-failover=/disable-udp-flood=/g' "$envFile"
+      regenerate_distress_service_file
+    fi
+    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'enable-icmp-flood='; then
+      sed -i 's/\[\/distress\]/enable-icmp-flood=\n\[\/distress\]/g' "$envFile"
+      regenerate_distress_service_file
+    fi
+    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'enable-packet-flood='; then
+      sed -i 's/\[\/distress\]/enable-packet-flood=\n\[\/distress\]/g' "$envFile"
+      regenerate_distress_service_file
+    fi
+    if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-failover='; then
+      sed -i '/^\[distress\]/,/^\[\/distress\]/{/direct-udp-failover=/d}'  "$envFile"
+      regenerate_distress_service_file
+    fi
+    if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-mixed-flood='; then
+      sed -i '/^\[distress\]/,/^\[\/distress\]/{/direct-udp-mixed-flood=/d}'  "$envFile"
+      regenerate_distress_service_file
+    fi
+    if ! awk '/\[db1000n\]/,/\[\/db1000n\]/' "$envFile" | grep -q 'disable-udp-flood='; then
+      use_my_ip=$(sed -n '/\[distress\]/,/\[\/distress\]/ s/use-my-ip=\([0-9]\+\)/\1/p' "$envFile")
+      if [[ $use_my_ip -eq 0 ]]; then
+        sed -i 's/\[\/db1000n\]/disable-udp-flood=0\n\[\/db1000n\]/g' "$envFile"
+      else
+        sed -i 's/\[\/db1000n\]/disable-udp-flood=1\n\[\/db1000n\]/g' "$envFile"
+      fi
+      regenerate_db1000n_service_file
+    fi
+  # for 1.2.3
 }
