@@ -107,9 +107,7 @@ declare -A localization=(
   ["Протокол проксі (socks5, socks4): "]="Proxy protocol (socks5, socks4): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
-  ["Вимкнути UDP flood (1 | 0): "]="Disable UDP flood (1 | 0): "
-  ["Увімкнути ICMP flood (1 | 0): "]="Enable ICMP flood (1 | 0): "
-  ["Увімкнути PACKET flood (1 | 0): "]="Enable PACKET flood (1 | 0): "
+  ["Увімкнути UDP flood (1 | 0): "]="Enable UDP flood (1 | 0): "
   ["Розмір UDP пакунку (576-1420): "]="UDP packet size (576-1420): "
   ["Кількість пакетів (1-100): "]="Number of packets (1-100): "
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
