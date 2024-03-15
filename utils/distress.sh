@@ -208,7 +208,9 @@ regenerate_distress_service_file() {
     fi
     if [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'use-my-ip')" == 0  ]]; then
       continue
-    elif [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'disable-udp-flood')" == 0  ]];then
+    elif [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'disable-udp-flood')" == 1  ]]; then
+      value=" "
+    elif [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'disable-udp-flood')" == 0  ]]; then
       continue
     fi
     if [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'disable-udp-flood')" == 1 ]];then
@@ -231,11 +233,15 @@ regenerate_distress_service_file() {
       continue
     elif [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'enable-packet-flood')" == 0 ]]; then
       continue
+    elif [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'enable-packet-flood')" == 1  ]]; then
+      value=" "
     fi
     if [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
       continue
     elif [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'enable-icmp-flood')" == 0 ]];then
       continue
+    elif [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'enable-icmp-flood')" == 1  ]]; then
+      value=" "
     fi
     if [[ "$value" ]]; then
       data["$key"]="$value"
