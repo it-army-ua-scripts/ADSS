@@ -76,11 +76,11 @@ apply_patch() {
   udpPackageSize=$(sed -n '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=\([0-9]\+\)/\1/p' "$envFile")
   if [[ $udpPackageSize -gt 1420 ]]; then
     sed -i '/\[distress\]/,/\[\/distress\]/ s/udp-packet-size=[0-9]\+/udp-packet-size=1252/g' "$envFile"
-      regenerate_distress_service_file
+    regenerate_distress_service_file
   fi
   # for 1.2.1
 
-  # for 1.2.3
+  # for 1.2.2
     if awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'bind='; then
       sed -i '/\[mhddos\]/,/\[\/mhddos\]/ s/bind=/ifaces=/g' "$envFile"
       regenerate_mhddos_service_file
@@ -100,10 +100,6 @@ apply_patch() {
       sed -i 's/\[\/distress\]/enable-packet-flood=\n\[\/distress\]/g' "$envFile"
       regenerate_distress_service_file
     fi
-    if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-failover='; then
-      sed -i '/^\[distress\]/,/^\[\/distress\]/{/direct-udp-failover=/d}'  "$envFile"
-      regenerate_distress_service_file
-    fi
     if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-mixed-flood='; then
       sed -i '/^\[distress\]/,/^\[\/distress\]/{/direct-udp-mixed-flood=/d}'  "$envFile"
       regenerate_distress_service_file
@@ -117,5 +113,5 @@ apply_patch() {
       fi
       regenerate_db1000n_service_file
     fi
-  # for 1.2.3
+  # for 1.2.2
 }

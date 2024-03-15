@@ -71,50 +71,72 @@ configure_distress() {
     params[use-my-ip]=$use_my_ip
 
     if [[ $use_my_ip -gt 0 ]]; then
-      disable_udp_flood=0
-      params[disable-udp-flood]="$disable_udp_flood"
-    else
-      disable_udp_flood=1
-      params[disable-udp-flood]="$disable_udp_flood"
-    fi
 
-    if [[ $disable_udp_flood -eq 0 ]]; then
-
-      packageSize="$(get_distress_variable 'udp-packet-size')"
-      if [[ -z $packageSize || $packageSize == " "  ]];then
-        packageSize=4096
-      fi
-
-      read -e -p "$(trans "Розмір UDP пакунку (576-1420): ")" -i "$packageSize" udp_packet_size
-      if [[ -n "$udp_packet_size" ]];then
-        while [[ "$udp_packet_size" -lt 576 || "$udp_packet_size" -gt 1420 ]]
+      read -e -p "$(trans "Увімкнути ICMP флуд (1 | 0): ")" -i "$(get_distress_variable 'enable-icmp-flood')" enable_icmp_flood
+      if [[ -n "$enable_icmp_flood" ]];then
+        while [[ "$enable_icmp_flood" != "1" && "$enable_icmp_flood" != "0" ]]
         do
           echo "$(trans "Будь ласка введіть правильні значення")"
-          read -e -p "$(trans "Розмір UDP пакунку (576-1420): ")" -i "$packageSize" udp_packet_size
+          read -e -p "$(trans "Увімкнути ICMP флуд (1 | 0): ")" -i "$(get_distress_variable 'enable-icmp-flood')" enable_icmp_flood
         done
       fi
 
-      params[udp-packet-size]=$udp_packet_size
+      params[enable-icmp-flood]=$enable_icmp_flood
 
-      connCount="$(get_distress_variable 'direct-udp-mixed-flood-packets-per-conn')"
-      if [[ -z $connCount || $connCount == " " ]];then
-        connCount=30
-      fi
-
-      read -e -p "$(trans "Кількість пакетів: ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
-      if [[ -n "$direct_udp_mixed_flood_packets_per_conn" ]];then
-        while [[ ! $direct_udp_mixed_flood_packets_per_conn =~ ^[0-9]+$ ]]
+      read -e -p "$(trans "Увімкнути packet флуд (1 | 0): ")" -i "$(get_distress_variable 'enable-packet-flood')" enable_packet_flood
+      if [[ -n "$enable_packet_flood" ]];then
+        while [[ "$enable_packet_flood" != "1" && "$enable_packet_flood" != "0" ]]
         do
           echo "$(trans "Будь ласка введіть правильні значення")"
-          read -e -p "$(trans "Кількість пакетів: ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
+          read -e -p "$(trans "Увімкнути packet флуд (1 | 0): ")" -i "$(get_distress_variable 'enable-packet-flood')" enable_packet_flood
         done
       fi
+      params[enable-packet-flood]=$enable_packet_flood
 
-      params[direct-udp-mixed-flood-packets-per-conn]=$direct_udp_mixed_flood_packets_per_conn
+      read -e -p "$(trans "Вимкнути UDP флуд (1 | 0): ")" -i "$(get_distress_variable 'disable-udp-flood')" disable_udp_flood
+      if [[ -n "$disable_udp_flood" ]];then
+        while [[ "$disable_udp_flood" != "1" && "$disable_udp_flood" != "0" ]]
+        do
+          echo "$(trans "Будь ласка введіть правильні значення")"
+          read -e -p "$(trans "Вимкнути UDP flood (1 | 0): ")" -i "$(get_distress_variable 'disable-udp-flood')" disable_udp_flood
+        done
+      fi
+      params[disable-udp-flood]=$disable_udp_flood
 
-    else
-      params[direct-udp-mixed-flood-packets-per-conn]=" "
-      params[udp-packet-size]=" "
+      if [[ "$disable_udp_flood" -eq 0 ]];then
+        packageSize="$(get_distress_variable 'udp-packet-size')"
+        if [[ -z $packageSize || $packageSize == " "  ]];then
+          packageSize=1420
+        fi
+
+        read -e -p "$(trans "Розмір UDP пакунку (576-1420): ")" -i "$packageSize" udp_packet_size
+        if [[ -n "$udp_packet_size" ]];then
+          while [[ "$udp_packet_size" -lt 576 || "$udp_packet_size" -gt 1420 ]]
+          do
+            echo "$(trans "Будь ласка введіть правильні значення")"
+            read -e -p "$(trans "Розмір UDP пакунку (576-1420): ")" -i "$packageSize" udp_packet_size
+          done
+        fi
+
+        params[udp-packet-size]=$udp_packet_size
+
+        connCount="$(get_distress_variable 'direct-udp-mixed-flood-packets-per-conn')"
+        if [[ -z $connCount || $connCount == " " ]];then
+          connCount=30
+        fi
+
+        read -e -p "$(trans "Кількість пакетів (1-100): ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
+        if [[ -n "$direct_udp_mixed_flood_packets_per_conn" ]];then
+          while [[ $direct_udp_mixed_flood_packets_per_conn -lt 0 || $direct_udp_mixed_flood_packets_per_conn -gt 100 ]]
+          do
+            echo "$(trans "Будь ласка введіть правильні значення")"
+            read -e -p "$(trans "Кількість пакетів (1-100): ")" -i $connCount direct_udp_mixed_flood_packets_per_conn
+          done
+        fi
+
+        params[direct-udp-mixed-flood-packets-per-conn]=$direct_udp_mixed_flood_packets_per_conn
+
+      fi
     fi
 
     read -e -p "$(trans "Кількість підключень Tor (0-100): ")"  -i "$(get_distress_variable 'use-tor')" use_tor
@@ -128,20 +150,20 @@ configure_distress() {
 
     params[use-tor]=$use_tor
 
-    read -e -p "$(trans "Кількість створювачів завдань (4096): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
+    read -e -p "$(trans "Кількість створювачів завдань (50-100000): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
     if [[ -n "$concurrency" ]];then
-      while [[ ! $concurrency =~ ^[0-9]+$ ]]
+      while [[ $concurrency -lt 50 || $concurrency -gt 100000 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Кількість створювачів завдань (4096): ")" -i "$(get_distress_variable 'concurrency')" concurrency
+        read -e -p "$(trans "Кількість створювачів завдань (50-100000): ")" -i "$(get_distress_variable 'concurrency')" concurrency
       done
     fi
 
     params[concurrency]=$concurrency
 
     echo -ne "\n"
-    echo -e "${ORANGE}$(trans "Назва інтерфейсу (ensXXX, ethX, тощо.)")${NC}"
-    read -e -p "$(trans "Інтерфейс: ")"  -i "$(get_distress_variable 'interface')" interface
+    echo -e "${ORANGE}$(trans "Мережеві інтерфейси (через кому: eth0,eth1,тощо.)")${NC}"
+    read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_distress_variable 'interface')" interface
     if [[ -n "$interface" ]];then
       params[interface]=$interface
     else
@@ -175,6 +197,7 @@ regenerate_distress_service_file() {
 
   start="ExecStart=${SCRIPT_DIR}/bin/distress"
 
+  declare -A data
   while read -r line
   do
     key=$(echo "$line"  | cut -d '=' -f1)
@@ -183,18 +206,20 @@ regenerate_distress_service_file() {
     if [[ "$key" = "[distress]" || "$key" = "[/distress]" ]]; then
       continue
     fi
-    if [[ "$key" == 'disable-udp-flood' ]];then
-      if [[ "$value" == 0 ]]; then
-        continue
-      elif [[ "$value" == 1 ]]; then
-        value=" "
-      fi
+    if [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'use-my-ip')" == 0  ]]; then
+      continue
+    elif [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'disable-udp-flood')" == 0  ]];then
+      continue
     fi
-    if [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'disable-udp-flood')" == 0 ]];then
-        continue
+    if [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'disable-udp-flood')" == 1 ]];then
+      continue
+    elif [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'use-my-ip')" == 0  ]];then
+      continue
     fi
-    if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'disable-udp-flood')" == 0 ]];then
-        continue
+    if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'disable-udp-flood')" == 1 ]];then
+      continue
+    elif [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'use-my-ip')" == 0  ]]; then
+      continue
     fi
     if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
       continue
@@ -202,10 +227,23 @@ regenerate_distress_service_file() {
     if [[ "$key" == 'use-tor' && "$(get_distress_variable 'use-tor')" == 0 ]];then
       continue
     fi
+    if [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
+      continue
+    elif [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'enable-packet-flood')" == 0 ]]; then
+      continue
+    fi
+    if [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
+      continue
+    elif [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'enable-icmp-flood')" == 0 ]];then
+      continue
+    fi
     if [[ "$value" ]]; then
-      start="$start --$key $value"
+      data["$key"]="$value"
     fi
   done <<< "$lines"
+  for key in "${!data[@]}"; do
+    start="$start --$key ${data[$key]}"
+  done
   start=$(echo $start  | sed 's/\//\\\//g')
 
   sed -i  "s/ExecStart=.*/$start/g" "${SCRIPT_DIR}"/services/distress.service
@@ -235,11 +273,7 @@ distress_auto_disable() {
 }
 
 distress_enabled() {
-  if sudo systemctl is-enabled distress >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+  sudo systemctl is-enabled distress >/dev/null 2>&1 && return 0 || return 1
 }
 
 distress_stop() {
