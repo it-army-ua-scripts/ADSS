@@ -93,11 +93,11 @@ apply_patch() {
       regenerate_distress_service_file
     fi
     if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'enable-icmp-flood='; then
-      sed -i 's/\[\/distress\]/enable-icmp-flood=\n\[\/distress\]/g' "$envFile"
+      sed -i 's/\[\/distress\]/enable-icmp-flood=0\n\[\/distress\]/g' "$envFile"
       regenerate_distress_service_file
     fi
     if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'enable-packet-flood='; then
-      sed -i 's/\[\/distress\]/enable-packet-flood=\n\[\/distress\]/g' "$envFile"
+      sed -i 's/\[\/distress\]/enable-packet-flood=0\n\[\/distress\]/g' "$envFile"
       regenerate_distress_service_file
     fi
     if awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'direct-udp-mixed-flood='; then
