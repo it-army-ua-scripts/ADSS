@@ -211,43 +211,70 @@ regenerate_distress_service_file() {
     if [[ "$key" = "[distress]" || "$key" = "[/distress]" ]]; then
       continue
     fi
-    if [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'use-my-ip')" == 0  ]]; then
-      continue
-    elif [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'disable-udp-flood')" == 1  ]]; then
-      value=" "
-    elif [[ "$key" == 'disable-udp-flood' && "$(get_distress_variable 'disable-udp-flood')" == 0  ]]; then
-      continue
+    if [[ "$key" == 'disable-udp-flood' ]]; then
+      if [[ "$(get_distress_variable 'use-my-ip')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'disable-udp-flood')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'disable-udp-flood')" == 1 ]]; then
+        value=" "
+        #end result will be just "--disable-udp-flood "
+      fi
     fi
-    if [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'disable-udp-flood')" == 1 ]];then
-      continue
-    elif [[ "$key" == 'udp-packet-size' && "$(get_distress_variable 'use-my-ip')" == 0  ]];then
-      continue
+
+    if [[ "$key" == 'udp-packet-size' ]]; then
+      if [[ "$(get_distress_variable 'use-my-ip')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'disable-udp-flood')" == 1 ]]; then
+        continue
+      fi
     fi
-    if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'disable-udp-flood')" == 1 ]];then
-      continue
-    elif [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' && "$(get_distress_variable 'use-my-ip')" == 0  ]]; then
-      continue
+
+    if [[ "$key" == 'direct-udp-mixed-flood-packets-per-conn' ]]; then
+      if [[ "$(get_distress_variable 'use-my-ip')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'disable-udp-flood')" == 1 ]]; then
+        continue
+      fi
     fi
+
+    if [[ "$key" == 'enable-packet-flood' ]]; then
+      if [[ "$(get_distress_variable 'use-my-ip')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'enable-packet-flood')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'enable-packet-flood')" == 1 ]]; then
+        value=" "
+        #end result will be just "--enable-packet-flood "
+      fi
+    fi
+
+    if [[ "$key" == 'enable-icmp-flood' ]]; then
+      if [[ "$(get_distress_variable 'use-my-ip')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'enable-icmp-flood')" == 0 ]]; then
+        continue
+      fi
+      if [[ "$(get_distress_variable 'enable-icmp-flood')" == 1 ]]; then
+        value=" "
+        #end result will be just "--enable-icmp-flood "
+      fi
+    fi
+
     if [[ "$key" == 'use-my-ip' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
       continue
     fi
     if [[ "$key" == 'use-tor' && "$(get_distress_variable 'use-tor')" == 0 ]];then
       continue
     fi
-    if [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
-      continue
-    elif [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'enable-packet-flood')" == 0 ]]; then
-      continue
-    elif [[ "$key" == 'enable-packet-flood' && "$(get_distress_variable 'enable-packet-flood')" == 1  ]]; then
-      value=" "
-    fi
-    if [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'use-my-ip')" == 0 ]];then
-      continue
-    elif [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'enable-icmp-flood')" == 0 ]];then
-      continue
-    elif [[ "$key" == 'enable-icmp-flood' && "$(get_distress_variable 'enable-icmp-flood')" == 1  ]]; then
-      value=" "
-    fi
+
     if [[ "$value" ]]; then
       data["$key"]="$value"
     fi
