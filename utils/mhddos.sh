@@ -112,7 +112,7 @@ configure_mhddos() {
     params[proxies]=$proxies
 
     echo -ne "\n"
-    echo -e "${ORANGE}$(trans "IP адреса кожного інтерфейсу через пробіл.")${NC}"
+    echo -e "${ORANGE}$(trans "Мережеві інтерфейси (через пробіл: eth0 eth1 тощо.)")${NC}"
     read -e -p "$(trans "Інтерфейси: ")"  -i "$(get_mhddos_variable 'ifaces')" interface
     if [[ -n "$interface" ]];then
       params[ifaces]=$interface
@@ -190,11 +190,7 @@ mhddos_auto_disable() {
  confirm_dialog "$(trans "MHDDOS видалено з автозавантаження")"
 }
 mhddos_enabled() {
-  if sudo systemctl is-enabled mhddos >/dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
+  sudo systemctl is-enabled mhddos >/dev/null 2>&1  && return 0 || return 1
 }
 
 mhddos_stop() {
