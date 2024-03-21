@@ -100,18 +100,24 @@ declare -A localization=(
   ["Автооновлення (1 | 0): "]="Autoupdate (1 | 0): "
   ["Будь ласка введіть правильні значення"]="Please enter the correct values"
   ["Проксі (шлях до файлу або веб-ресурсу): "]="Proxy (path to file or web resource): "
+  ["Проксі (шлях до файлу): "]="Proxy (path to file): "
   ["Масштабування (1 | X): "]="Scaling (1 | X): "
   ["Список проксі у форматі"]="List of proxies in format"
   ["або"]="or"
   ["Укажіть протокол, якщо формат"]="Specify the protocol if the format is"
-  ["Протокол проксі (socks5, socks4, http): "]="Proxy protocol (socks5, socks4, http): "
+  ["Протокол проксі (socks5, socks4): "]="Proxy protocol (socks5, socks4): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
-  ["Увімкнути UDP flood (1 | 0): "]="Enable UDP flood (1 | 0): "
+
+  ["Увімкнути ICMP флуд (1 | 0): "]="Enable ICMP flood (1 | 0): "
+  ["Увімкнути packet флуд (1 | 0): "]="Enable packet flood (1 | 0): "
+  ["Вимкнути UDP флуд (1 | 0): "]="Disable UDP flood (1 | 0): "
+  ["Кількість пакетів (1-100): "]="Number of packets (1-100): "
+
+
   ["Розмір UDP пакунку (576-1420): "]="UDP packet size (576-1420): "
-  ["Кількість пакетів: "]="Number of packets: "
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
-  ["Кількість створювачів завдань (4096): "]="Number of task creators (4096): "
+  ["Кількість створювачів завдань (50-100000): "]="Number of task creators (50-100000): "
 
   ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="There's no MHDDOS implementation for the x86 architecture that corresponds to the 32-bit variant"
   ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bit depth"
@@ -125,7 +131,7 @@ declare -A localization=(
   ["Наразі всі порти розширено"]="All ports are currently extended"
   ["Не можливо виконати дію"]="Unable to perform the action"
 
-  ["Перевіряємо наявленість оновлень"]="Checking for updates"
+  ["Перевіряємо наявність оновлень"]="Checking for updates"
   ["Оновляємо ADSS"]="Updating ADSS"
   ["ADSS успішно оновлено"]="ADSS updated successfully"
   ["Встановлена версія"]="Installed Version"
@@ -133,8 +139,8 @@ declare -A localization=(
 
   ["Назва інтерфейсу (ensXXX, ethX, тощо.)"]="Interface name (ensXXX, ethX, etc.)"
   ["Мережеві інтерфейси (через кому: eth0,eth1,тощо.)"]="Interface names (Comma separated: eth0,eth1,etc.)"
+  ["Мережеві інтерфейси (через пробіл: eth0 eth1 тощо.)"]="Interface names (Space separated: eth0 eth1 etc.)"
   ["Інтерфейс: "]="Interface: "
-  ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
   ["Інтерфейси: "]="Interfaces: "
   ["ADSS успішно видалено"]="ADSS was deleted successfully"
 )

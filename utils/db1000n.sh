@@ -206,12 +206,7 @@ db1000n_get_status() {
 }
 
 db1000n_installed() {
-  if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
-      confirm_dialog "$(trans "DB1000N не встановлений, будь ласка встановіть і спробуйте знову")"
-      return 1
-  else
-      return 0
-  fi
+  sudo systemctl is-enabled db1000n >/dev/null 2>&1 && return 0 || return 1
 }
 
 initiate_db1000n() {
