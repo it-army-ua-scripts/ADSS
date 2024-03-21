@@ -107,11 +107,16 @@ declare -A localization=(
   ["Протокол проксі (socks5, socks4, http): "]="Proxy protocol (socks5, socks4, http): "
 
   ["Відсоткове співвідношення використання власної IP адреси (0-100): "]="Percentage of personal IP address usage (0-100): "
-  ["Увімкнути UDP flood (1 | 0): "]="Enable UDP flood (1 | 0): "
+
+  ["Увімкнути ICMP флуд (1 | 0): "]="Enable ICMP flood (1 | 0): "
+  ["Увімкнути packet флуд (1 | 0): "]="Enable packet flood (1 | 0): "
+  ["Вимкнути UDP флуд (1 | 0): "]="Disable UDP flood (1 | 0): "
+  ["Кількість пакетів (1-100): "]="Number of packets (1-100): "
+  ["Проксі (шлях до файлу): "]="Proxy (path to file): "
   ["Розмір UDP пакунку (576-1420): "]="UDP packet size (576-1420): "
-  ["Кількість пакетів: "]="Number of packets: "
+
   ["Кількість підключень Tor (0-100): "]="Number of Tor connections (0-100): "
-  ["Кількість створювачів завдань (4096): "]="Number of task creators (4096): "
+  ["Кількість створювачів завдань (50-100000): "]="Number of task creators (50-100000): "
 
   ["Відсутня реалізація MHDDOS для x86 архітектури, що відповідає 32-бітній розрядності"]="There's no MHDDOS implementation for the x86 architecture that corresponds to the 32-bit variant"
   ["Неможливо визначити розрядность операційної системи"]="Unable to determine the operating system's bit depth"
@@ -134,7 +139,7 @@ declare -A localization=(
   ["Назва інтерфейсу (ensXXX, ethX, тощо.)"]="Interface name (ensXXX, ethX, etc.)"
   ["Інтерфейс: "]="Interface: "
   ["Мережеві інтерфейси (через кому: eth0,eth1,тощо.)"]="Interface names (Comma separated: eth0,eth1,etc.)"
-  ["IP адреса кожного інтерфейсу через пробіл."]="IP addresses of each interface, space separated."
+  ["Мережеві інтерфейси (через пробіл: eth0 eth1 тощо.)"]="Interface names (Space separated: eth0 eth1 etc.)"
   ["Інтерфейси: "]="Interfaces: "
   ["ADSS успішно видалено"]="ADSS was deleted successfully"
 )
