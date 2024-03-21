@@ -5,11 +5,14 @@ install_distress() {
 
     install() {
         cd $TOOL_DIR
-        OSARCH=$(uname -m)
         package=''
         case "$OSARCH" in
           aarch64*)
             package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_aarch64-unknown-linux-musl
+          ;;
+
+          armv6* | armv7* | armv8*)
+            package=https://github.com/Yneth/distress-releases/releases/latest/download/distress_arm-unknown-linux-musleabi
           ;;
 
           x86_64*)
@@ -39,27 +42,36 @@ configure_distress() {
     clear
     declare -A params;
 
-    echo -e "${GRAY}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
+    echo -e "${ORANGE}$(trans "Залишіть пустим якщо бажаєте видалити пераметри")${NC}"
     echo -ne "\n"
     echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
     echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
     echo -ne "\n"
     read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
+    if [[ -n "$user_id" ]];then
+      while [[ ! $user_id =~ ^[0-9]+$ ]]
+      do
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Юзер ІД: ")" -i "$(get_distress_variable 'user-id')" user_id
+      done
+    fi
 
     params[user-id]=$user_id
 
     read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
+
     if [[ -n "$use_my_ip" ]]; then
       while [[ $use_my_ip -lt 0 || $use_my_ip -gt 100 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
         read -e -p "$(trans "Відсоткове співвідношення використання власної IP адреси (0-100): ")" -i "$(get_distress_variable 'use-my-ip')" use_my_ip
       done
-    fi
 
+    fi
     params[use-my-ip]=$use_my_ip
 
     if [[ $use_my_ip -gt 0 ]]; then
+
       read -e -p "$(trans "Увімкнути ICMP флуд (1 | 0): ")" -i "$(get_distress_variable 'enable-icmp-flood')" enable_icmp_flood
       if [[ -n "$enable_icmp_flood" ]];then
         while [[ "$enable_icmp_flood" != "1" && "$enable_icmp_flood" != "0" ]]
@@ -81,7 +93,6 @@ configure_distress() {
       fi
       params[enable-packet-flood]=$enable_packet_flood
 
-
       read -e -p "$(trans "Вимкнути UDP флуд (1 | 0): ")" -i "$(get_distress_variable 'disable-udp-flood')" disable_udp_flood
       if [[ -n "$disable_udp_flood" ]];then
         while [[ "$disable_udp_flood" != "1" && "$disable_udp_flood" != "0" ]]
@@ -93,7 +104,6 @@ configure_distress() {
       params[disable-udp-flood]=$disable_udp_flood
 
       if [[ "$disable_udp_flood" -eq 0 ]];then
-
         packageSize="$(get_distress_variable 'udp-packet-size')"
         if [[ -z $packageSize || $packageSize == " "  ]];then
           packageSize=1420
@@ -125,9 +135,9 @@ configure_distress() {
         fi
 
         params[direct-udp-mixed-flood-packets-per-conn]=$direct_udp_mixed_flood_packets_per_conn
+
       fi
     fi
-
 
     read -e -p "$(trans "Кількість підключень Tor (0-100): ")"  -i "$(get_distress_variable 'use-tor')" use_tor
     if [[ -n "$use_tor" ]];then
@@ -145,7 +155,7 @@ configure_distress() {
       while [[ $concurrency -lt 50 || $concurrency -gt 100000 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Кількість створювачів завдань (50-100000): ")"  -i "$(get_distress_variable 'concurrency')" concurrency
+        read -e -p "$(trans "Кількість створювачів завдань (50-100000): ")" -i "$(get_distress_variable 'concurrency')" concurrency
       done
     fi
 
@@ -191,6 +201,7 @@ regenerate_distress_service_file() {
   lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
   start="ExecStart=${SCRIPT_DIR}/bin/distress"
+
   declare -A data
   while read -r line
   do
@@ -200,7 +211,6 @@ regenerate_distress_service_file() {
     if [[ "$key" = "[distress]" || "$key" = "[/distress]" ]]; then
       continue
     fi
-
     if [[ "$key" == 'disable-udp-flood' ]]; then
       if [[ "$(get_distress_variable 'use-my-ip')" == 0 ]]; then
         continue
