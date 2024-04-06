@@ -182,6 +182,7 @@ regenerate_db1000n_service_file() {
 db1000n_run() {
   sudo systemctl stop mhddos.service >/dev/null 2>&1
   sudo systemctl stop distress.service >/dev/null 2>&1
+  x100_stop
   sudo systemctl start db1000n.service >/dev/null 2>&1
 }
 
@@ -191,6 +192,7 @@ db1000n_stop() {
 db1000n_auto_enable() {
   sudo systemctl disable mhddos.service >/dev/null 2>&1
   sudo systemctl disable distress.service >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
   sudo systemctl enable db1000n >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DB1000N додано до автозавантаження")"

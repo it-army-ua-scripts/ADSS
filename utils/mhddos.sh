@@ -173,12 +173,14 @@ mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
   sudo systemctl stop distress.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
+  x100_stop
   sudo systemctl start mhddos.service >/dev/null 2>&1
 }
 
 mhddos_auto_enable() {
   sudo systemctl disable distress.service >/dev/null 2>&1
   sudo systemctl disable db1000n.service >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
   sudo systemctl enable mhddos.service >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "MHDDOS додано до автозавантаження")"

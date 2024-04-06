@@ -27,7 +27,17 @@ autoload_configuration() {
   else
     distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
   fi
-  menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" "$(trans "Повернутись назад")")
+  menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" )
+  if x100_installed; then
+    if x100_enabled; then
+      x100_item_menu="$(trans "Вимкнути автозапуск X100")"
+    else
+      x100_item_menu="$(trans "Увімкнути автозапуск X100")"
+    fi
+    menu_items+=("$x100_item_menu")
+  fi
+  menu_items+=("$(trans "Повернутись назад")")
+
   res=$(display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}")
 
   case "$res" in
@@ -53,6 +63,14 @@ autoload_configuration() {
     ;;
   "$(trans "Увімкнути автозапуск DISTRESS")")
     distress_auto_enable
+    autoload_configuration
+    ;;
+  "$(trans "Вимкнути автозапуск X100")")
+    x100_auto_disable
+    autoload_configuration
+    ;;
+  "$(trans "Увімкнути автозапуск X100")")
+    x100_auto_enable
     autoload_configuration
     ;;
   "$(trans "Повернутись назад")")

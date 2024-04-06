@@ -266,12 +266,14 @@ distress_run() {
   sudo rm -rf /tmp/distress >/dev/null 2>&1
   sudo systemctl stop mhddos.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
+  x100_stop
   sudo systemctl start distress.service >/dev/null 2>&1
 }
 
 distress_auto_enable() {
   sudo systemctl disable mhddos.service >/dev/null 2>&1
   sudo systemctl disable db1000n.service >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
   sudo systemctl enable distress >/dev/null 2>&1
   create_symlink
   confirm_dialog "$(trans "DISTRESS додано до автозавантаження")"

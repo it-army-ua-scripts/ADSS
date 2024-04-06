@@ -24,6 +24,10 @@ create_symlink() {
   if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
     sudo ln -sf "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
   fi
+
+  if [ ! -L "/etc/systemd/system/x100.service" ]; then
+    sudo ln -sf "$SCRIPT_DIR"/services/x100.service /etc/systemd/system/x100.service >/dev/null 2>&1
+  fi
 }
 
 stop_services() {
@@ -36,7 +40,7 @@ stop_services() {
 }
 
 get_ddoss_status() {
-  services=("mhddos" "distress" "db1000n")
+  services=("mhddos" "distress" "db1000n", "x100")
   service=""
 
   for element in "${services[@]}"; do
