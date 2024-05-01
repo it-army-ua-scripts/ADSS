@@ -37,9 +37,37 @@ x100_get_status() {
   read -s -n 1 key
   initiate_x100
 }
+
 docker_installed() {
   docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
 }
+
+install_docker() {
+  if [ -r /etc/os-release ]; then
+    clear
+    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo service docker start
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+  else
+    echo -e "${RED}Неможливо визначити операційну систему/Unable to determine operating system${NC}"
+  fi
+}
+
 initiate_x100() {
    x100_installed
    if [[ $? == 1 ]]; then
@@ -47,19 +75,21 @@ initiate_x100() {
       res=$(display_menu "$(trans "X100 не встановлений, встановити?")" "${menu_items[@]}")
       case "$res" in
         "$(trans "Так")")
+          confirm_dialog "$(trans "Встановлюємо Х100")"
           install_x100
+          confirm_dialog "$(trans "Х100 успішно встановлено")"
+          docker_installed
+          if [[ $? == 1 ]]; then
+            confirm_dialog "$(trans "Встановлюємо докер")"
+            install_docker
+            confirm_dialog "$(trans "Докер успішно встановлено")"
+          fi
         ;;
         "$(trans "Ні")")
           ddos_tool_managment
         ;;
       esac
-      exit 0
-   fi
-   docker_installed
-   if [[ $? == 1 ]]; then
-     confirm_dialog "$(trans "Докер не встановлений або не запущений. Будь ласка виправте це і спробуйте знову")"
-     ddos_tool_managment
-     exit 0
+#      exit 0
    fi
   if sudo systemctl is-active x100 >/dev/null 2>&1; then
     active_disactive="$(trans "Зупинка X100")"
@@ -80,7 +110,7 @@ initiate_x100() {
    ;;
    "$(trans "Налаштування X100")")
      confirm_dialog "$(trans "Даний функціонал ще в розробці")"
-     ddos_tool_managment
+     initiate_x100
    ;;
    "$(trans "Статус X100")")
      x100_get_status
@@ -142,5 +172,4 @@ install_x100() {
 
     echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
     read -s -n 1 key
-    initiate_x100
 }
