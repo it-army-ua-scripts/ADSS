@@ -50,6 +50,7 @@ install_docker() {
     sudo service docker enable
     sudo groupadd docker
     sudo usermod -aG docker $USER
+    newgrp docker
   else
     echo -e "${RED}Неможливо визначити операційну систему/Unable to determine operating system${NC}"
   fi
