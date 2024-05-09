@@ -63,9 +63,9 @@ get_ddoss_status() {
 	  
       if [[ "$lsb_id" == "ubuntu" ]] &&
          [[ "$lsb_version" < 19* ]]; then
-        journalctl -n 20 -u "$service.service" --no-pager
+        journalctl -n 200 -u "$service.service" --no-pager
       else
-        tail --lines=20 /var/log/adss.log
+        tail --lines=200 /var/log/adss.log
       fi
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
