@@ -129,7 +129,7 @@ install_x100() {
     chmod -R ug+x "./for-macOS-and-Linux-hosts"
 
     echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
-    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stat_bot${NC}""\n"
+    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stats_bot${NC}""\n"
     echo -ne "\n"
     read -e -p "$(trans "Юзер ІД: ")"  user_id
 
