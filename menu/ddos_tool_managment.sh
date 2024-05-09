@@ -24,6 +24,10 @@ create_symlink() {
   if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
     sudo ln -sf "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
   fi
+
+  if [ ! -L "/etc/systemd/system/x100.service" ]; then
+    sudo ln -sf "$SCRIPT_DIR"/services/x100.service /etc/systemd/system/x100.service >/dev/null 2>&1
+  fi
 }
 
 stop_services() {
@@ -36,7 +40,7 @@ stop_services() {
 }
 
 get_ddoss_status() {
-  services=("mhddos" "distress" "db1000n")
+  services=("mhddos" "distress" "db1000n", "x100")
   service=""
 
   for element in "${services[@]}"; do
@@ -60,16 +64,21 @@ get_ddoss_status() {
       #Fix Ubuntu < 19
       lsb_version="$(. /etc/os-release && echo "$VERSION_ID")"
       lsb_id="$(. /etc/os-release && echo "$ID")"
-	  
+
       if [[ "$lsb_id" == "ubuntu" ]] &&
          [[ "$lsb_version" < 19* ]]; then
-        journalctl -n 200 -u "$service.service" --no-pager
+        journalctl -n 20 -u "$service.service" --no-pager
       else
-        tail --lines=200 /var/log/adss.log
+        if [[ $service == "x100" ]]; then
+          tail --lines=20 "$SCRIPT_DIR/x100-for-docker/put-your-ovpn-files-here/x100-log-short.txt"
+        else
+          tail --lines=20 /var/log/adss.log
+        fi
       fi
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
 
+      sleep 3
       if read -rsn1 -t 0.1; then
         break
       fi
@@ -110,7 +119,7 @@ ddos_tool_managment() {
   if [[ $? == 1 ]]; then
     menu_items+=("MHDDOS")
   fi
-  menu_items+=("DB1000N" "DISTRESS" "$(trans "Повернутись назад")")
+  menu_items+=("DB1000N" "DISTRESS" "X100" "$(trans "Повернутись назад")")
   res=$(display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}")
 
   case "$res" in
@@ -133,6 +142,9 @@ ddos_tool_managment() {
   "DISTRESS")
     initiate_distress
     ;;
+  "X100")
+    initiate_x100
+  ;;
   "$(trans "Повернутись назад")")
     ddos
     ;;
