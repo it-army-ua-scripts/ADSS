@@ -69,7 +69,11 @@ get_ddoss_status() {
          [[ "$lsb_version" < 19* ]]; then
         journalctl -n 20 -u "$service.service" --no-pager
       else
-        tail --lines=20 /var/log/adss.log
+        if [[ $service == "x100" ]]; then
+          tail --lines=20 "$SCRIPT_DIR/x100-for-docker/put-your-ovpn-files-here/x100-log-short.txt"
+        else
+          tail --lines=20 /var/log/adss.log
+        fi
       fi
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
