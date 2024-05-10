@@ -58,7 +58,7 @@ get_ddoss_status() {
       journalctl -n 20 -u "$service.service" --no-pager
 
       echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
-
+      sleep 3
       if read -rsn1 -t 0.1; then
         break
       fi
