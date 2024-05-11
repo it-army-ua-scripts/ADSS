@@ -303,7 +303,6 @@ distress_get_status() {
 
 distress_installed() {
   if [[ ! -f "$TOOL_DIR/distress" ]]; then
-      confirm_dialog "$(trans "DISTRESS не встановлений, будь ласка встановіть і спробуйте знову")"
       return 1
   else
       return 0
@@ -313,6 +312,7 @@ distress_installed() {
 initiate_distress() {
    distress_installed
    if [[ $? == 1 ]]; then
+    confirm_dialog "$(trans "DISTRESS не встановлений, будь ласка встановіть і спробуйте знову")"
     ddos_tool_managment
   else
       if sudo systemctl is-active distress >/dev/null 2>&1; then

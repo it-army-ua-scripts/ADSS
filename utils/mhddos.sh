@@ -208,7 +208,6 @@ mhddos_get_status() {
 }
 mhddos_installed() {
   if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
-      confirm_dialog "$(trans "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову")"
       return 1
   else
       return 0
@@ -226,6 +225,7 @@ is_not_arm_arch() {
 initiate_mhddos() {
   mhddos_installed
   if [[ $? == 1 ]]; then
+    confirm_dialog "$(trans "MHDDOS не встановлений, будь ласка встановіть і спробуйте знову")"
     ddos_tool_managment
   else
       if sudo systemctl is-active mhddos >/dev/null 2>&1; then

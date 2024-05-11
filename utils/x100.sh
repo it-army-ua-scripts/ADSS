@@ -31,10 +31,17 @@ x100_stop() {
 }
 
 x100_get_status() {
-  clear
-  sudo systemctl status x100.service
-  echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
-  read -s -n 1 key
+  while true; do
+    clear
+    st=$(sudo systemctl status x100.service)
+    echo "$st"
+    echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
+    sleep 3
+    if read -rsn1 -t 0.1; then
+      break
+    fi
+  done
+
   initiate_x100
 }
 
@@ -46,11 +53,12 @@ install_docker() {
   if [ -r /etc/os-release ]; then
     clear
     sudo apt install -y docker.io
+    if ! grep -q docker /etc/group; then
+      sudo groupadd docker
+      sudo usermod -aG docker $USER
+    fi
     sudo service docker start
-    sudo service docker enable
-    sudo groupadd docker
-    sudo usermod -aG docker $USER
-    newgrp docker
+    sudo systemctl enable docker
   else
     echo -e "${RED}Неможливо визначити операційну систему/Unable to determine operating system${NC}"
   fi
@@ -66,18 +74,17 @@ initiate_x100() {
           confirm_dialog "$(trans "Встановлюємо Х100")"
           install_x100
           confirm_dialog "$(trans "Х100 успішно встановлено")"
-          docker_installed
-          if [[ $? == 1 ]]; then
-            confirm_dialog "$(trans "Встановлюємо докер")"
-            install_docker
-            confirm_dialog "$(trans "Докер успішно встановлено")"
-          fi
         ;;
         "$(trans "Ні")")
           ddos_tool_managment
         ;;
       esac
-#      exit 0
+   fi
+   docker_installed
+   if [[ $? == 1 ]]; then
+     confirm_dialog "$(trans "Встановлюємо докер")"
+     install_docker
+     confirm_dialog "$(trans "Докер успішно встановлено")"
    fi
   if sudo systemctl is-active x100 >/dev/null 2>&1; then
     active_disactive="$(trans "Зупинка X100")"
@@ -97,7 +104,7 @@ initiate_x100() {
      x100_get_status
    ;;
    "$(trans "Налаштування X100")")
-     confirm_dialog "$(trans "Даний функціонал ще в розробці")"
+     configure_x100
      initiate_x100
    ;;
    "$(trans "Статус X100")")
@@ -107,6 +114,39 @@ initiate_x100() {
      ddos_tool_managment
    ;;
   esac
+}
+
+configure_x100() {
+    clear
+    echo -ne "${GREEN}$(trans "Для збору особистої статистики та відображення у лідерборді на офіційному сайті.")${NC} ${ORANGE}https://itarmy.com.ua/leaderboard ${NC}""\n"
+    echo -ne "${GREEN}$(trans "Надається Telegram ботом")${NC} ${ORANGE}@itarmy_stats_bot${NC}""\n"
+    echo -ne "\n"
+    read -e -p "$(trans "Юзер ІД: ")" -i "$(get_x100_variable 'itArmyUserId')"  user_id
+
+    configPath="$SCRIPT_DIR/x100-for-docker/put-your-ovpn-files-here/x100-config.txt"
+
+    sed -i -e "s/itArmyUserId=$(get_x100_variable 'itArmyUserId')/itArmyUserId=$user_id/g" "$configPath"
+
+    read -e -p "$(trans "Initial Distress Scale (0-100): ")" -i "$(get_x100_variable 'initialDistressScale')"  scale
+    if [[ -n "$scale" ]];then
+      while [[ $scale -lt 0 || $scale -gt 100 ]]
+      do
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Initial Distress Scale (0-100): ")" -i "$(get_x100_variable 'initialDistressScale')" scale
+      done
+    fi
+    sed -i -e "s/initialDistressScale=$(get_x100_variable 'initialDistressScale')/initialDistressScale=$scale/g" "$configPath"
+    if systemctl is-active --quiet x100.service; then
+        sudo systemctl restart x100.service >/dev/null 2>&1
+    fi
+    confirm_dialog "$(trans "Успішно виконано")"
+}
+
+get_x100_variable() {
+  configPath="$SCRIPT_DIR/x100-for-docker/put-your-ovpn-files-here/x100-config.txt"
+  local lines=$(cat $configPath)
+  local variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
 }
 
 x100_installed() {

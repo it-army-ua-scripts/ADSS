@@ -218,7 +218,6 @@ db1000n_get_status() {
 
 db1000n_installed() {
   if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
-      confirm_dialog "$(trans "DB1000N не встановлений, будь ласка встановіть і спробуйте знову")"
       return 1
   else
       return 0
@@ -228,6 +227,7 @@ db1000n_installed() {
 initiate_db1000n() {
   db1000n_installed
   if [[ $? == 1 ]]; then
+    confirm_dialog "$(trans "DB1000N не встановлений, будь ласка встановіть і спробуйте знову")"
     ddos_tool_managment
   else
       if sudo systemctl is-active db1000n >/dev/null 2>&1; then

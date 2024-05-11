@@ -13,21 +13,15 @@ check_enabled() {
 }
 
 create_symlink() {
-  if [ ! -L "/etc/systemd/system/mhddos.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service >/dev/null 2>&1
-  fi
+  sudo rm -f /etc/systemd/system/mhddos.service
+  sudo rm -f /etc/systemd/system/distress.service
+  sudo rm -f /etc/systemd/system/db1000n.service
+  sudo rm -f /etc/systemd/system/x100.service
 
-  if [ ! -L "/etc/systemd/system/distress.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service >/dev/null 2>&1
-  fi
-
-  if [ ! -L "/etc/systemd/system/db1000n.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
-  fi
-
-  if [ ! -L "/etc/systemd/system/x100.service" ]; then
-    sudo ln -sf "$SCRIPT_DIR"/services/x100.service /etc/systemd/system/x100.service >/dev/null 2>&1
-  fi
+  sudo ln -sf "$SCRIPT_DIR"/services/mhddos.service /etc/systemd/system/mhddos.service >/dev/null 2>&1
+  sudo ln -sf "$SCRIPT_DIR"/services/distress.service /etc/systemd/system/distress.service >/dev/null 2>&1
+  sudo ln -sf "$SCRIPT_DIR"/services/db1000n.service /etc/systemd/system/db1000n.service >/dev/null 2>&1
+  sudo ln -sf "$SCRIPT_DIR"/services/x100.service /etc/systemd/system/x100.service >/dev/null 2>&1
 }
 
 stop_services() {
@@ -85,25 +79,6 @@ get_ddoss_status() {
   else
     confirm_dialog "$(trans "Немає запущених процесів")"
   fi
-}
-
-ddos_tool_installed() {
-  if [[ ! -f "$TOOL_DIR/db1000n" ]]; then
-    return 1
-  fi
-
-  if [[ ! -f "$TOOL_DIR/distress" ]]; then
-    return 1
-  fi
-
-  is_not_arm_arch
-  if [[ $? == 1 ]]; then
-    if [[ ! -f "$TOOL_DIR/mhddos_proxy_linux" ]]; then
-      return 1
-    fi
-  fi
-
-  return 0
 }
 
 ddos_tool_managment() {

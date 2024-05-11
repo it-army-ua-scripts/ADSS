@@ -106,6 +106,6 @@ elif [ "$1" = "--uninstall" ]; then
 else
   check_updates
   apply_patch
-
+  source ~/.bashrc
   main_menu
 fi

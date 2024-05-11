@@ -1,33 +1,37 @@
 #!/bin/bash
 
 autoload_configuration() {
-  ddos_tool_installed
-  if [[ $? == 1 ]]; then
-    confirm_dialog "$(trans "ДДОС інструменти не встановлено")"
-    ddos_tool_managment
-  fi
-
-  is_not_arm_arch
-  if [[ $? == 1 ]]; then
-    if mhddos_enabled; then
-      mhddos_item_menu="$(trans "Вимкнути автозапуск MHDDOS")"
-    else
-      mhddos_item_menu="$(trans "Увімкнути автозапуск MHDDOS")"
+  menu_items=()
+  if mhddos_installed ; then
+    is_not_arm_arch
+    if [[ $? == 1 ]]; then
+      if mhddos_enabled; then
+        mhddos_item_menu="$(trans "Вимкнути автозапуск MHDDOS")"
+      else
+        mhddos_item_menu="$(trans "Увімкнути автозапуск MHDDOS")"
+      fi
+      menu_items+=("$mhddos_item_menu")
     fi
   fi
 
-  if db1000n_enabled; then
-    db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
-  else
-    db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
+  if db1000n_installed ; then
+    if db1000n_enabled; then
+      db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
+    else
+      db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
+    fi
+    menu_items+=("$db1000n_item_menu")
   fi
 
-  if distress_enabled; then
-    distress_item_menu="$(trans "Вимкнути автозапуск DISTRESS")"
-  else
-    distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
+  if distress_installed ; then
+    if distress_enabled; then
+      distress_item_menu="$(trans "Вимкнути автозапуск DISTRESS")"
+    else
+      distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
+    fi
+    menu_items+=("$distress_item_menu")
   fi
-  menu_items=("$mhddos_item_menu" "$db1000n_item_menu" "$distress_item_menu" )
+
   if x100_installed; then
     if x100_enabled; then
       x100_item_menu="$(trans "Вимкнути автозапуск X100")"
@@ -36,6 +40,11 @@ autoload_configuration() {
     fi
     menu_items+=("$x100_item_menu")
   fi
+  if [[ ${#menu_items[@]} -eq 0 ]]; then
+        confirm_dialog "$(trans "ДДОС інструменти не встановлено")"
+        ddos_tool_managment
+  fi
+
   menu_items+=("$(trans "Повернутись назад")")
 
   res=$(display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}")
