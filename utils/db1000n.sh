@@ -209,10 +209,16 @@ db1000n_enabled() {
 }
 
 db1000n_get_status() {
-  clear
-  sudo systemctl status db1000n.service
-  echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
-  read -s -n 1 key
+  while true; do
+    clear
+    st=$(sudo systemctl status db1000n.service)
+    echo "$st"
+    echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
+    sleep 3
+    if read -rsn1 -t 0.1; then
+      break
+    fi
+  done
   initiate_db1000n
 }
 
