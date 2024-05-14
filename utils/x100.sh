@@ -127,12 +127,12 @@ configure_x100() {
 
     sed -i -e "s/itArmyUserId=$(get_x100_variable 'itArmyUserId')/itArmyUserId=$user_id/g" "$configPath"
 
-    read -e -p "$(trans "Initial Distress Scale (0-100): ")" -i "$(get_x100_variable 'initialDistressScale')"  scale
+    read -e -p "$(trans "Initial Distress Scale (10-1000): ")" -i "$(get_x100_variable 'initialDistressScale')"  scale
     if [[ -n "$scale" ]];then
-      while [[ $scale -lt 0 || $scale -gt 100 ]]
+      while [[ $scale -lt 10 || $scale -gt 1000 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Initial Distress Scale (0-100): ")" -i "$(get_x100_variable 'initialDistressScale')" scale
+        read -e -p "$(trans "Initial Distress Scale (10-1000): ")" -i "$(get_x100_variable 'initialDistressScale')" scale
       done
     fi
     sed -i -e "s/initialDistressScale=$(get_x100_variable 'initialDistressScale')/initialDistressScale=$scale/g" "$configPath"
