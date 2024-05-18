@@ -46,7 +46,7 @@ x100_get_status() {
 }
 
 docker_installed() {
-  sudo docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
+   docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
 }
 
 add_user_to_docker_group() {
@@ -54,7 +54,7 @@ add_user_to_docker_group() {
     sudo groupadd docker
   fi
 
-  if id -nG "$USER" | grep -qw "docker"; then
+  if ! id -nG "$USER" | grep -qw "docker"; then
       sudo usermod -aG docker $USER
       newgrp docker
       initiate_x100
