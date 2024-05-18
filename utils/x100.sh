@@ -46,7 +46,7 @@ x100_get_status() {
 }
 
 docker_installed() {
-  docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
+  sudo docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
 }
 
 install_docker() {

@@ -47,7 +47,7 @@ source_files_in_directory() {
 source_files_in_directory "$SCRIPT_DIR/utils"
 source_files_in_directory "$SCRIPT_DIR/menu"
 
-sudo find "/var/log/"  -name "adss.log" -size +300M -delete
+sudo find "/var/log/"  -name "adss.log" -size +300M -execdir sh -c  'truncate -s 0 adss.log'  \;
 
 if [ "$1" = "--auto-install" ]; then
   check_updates
