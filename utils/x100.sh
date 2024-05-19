@@ -58,7 +58,8 @@ add_user_to_docker_group() {
       sudo usermod -aG docker $USER
       confirm_dialog "$(trans "Перезапускаємо ADSS")"
       newgrp docker
-      adss
+      exit 0
+      initiate_x100
   fi
 }
 
