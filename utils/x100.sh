@@ -56,10 +56,7 @@ add_user_to_docker_group() {
 
   if ! id -nG "$USER" | grep -qw "docker"; then
       sudo usermod -aG docker $USER
-      newgrp docker << END
-clear >$(tty)
-exit 0
-END
+      newgrp - docker
   fi
 }
 
