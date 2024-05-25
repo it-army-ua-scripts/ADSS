@@ -57,6 +57,7 @@ add_user_to_docker_group() {
   if ! id -nG "$USER" | grep -qw "docker"; then
       sudo usermod -aG docker $USER
       clear
+      echo -e '\n'
       echo -e "${ORANGE}Перезапустили 'docker' конфігурацію, будь ласка, запустіть ${NC}""${GREEN}\e[4madss\e[0m${NC}""${ORANGE} команду знову і вдалого вам ддосу :).${NC}"
       newgrp docker
   fi
