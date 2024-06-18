@@ -1,7 +1,7 @@
 #!/bin/bash
 
 check_enabled() {
-  services=("mhddos" "distress" "db1000n")
+  services=("mhddos" "distress" "db1000n" "x100")
   stop_service=0
   for service in "${services[@]}"; do
     if sudo systemctl is-active "$service" >/dev/null; then
@@ -34,7 +34,7 @@ stop_services() {
 }
 
 get_ddoss_status() {
-  services=("mhddos" "distress" "db1000n", "x100")
+  services=("mhddos" "distress" "db1000n" "x100")
   service=""
 
   for element in "${services[@]}"; do
