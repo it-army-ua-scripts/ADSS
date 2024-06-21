@@ -16,11 +16,11 @@ autoload_configuration() {
     fi
   fi
 
-  if db1000n_enabled; then
-    db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
-  else
-    db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
-  fi
+#  if db1000n_enabled; then
+#    db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
+#  else
+#    db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
+#  fi
 
   if distress_enabled; then
     distress_item_menu="$(trans "Вимкнути автозапуск DISTRESS")"
