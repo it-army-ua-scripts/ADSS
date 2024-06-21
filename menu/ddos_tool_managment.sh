@@ -93,7 +93,8 @@ ddos_tool_managment() {
   if [[ $? == 1 ]]; then
     menu_items+=("MHDDOS")
   fi
-  menu_items+=("DB1000N" "DISTRESS" "X100" "$(trans "Повернутись назад")")
+#  menu_items+=("DB1000N" "DISTRESS" "X100" "$(trans "Повернутись назад")")
+  menu_items+=("DISTRESS" "X100" "$(trans "Повернутись назад")")
   res=$(display_menu "$(trans "Управління ддос інструментами")" "${menu_items[@]}")
 
   case "$res" in
@@ -110,9 +111,9 @@ ddos_tool_managment() {
   "MHDDOS")
     initiate_mhddos
     ;;
-  "DB1000N")
-    initiate_db1000n
-    ;;
+#  "DB1000N")
+#    initiate_db1000n
+#    ;;
   "DISTRESS")
     initiate_distress
     ;;

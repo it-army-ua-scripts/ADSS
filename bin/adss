@@ -49,6 +49,13 @@ source_files_in_directory "$SCRIPT_DIR/menu"
 
 sudo find "/var/log/"  -name "adss.log" -size +300M -execdir sh -c  'truncate -s 0 adss.log'  \;
 
+if [[ -f "$TOOL_DIR/db1000n" ]]; then
+  rm -f "$TOOL_DIR/db1000n"
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  db1000n_auto_disable >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/db1000n.service >/dev/null 2>&1
+fi
+
 if [ "$1" = "--auto-install" ]; then
   check_updates
   apply_patch
@@ -57,7 +64,7 @@ if [ "$1" = "--auto-install" ]; then
   configure_fail2ban
   install_ufw
   configure_ufw
-  install_db1000n
+#  install_db1000n
   install_distress
 
   is_not_arm_arch
