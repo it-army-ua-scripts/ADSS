@@ -24,7 +24,7 @@ ddos() {
       install_mhddos
     fi
 
-    install_db1000n
+#    install_db1000n
     install_distress
     ddos
     ;;
