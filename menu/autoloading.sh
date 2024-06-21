@@ -39,14 +39,14 @@ autoload_configuration() {
     mhddos_auto_enable
     autoload_configuration
     ;;
-  "$(trans "Вимкнути автозапуск DB1000N")")
-    db1000n_auto_disable
-    autoload_configuration
-    ;;
-  "$(trans "Увімкнути автозапуск DB1000N")")
-    db1000n_auto_enable
-    autoload_configuration
-    ;;
+#  "$(trans "Вимкнути автозапуск DB1000N")")
+#    db1000n_auto_disable
+#    autoload_configuration
+#    ;;
+#  "$(trans "Увімкнути автозапуск DB1000N")")
+#    db1000n_auto_enable
+#    autoload_configuration
+#    ;;
   "$(trans "Вимкнути автозапуск DISTRESS")")
     distress_auto_disable
     autoload_configuration
