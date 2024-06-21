@@ -51,6 +51,9 @@ sudo find "/var/log/adss"  -name "current" -size +300M -delete
 
 if [[ -f "$TOOL_DIR/db1000n" ]]; then
   rm -f "$TOOL_DIR/db1000n"
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  db1000n_auto_disable >/dev/null 2>&1
+  sudo rm -r /etc/systemd/system/db1000n.service >/dev/null 2>&1
 fi
 
 if [ "$1" = "--auto-install" ]; then
