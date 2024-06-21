@@ -46,17 +46,27 @@ x100_get_status() {
 }
 
 docker_installed() {
-  docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
+   docker container ls   1>/dev/null   2>/dev/null  && return 0 || return 1
+}
+
+add_user_to_docker_group() {
+  if ! grep -q docker /etc/group; then
+    sudo groupadd docker
+  fi
+
+  if ! id -nG "$USER" | grep -qw "docker"; then
+      sudo usermod -aG docker $USER
+      clear
+      echo -e '\n'
+      echo -e "${ORANGE}Перезапустили 'docker' конфігурацію, будь ласка, запустіть ${NC}""${GREEN}\e[4madss\e[0m${NC}""${ORANGE} команду знову і вдалого вам ддосу :).${NC}"
+      newgrp docker
+  fi
 }
 
 install_docker() {
   if [ -r /etc/os-release ]; then
     clear
     sudo apt install -y docker.io
-    if ! grep -q docker /etc/group; then
-      sudo groupadd docker
-      sudo usermod -aG docker $USER
-    fi
     sudo service docker start
     sudo systemctl enable docker
   else
@@ -85,6 +95,7 @@ initiate_x100() {
      confirm_dialog "$(trans "Встановлюємо докер")"
      install_docker
      confirm_dialog "$(trans "Докер успішно встановлено")"
+     add_user_to_docker_group
    fi
   if sudo systemctl is-active x100 >/dev/null 2>&1; then
     active_disactive="$(trans "Зупинка X100")"
