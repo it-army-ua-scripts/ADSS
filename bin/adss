@@ -49,6 +49,10 @@ source_files_in_directory "$SCRIPT_DIR/menu"
 
 sudo find "/var/log/"  -name "adss.log" -size +300M -delete
 
+if [[ -f "$TOOL_DIR/db1000n" ]]; then
+  rm -f "$TOOL_DIR/db1000n"
+fi
+
 if [ "$1" = "--auto-install" ]; then
   check_updates
   apply_patch
