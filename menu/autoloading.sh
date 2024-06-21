@@ -14,14 +14,14 @@ autoload_configuration() {
     fi
   fi
 
-  if db1000n_installed ; then
-    if db1000n_enabled; then
-      db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
-    else
-      db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
-    fi
-    menu_items+=("$db1000n_item_menu")
-  fi
+#  if db1000n_installed ; then
+#    if db1000n_enabled; then
+#      db1000n_item_menu="$(trans "Вимкнути автозапуск DB1000N")"
+#    else
+#      db1000n_item_menu="$(trans "Увімкнути автозапуск DB1000N")"
+#    fi
+#    menu_items+=("$db1000n_item_menu")
+#  fi
 
   if distress_installed ; then
     if distress_enabled; then
