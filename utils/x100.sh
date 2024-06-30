@@ -147,6 +147,18 @@ configure_x100() {
       done
     fi
     sed -i -e "s/initialDistressScale=$(get_x100_variable 'initialDistressScale')/initialDistressScale=$scale/g" "$configPath"
+
+    if [[ -n "$(get_x100_variable 'ignoreBundledFreeVpn')" ]];then
+      read -e -p "$(trans "Ignore Bundled Free Vpn (0-1): ")" -i "$(get_x100_variable 'ignoreBundledFreeVpn')"  ignoreBundledFreeVpn
+      while [[ ignoreBundledFreeVpn -lt 0 || ignoreBundledFreeVpn -gt 1 ]]
+      do
+        echo "$(trans "Будь ласка введіть правильні значення")"
+        read -e -p "$(trans "Ignore Bundled Free Vpn (0-1): ")" -i "$(get_x100_variable 'ignoreBundledFreeVpn')" ignoreBundledFreeVpn
+      done
+
+      sed -i -e "s/ignoreBundledFreeVpn=$(get_x100_variable 'ignoreBundledFreeVpn')/ignoreBundledFreeVpn=$ignoreBundledFreeVpn/g" "$configPath"
+    fi
+
     if systemctl is-active --quiet x100.service; then
         sudo systemctl restart x100.service >/dev/null 2>&1
     fi
@@ -202,6 +214,7 @@ install_x100() {
      echo -ne "${GREEN}$(trans "This installation of X100 uses free and slow 'VPNGate' VPN provider.")${NC}""\n"
      echo -ne "${GREEN}$(trans "${ORANGE}http://www.vpngate.net${NC}")${NC}""\n"
      echo -ne "${GREEN}$(trans "You will need a commercial VPN account to achieve top attack speed (1 Gbit/s or more).")${NC}""\n"
+     echo -ne "${GREEN}$(trans "(Use this link to get full-featured VPN for free https://www.vpnunlimited.com/ua/palianytsia)")${NC}""\n"
      echo -ne "${GREEN}$(trans "Also, be aware, that X100 gradually increases resources usage.")${NC}""\n"
      echo -ne "${GREEN}$(trans "X100 will reach pick performance approximately in 3 hours after launch.")${NC}""\n"
      echo -ne "${GREEN}$(trans "Logs will be stored in ${ORANGE}$SCRIPT_DIR/x100-for-docker/put-your-ovpn-files-here${NC} ${GREEN}folder.${NC}")${NC}""\n"
