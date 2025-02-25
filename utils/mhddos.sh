@@ -158,6 +158,9 @@ regenerate_mhddos_service_file() {
     if [[ "$key" == 'use-my-ip' && "$(get_mhddos_variable 'use-my-ip')" == 0 ]];then
       continue
     fi
+    if [[ "$key" == 'cron-to-run' || "$key" == 'cron-to-stop' ]];then
+      continue
+    fi
     if [[ "$value" ]]; then
       start="$start --$key $value"
     fi
@@ -227,6 +230,103 @@ is_not_arm_arch() {
     return 0
   fi
 }
+
+mhddos_configure_scheduler() {
+  clear
+  echo -ne "${GREEN}  .---------------- хвилина (0 - 59)
+  |  .------------- година (0 - 23)
+  |  |  .---------- день місяця (1 - 31)
+  |  |  |  .------- місяць (1 - 12)
+  |  |  |  |  .---- день тижня (0 - 6) (неділя=0 чи 7)
+  |  |  |  |  |
+  *  *  *  *  *${NC}"
+
+  echo -ne "\n\n"
+  echo -ne "${GREEN}Або згенеруйте його за посиланням ${NC}${RED}https://crontab.guru/${NC}"
+  echo -ne "\n\n"
+  echo -ne "Наприклад:"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}Запуск MHDDOS о 20:00 щодня -${NC} ${RED}0 20 * * *${NC}"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}Зупинка MHDDOS о 08:00 щодня -${NC} ${RED}0 8 * * *${NC}"
+  echo -ne "\n\n"
+  read -e -p "$(trans "Введіть cron-час для ЗАПУСКУ (формат: * * * * *): ")" -i "$(get_mhddos_variable 'cron-to-run')" cron_time_to_run
+  echo -ne "\n"
+  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): " )"  -i "$(get_mhddos_variable 'cron-to-stop')" cron_time_to_stop
+
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    write_mhddos_variable "cron-to-run" "$cron_time_to_run"
+  elif [[ "$cron_time_to_run" == "" ]]; then
+    crontab -l | grep -v 'mhddos_run' | crontab -
+    write_mhddos_variable "cron-to-run" ""
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    write_mhddos_variable "cron-to-stop" "$cron_time_to_stop"
+  elif [[ "$cron_time_to_stop" == "" ]]; then
+    crontab -l | grep -v 'mhddos_stop' | crontab -
+    write_mhddos_variable "cron-to-stop" ""
+  fi
+
+  if [[ "$cron_time_to_run" == "" ]] && [[ "$cron_time_to_stop" == "" ]]; then
+      confirm_dialog "$(trans "Запуск MHDDOS за розкладом припинено")"
+      autoload_configuration
+  elif [[ -n "$cron_time_to_run" ]] || [[ -n "$cron_time_to_stop" ]]; then
+    to_start_mhddos_shedule_running
+  else
+    autoload_configuration
+  fi
+}
+
+check_if_mhddos_running_on_shedule() {
+  ($(crontab -l | grep -q 'mhddos_run') || $(crontab -l | grep -q 'mhddos_stop'))  && return 0 || return 1
+}
+
+to_start_mhddos_shedule_running() {
+    menu_items=("$(trans "Так")" "$(trans "Ні")")
+    res=$(display_menu "$(trans "Запустити MHDDOS за розкладом?")" "${menu_items[@]}")
+    case "$res" in
+    "$(trans "Так")")
+      run_mhddos_on_schedule
+      confirm_dialog "$(trans "MHDDOS успішно ЗАПУЩЕНО за розкладом")"
+      autoload_configuration
+    ;;
+    "$(trans "Ні")")
+      autoload_configuration
+    ;;
+    esac
+}
+
+run_mhddos_on_schedule() {
+  sudo systemctl disable mhddos >/dev/null 2>&1
+  sudo systemctl disable distress >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
+  sudo systemctl disable db1000n >/dev/null 2>&1
+  create_symlink
+
+  chmod +x "$SCRIPT_DIR/utils/mhddos.sh"
+  cron_time_to_run=$(get_mhddos_variable 'cron-to-run')
+  cron_time_to_stop=$(get_mhddos_variable 'cron-to-stop')
+  crontab -l | grep -v 'mhddos_run' | crontab -
+  crontab -l | grep -v 'mhddos_stop' | crontab -
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    (crontab -l 2>/dev/null; echo "$cron_time_to_run $SCRIPT_DIR/utils/mhddos.sh mhddos_run") | crontab -
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    (crontab -l 2>/dev/null; echo "$cron_time_to_stop $SCRIPT_DIR/utils/mhddos.sh mhddos_stop") | crontab -
+  fi
+}
+
+stop_mhddos_on_schedule() {
+  crontab -l | grep -v 'mhddos_run' | crontab -
+  crontab -l | grep -v 'mhddos_stop' | crontab -
+  write_mhddos_variable "cron-to-run" ""
+  write_mhddos_variable "cron-to-stop" ""
+}
+
 
 initiate_mhddos() {
   mhddos_installed

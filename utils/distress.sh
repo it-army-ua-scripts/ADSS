@@ -342,6 +342,103 @@ distress_installed() {
   fi
 }
 
+distress_configure_scheduler() {
+  clear
+  echo -ne "${GREEN}  .---------------- хвилина (0 - 59)
+  |  .------------- година (0 - 23)
+  |  |  .---------- день місяця (1 - 31)
+  |  |  |  .------- місяць (1 - 12)
+  |  |  |  |  .---- день тижня (0 - 6) (неділя=0 чи 7)
+  |  |  |  |  |
+  *  *  *  *  *${NC}"
+
+  echo -ne "\n\n"
+  echo -ne "${GREEN}Або згенеруйте його за посиланням ${NC}${RED}https://crontab.guru/${NC}"
+  echo -ne "\n\n"
+  echo -ne "Наприклад:"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}Запуск DISTRESS о 20:00 щодня -${NC} ${RED}0 20 * * *${NC}"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}Зупинка DISTRESS о 08:00 щодня -${NC} ${RED}0 8 * * *${NC}"
+  echo -ne "\n\n"
+  read -e -p "$(trans "Введіть cron-час для ЗАПУСКУ (формат: * * * * *): ")" -i "$(get_distress_variable 'cron-to-run')" cron_time_to_run
+  echo -ne "\n"
+  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): " )"  -i "$(get_distress_variable 'cron-to-stop')" cron_time_to_stop
+
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    write_distress_variable "cron-to-run" "$cron_time_to_run"
+  elif [[ "$cron_time_to_run" == "" ]]; then
+    crontab -l | grep -v 'distress_run' | crontab -
+    write_distress_variable "cron-to-run" ""
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    write_distress_variable "cron-to-stop" "$cron_time_to_stop"
+  elif [[ "$cron_time_to_stop" == "" ]]; then
+    crontab -l | grep -v 'distress_stop' | crontab -
+    write_distress_variable "cron-to-stop" ""
+  fi
+
+  if [[ "$cron_time_to_run" == "" ]] && [[ "$cron_time_to_stop" == "" ]]; then
+      confirm_dialog "$(trans "Запуск DISTRESS за розкладом припинено")"
+      autoload_configuration
+  elif [[ -n "$cron_time_to_run" ]] || [[ -n "$cron_time_to_stop" ]]; then
+    to_start_distress_shedule_running
+  else
+    autoload_configuration
+  fi
+}
+
+check_if_distress_running_on_shedule() {
+  ($(crontab -l | grep -q 'distress_run') || $(crontab -l | grep -q 'distress_stop'))  && return 0 || return 1
+}
+
+to_start_distress_shedule_running() {
+    menu_items=("$(trans "Так")" "$(trans "Ні")")
+    res=$(display_menu "$(trans "Запустити DISTRESS за розкладом?")" "${menu_items[@]}")
+    case "$res" in
+    "$(trans "Так")")
+      run_distress_on_schedule
+      confirm_dialog "$(trans "DISTRESS успішно ЗАПУЩЕНО за розкладом")"
+      autoload_configuration
+    ;;
+    "$(trans "Ні")")
+      autoload_configuration
+    ;;
+    esac
+}
+
+stop_distress_on_schedule() {
+  crontab -l | grep -v 'distress_run' | crontab -
+  crontab -l | grep -v 'distress_stop' | crontab -
+  write_distress_variable "cron-to-run" ""
+  write_distress_variable "cron-to-stop" ""
+}
+
+run_distress_on_schedule() {
+  sudo systemctl disable mhddos >/dev/null 2>&1
+  sudo systemctl disable distress >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
+  sudo systemctl disable db1000n >/dev/null 2>&1
+  create_symlink
+
+  chmod +x "$SCRIPT_DIR/utils/distress.sh"
+  cron_time_to_run=$(get_distress_variable 'cron-to-run')
+  cron_time_to_stop=$(get_distress_variable 'cron-to-stop')
+  crontab -l | grep -v 'distress_run' | crontab -
+  crontab -l | grep -v 'distress_stop' | crontab -
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    (crontab -l 2>/dev/null; echo "$cron_time_to_run $SCRIPT_DIR/utils/distress.sh distress_run") | crontab -
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    (crontab -l 2>/dev/null; echo "$cron_time_to_stop $SCRIPT_DIR/utils/distress.sh distress_stop") | crontab -
+  fi
+}
+
+
 initiate_distress() {
    distress_installed
    if [[ $? == 1 ]]; then

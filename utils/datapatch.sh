@@ -118,4 +118,19 @@ apply_patch() {
       regenerate_distress_service_file
     fi
   # for 1.2.2
+
+  # 2.0.5
+    if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'cron-to-run='; then
+      sed -i 's/\[\/mhddos\]/cron-to-run=\n\[\/mhddos\]/g' "$envFile"
+    fi
+    if ! awk '/\[mhddos\]/,/\[\/mhddos\]/' "$envFile" | grep -q 'cron-to-stop='; then
+      sed -i 's/\[\/mhddos\]/cron-to-stop=\n\[\/mhddos\]/g' "$envFile"
+    fi
+    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'cron-to-run='; then
+      sed -i 's/\[\/distress\]/cron-to-run=\n\[\/distress\]/g' "$envFile"
+    fi
+    if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'cron-to-stop='; then
+      sed -i 's/\[\/distress\]/cron-to-stop=\n\[\/distress\]/g' "$envFile"
+    fi
+  # end 2.0.5
 }
