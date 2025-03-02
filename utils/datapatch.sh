@@ -132,5 +132,16 @@ apply_patch() {
     if ! awk '/\[distress\]/,/\[\/distress\]/' "$envFile" | grep -q 'cron-to-stop='; then
       sed -i 's/\[\/distress\]/cron-to-stop=\n\[\/distress\]/g' "$envFile"
     fi
+
+    if ! grep -q '^\[x100\]$' "$envFile" || ! grep -q '^\[/x100\]$' "$envFile"; then
+        echo -e "\n[x100]\n[/x100]" >> "$envFile"
+    fi
+    if ! awk '/\[x100\]/,/\[\/x100\]/' "$envFile" | grep -q 'cron-to-run='; then
+      sed -i 's/\[\/x100\]/cron-to-run=\n\[\/x100\]/g' "$envFile"
+    fi
+    if ! awk '/\[x100\]/,/\[\/x100\]/' "$envFile" | grep -q 'cron-to-stop='; then
+      sed -i 's/\[\/x100\]/cron-to-stop=\n\[\/x100\]/g' "$envFile"
+    fi
+
   # end 2.0.5
 }

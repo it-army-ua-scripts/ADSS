@@ -384,17 +384,17 @@ distress_configure_scheduler() {
       confirm_dialog "$(trans "Запуск DISTRESS за розкладом припинено")"
       autoload_configuration
   elif [[ -n "$cron_time_to_run" ]] || [[ -n "$cron_time_to_stop" ]]; then
-    to_start_distress_shedule_running
+    to_start_distress_schedule_running
   else
     autoload_configuration
   fi
 }
 
-check_if_distress_running_on_shedule() {
+check_if_distress_running_on_schedule() {
   ($(crontab -l | grep -q 'distress_run') || $(crontab -l | grep -q 'distress_stop'))  && return 0 || return 1
 }
 
-to_start_distress_shedule_running() {
+to_start_distress_schedule_running() {
     menu_items=("$(trans "Так")" "$(trans "Ні")")
     res=$(display_menu "$(trans "Запустити DISTRESS за розкладом?")" "${menu_items[@]}")
     case "$res" in
@@ -428,6 +428,10 @@ run_distress_on_schedule() {
   cron_time_to_stop=$(get_distress_variable 'cron-to-stop')
   crontab -l | grep -v 'distress_run' | crontab -
   crontab -l | grep -v 'distress_stop' | crontab -
+  crontab -l | grep -v 'mhddos_run' | crontab -
+  crontab -l | grep -v 'mhddos_stop' | crontab -
+  crontab -l | grep -v 'x100_run' | crontab -
+  crontab -l | grep -v 'x100_stop' | crontab -
 
   if [[ -n "$cron_time_to_run" ]]; then
     (crontab -l 2>/dev/null; echo "$cron_time_to_run $SCRIPT_DIR/utils/distress.sh distress_run") | crontab -
@@ -474,4 +478,11 @@ initiate_distress() {
         ;;
       esac
   fi
+}
+
+stop_x100_on_schedule() {
+  crontab -l | grep -v 'x100_run' | crontab -
+  crontab -l | grep -v 'x100_stop' | crontab -
+  write_x100_adss_variable "cron-to-run" ""
+  write_x100_adss_variable "cron-to-stop" ""
 }

@@ -12,7 +12,7 @@ autoload_configuration() {
       fi
       mhddos_scheduler="$(trans "Керування розкладом MHDDOS")"
       menu_items+=("$mhddos_item_menu" "$mhddos_scheduler")
-      check_if_mhddos_running_on_shedule
+      check_if_mhddos_running_on_schedule
       if [[ $? == 0 ]]; then
         mhddos_scheduler_stop="$(trans "Зупинити запуск MHDDOS за розкладом")"
         menu_items+=("$mhddos_scheduler_stop")
@@ -36,8 +36,8 @@ autoload_configuration() {
       distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
     fi
     distress_scheduler="$(trans "Керування розкладом DISTRESS")"
-    menu_items+=("$mhddos_item_menu" "$distress_scheduler")
-    check_if_distress_running_on_shedule
+    menu_items+=("$distress_item_menu" "$distress_scheduler")
+    check_if_distress_running_on_schedule
     if [[ $? == 0 ]]; then
       distress_scheduler_stop="$(trans "Зупинити запуск DISTRESS за розкладом")"
       menu_items+=("$distress_scheduler_stop")
@@ -51,9 +51,14 @@ autoload_configuration() {
       x100_item_menu="$(trans "Увімкнути автозапуск X100")"
     fi
     x100_scheduler="$(trans "Керування розкладом X100")"
-    x100_scheduler_stop="$(trans "Зупинити запуск X100 за розкладом")"
-    menu_items+=("$x100_item_menu" "$x100_scheduler" "$x100_scheduler_stop")
+    menu_items+=("$x100_item_menu" "$x100_scheduler")
+    check_if_x100_running_on_schedule
+    if [[ $? == 0 ]]; then
+      x100_scheduler_stop="$(trans "Зупинити запуск X100 за розкладом")"
+      menu_items+=("$x100_scheduler_stop")
+    fi
   fi
+
   if [[ ${#menu_items[@]} -eq 0 ]]; then
         confirm_dialog "$(trans "ДДОС інструменти не встановлено")"
         ddos_tool_managment
@@ -81,7 +86,12 @@ autoload_configuration() {
     autoload_configuration
   ;;
   "$(trans "Керування розкладом X100")")
-
+    x100_configure_scheduler
+    ;;
+  "$(trans "Зупинити запуск X100 за розкладом")")
+    stop_x100_on_schedule
+    confirm_dialog "$(trans "Запуск X100 за розкладом успішно ЗУПИНЕНО")"
+    autoload_configuration
     ;;
   "$(trans "Вимкнути автозапуск MHDDOS")")
     mhddos_auto_disable

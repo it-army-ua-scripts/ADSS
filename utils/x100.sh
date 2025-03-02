@@ -172,6 +172,16 @@ get_x100_variable() {
   echo "$variable"
 }
 
+get_x100_adss_variable() {
+  lines=$(sed -n "/\[x100\]/,/\[\/x100\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
+}
+
+write_x100_adss_variable() {
+  sed -i "/\[x100\]/,/\[\/x100\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
+}
+
 x100_installed() {
   if [[ ! -d "$SCRIPT_DIR/x100-for-docker" ]]; then
       return 1
@@ -224,4 +234,96 @@ install_x100() {
 
     echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
     read -s -n 1 key
+}
+
+x100_configure_scheduler() {
+  clear
+  echo -ne "${GREEN}  .---------------- хвилина (0 - 59)
+  |  .------------- година (0 - 23)
+  |  |  .---------- день місяця (1 - 31)
+  |  |  |  .------- місяць (1 - 12)
+  |  |  |  |  .---- день тижня (0 - 6) (неділя=0 чи 7)
+  |  |  |  |  |
+  *  *  *  *  *${NC}"
+
+  echo -ne "\n\n"
+  echo -ne "${GREEN}Або згенеруйте його за посиланням ${NC}${RED}https://crontab.guru/${NC}"
+  echo -ne "\n\n"
+  echo -ne "Наприклад:"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}Запуск X100 о 20:00 щодня -${NC} ${RED}0 20 * * *${NC}"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}Зупинка X100 о 08:00 щодня -${NC} ${RED}0 8 * * *${NC}"
+  echo -ne "\n\n"
+  read -e -p "$(trans "Введіть cron-час для ЗАПУСКУ (формат: * * * * *): ")" -i "$(get_x100_adss_variable 'cron-to-run')" cron_time_to_run
+  echo -ne "\n"
+  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): " )"  -i "$(get_x100_adss_variable 'cron-to-stop')" cron_time_to_stop
+
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    write_x100_adss_variable "cron-to-run" "$cron_time_to_run"
+  elif [[ "$cron_time_to_run" == "" ]]; then
+    crontab -l | grep -v 'x100_run' | crontab -
+    write_x100_adss_variable "cron-to-run" ""
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    write_x100_adss_variable "cron-to-stop" "$cron_time_to_stop"
+  elif [[ "$cron_time_to_stop" == "" ]]; then
+    crontab -l | grep -v 'x100_stop' | crontab -
+    write_x100_adss_variable "cron-to-stop" ""
+  fi
+
+  if [[ "$cron_time_to_run" == "" ]] && [[ "$cron_time_to_stop" == "" ]]; then
+      confirm_dialog "$(trans "Запуск X100 за розкладом припинено")"
+      autoload_configuration
+  elif [[ -n "$cron_time_to_run" ]] || [[ -n "$cron_time_to_stop" ]]; then
+    to_start_x100_schedule_running
+  else
+    autoload_configuration
+  fi
+}
+
+to_start_x100_schedule_running() {
+    menu_items=("$(trans "Так")" "$(trans "Ні")")
+    res=$(display_menu "$(trans "Запустити X100 за розкладом?")" "${menu_items[@]}")
+    case "$res" in
+    "$(trans "Так")")
+      run_x100_on_schedule
+      confirm_dialog "$(trans "X100 успішно ЗАПУЩЕНО за розкладом")"
+      autoload_configuration
+    ;;
+    "$(trans "Ні")")
+      autoload_configuration
+    ;;
+    esac
+}
+
+run_x100_on_schedule() {
+  sudo systemctl disable mhddos >/dev/null 2>&1
+  sudo systemctl disable distress >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
+  sudo systemctl disable db1000n >/dev/null 2>&1
+  create_symlink
+
+  chmod +x "$SCRIPT_DIR/utils/x100.sh"
+  cron_time_to_run=$(get_x100_adss_variable 'cron-to-run')
+  cron_time_to_stop=$(get_x100_adss_variable 'cron-to-stop')
+  crontab -l | grep -v 'mhddos_run' | crontab -
+  crontab -l | grep -v 'mhddos_stop' | crontab -
+  crontab -l | grep -v 'distress_run' | crontab -
+  crontab -l | grep -v 'distress_stop' | crontab -
+  crontab -l | grep -v 'x100_run' | crontab -
+  crontab -l | grep -v 'x100_stop' | crontab -
+  if [[ -n "$cron_time_to_run" ]]; then
+    (crontab -l 2>/dev/null; echo "$cron_time_to_run $SCRIPT_DIR/utils/x100.sh x100_run") | crontab -
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    (crontab -l 2>/dev/null; echo "$cron_time_to_stop $SCRIPT_DIR/utils/x100.sh x100_stop") | crontab -
+  fi
+}
+
+check_if_x100_running_on_schedule() {
+  ($(crontab -l | grep -q 'x100_run') || $(crontab -l | grep -q 'x100_stop'))  && return 0 || return 1
 }
