@@ -293,7 +293,7 @@ distress_run() {
   sudo rm -rf /tmp/distress >/dev/null 2>&1
   sudo systemctl stop mhddos.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
-  x100_stop
+  sudo systemctl stop x100.service >/dev/null 2>&1
   sudo systemctl start distress.service >/dev/null 2>&1
 }
 

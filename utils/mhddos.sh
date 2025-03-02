@@ -176,7 +176,7 @@ mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
   sudo systemctl stop distress.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
-  x100_stop
+  sudo systemctl stop x100.service >/dev/null 2>&1
   sudo systemctl start mhddos.service >/dev/null 2>&1
 }
 
@@ -198,7 +198,7 @@ mhddos_enabled() {
 }
 
 mhddos_stop() {
-  create_symlink
+#  create_symlink
   sudo systemctl stop mhddos.service >/dev/null 2>&1
 }
 

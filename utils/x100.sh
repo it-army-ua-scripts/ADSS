@@ -1,9 +1,9 @@
 #!/bin/bash
 
 x100_run() {
-  db1000n_stop
-  distress_stop
-  mhddos_stop
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
   sudo systemctl start x100.service >/dev/null 2>&1
 }
 
