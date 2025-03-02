@@ -434,11 +434,11 @@ run_distress_on_schedule() {
   crontab -l | grep -v 'x100_stop' | crontab -
 
   if [[ -n "$cron_time_to_run" ]]; then
-    (crontab -l 2>/dev/null; echo "$cron_time_to_run $SCRIPT_DIR/utils/distress.sh distress_run") | crontab -
+    (crontab -l 2>/dev/null; echo "$cron_time_to_run source $SCRIPT_DIR/utils/distress.sh && distress_run") | crontab -
   fi
 
   if [[ -n "$cron_time_to_stop" ]]; then
-    (crontab -l 2>/dev/null; echo "$cron_time_to_stop $SCRIPT_DIR/utils/distress.sh distress_stop") | crontab -
+    (crontab -l 2>/dev/null; echo "$cron_time_to_stop source $SCRIPT_DIR/utils/distress.sh && distress_stop") | crontab -
   fi
 }
 
