@@ -173,8 +173,8 @@ get_x100_variable() {
 }
 
 get_x100_adss_variable() {
-  lines=$(sed -n "/\[x100\]/,/\[\/x100\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
-  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  local lines=$(sed -n "/\[x100\]/,/\[\/x100\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  local variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
   echo "$variable"
 }
 
@@ -285,8 +285,8 @@ x100_configure_scheduler() {
 }
 
 to_start_x100_schedule_running() {
-    menu_items=("$(trans "Так")" "$(trans "Ні")")
-    res=$(display_menu "$(trans "Запустити X100 за розкладом?")" "${menu_items[@]}")
+    local menu_items=("$(trans "Так")" "$(trans "Ні")")
+    local res=$(display_menu "$(trans "Запустити X100 за розкладом?")" "${menu_items[@]}")
     case "$res" in
     "$(trans "Так")")
       run_x100_on_schedule
@@ -307,8 +307,8 @@ run_x100_on_schedule() {
   create_symlink
 
   chmod +x "$SCRIPT_DIR/utils/x100.sh"
-  cron_time_to_run=$(get_x100_adss_variable 'cron-to-run')
-  cron_time_to_stop=$(get_x100_adss_variable 'cron-to-stop')
+  local cron_time_to_run=$(get_x100_adss_variable 'cron-to-run')
+  local cron_time_to_stop=$(get_x100_adss_variable 'cron-to-stop')
   crontab -l | grep -v 'mhddos_run' | crontab -
   crontab -l | grep -v 'mhddos_stop' | crontab -
   crontab -l | grep -v 'distress_run' | crontab -

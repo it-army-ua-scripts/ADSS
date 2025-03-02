@@ -142,9 +142,9 @@ write_mhddos_variable() {
 }
 
 regenerate_mhddos_service_file() {
-  lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  local lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
+  local start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
 
   while read -r line
   do
@@ -284,8 +284,8 @@ check_if_mhddos_running_on_schedule() {
 }
 
 to_start_mhddos_schedule_running() {
-    menu_items=("$(trans "Так")" "$(trans "Ні")")
-    res=$(display_menu "$(trans "Запустити MHDDOS за розкладом?")" "${menu_items[@]}")
+    local menu_items=("$(trans "Так")" "$(trans "Ні")")
+    local res=$(display_menu "$(trans "Запустити MHDDOS за розкладом?")" "${menu_items[@]}")
     case "$res" in
     "$(trans "Так")")
       run_mhddos_on_schedule
@@ -306,8 +306,8 @@ run_mhddos_on_schedule() {
   create_symlink
 
   chmod +x "$SCRIPT_DIR/utils/mhddos.sh"
-  cron_time_to_run=$(get_mhddos_variable 'cron-to-run')
-  cron_time_to_stop=$(get_mhddos_variable 'cron-to-stop')
+  local cron_time_to_run=$(get_mhddos_variable 'cron-to-run')
+  local cron_time_to_stop=$(get_mhddos_variable 'cron-to-stop')
   crontab -l | grep -v 'mhddos_run' | crontab -
   crontab -l | grep -v 'mhddos_stop' | crontab -
   crontab -l | grep -v 'distress_run' | crontab -
@@ -338,12 +338,12 @@ initiate_mhddos() {
     ddos_tool_managment
   else
       if sudo systemctl is-active mhddos >/dev/null 2>&1; then
-        active_disactive="$(trans "Зупинка MHDDOS")"
+        local active_disactive="$(trans "Зупинка MHDDOS")"
       else
-        active_disactive="$(trans "Запуск MHDDOS")"
+        local active_disactive="$(trans "Запуск MHDDOS")"
       fi
-      menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
-      res=$(display_menu "MHDDOS" "${menu_items[@]}")
+      local menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
+      local res=$(display_menu "MHDDOS" "${menu_items[@]}")
 
       case "$res" in
         "$(trans "Зупинка MHDDOS")")

@@ -188,8 +188,8 @@ configure_distress() {
 }
 
 get_distress_variable() {
-  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
-  variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  local lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  local variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
   echo "$variable"
 }
 
@@ -198,9 +198,9 @@ write_distress_variable() {
 }
 
 regenerate_distress_service_file() {
-  lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  local lines=$(sed -n "/\[distress\]/,/\[\/distress\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=${SCRIPT_DIR}/bin/distress"
+  local start="ExecStart=${SCRIPT_DIR}/bin/distress"
 
   declare -A data
   while read -r line
@@ -395,8 +395,8 @@ check_if_distress_running_on_schedule() {
 }
 
 to_start_distress_schedule_running() {
-    menu_items=("$(trans "Так")" "$(trans "Ні")")
-    res=$(display_menu "$(trans "Запустити DISTRESS за розкладом?")" "${menu_items[@]}")
+    local menu_items=("$(trans "Так")" "$(trans "Ні")")
+    local res=$(display_menu "$(trans "Запустити DISTRESS за розкладом?")" "${menu_items[@]}")
     case "$res" in
     "$(trans "Так")")
       run_distress_on_schedule
@@ -424,8 +424,8 @@ run_distress_on_schedule() {
   create_symlink
 
   chmod +x "$SCRIPT_DIR/utils/distress.sh"
-  cron_time_to_run=$(get_distress_variable 'cron-to-run')
-  cron_time_to_stop=$(get_distress_variable 'cron-to-stop')
+  local cron_time_to_run=$(get_distress_variable 'cron-to-run')
+  local cron_time_to_stop=$(get_distress_variable 'cron-to-stop')
   crontab -l | grep -v 'distress_run' | crontab -
   crontab -l | grep -v 'distress_stop' | crontab -
   crontab -l | grep -v 'mhddos_run' | crontab -
@@ -450,11 +450,11 @@ initiate_distress() {
     ddos_tool_managment
   else
       if sudo systemctl is-active distress >/dev/null 2>&1; then
-        active_disactive="$(trans "Зупинка DISTRESS")"
+        local active_disactive="$(trans "Зупинка DISTRESS")"
       else
-        active_disactive="$(trans "Запуск DISTRESS")"
+        local active_disactive="$(trans "Запуск DISTRESS")"
       fi
-      menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
+      local menu_items=("$active_disactive" "$(trans "Налаштування DISTRESS")" "$(trans "Статус DISTRESS")" "$(trans "Повернутись назад")")
       res=$(display_menu "DISTRESS" "${menu_items[@]}")
 
       case "$res" in
