@@ -369,14 +369,14 @@ distress_configure_scheduler() {
   if [[ -n "$cron_time_to_run" ]]; then
     write_distress_variable "cron-to-run" "$cron_time_to_run"
   elif [[ "$cron_time_to_run" == "" ]]; then
-    crontab -l | grep -v 'distress_run' | crontab -
+    sudo crontab -l | grep -v 'distress_run' | sudo crontab -
     write_distress_variable "cron-to-run" ""
   fi
 
   if [[ -n "$cron_time_to_stop" ]]; then
     write_distress_variable "cron-to-stop" "$cron_time_to_stop"
   elif [[ "$cron_time_to_stop" == "" ]]; then
-    crontab -l | grep -v 'distress_stop' | crontab -
+    sudo crontab -l | grep -v 'distress_stop' | sudo crontab -
     write_distress_variable "cron-to-stop" ""
   fi
 
@@ -391,7 +391,7 @@ distress_configure_scheduler() {
 }
 
 check_if_distress_running_on_schedule() {
-  ($(crontab -l | grep -q 'distress_run') || $(crontab -l | grep -q 'distress_stop'))  && return 0 || return 1
+  ($(sudo crontab -l | grep -q 'distress_run') || $(sudo crontab -l | grep -q 'distress_stop'))  && return 0 || return 1
 }
 
 to_start_distress_schedule_running() {
@@ -410,8 +410,8 @@ to_start_distress_schedule_running() {
 }
 
 stop_distress_on_schedule() {
-  crontab -l | grep -v 'distress_run' | crontab -
-  crontab -l | grep -v 'distress_stop' | crontab -
+  sudo crontab -l | grep -v 'distress_run' | sudo crontab -
+  sudo crontab -l | grep -v 'distress_stop' | sudo crontab -
   write_distress_variable "cron-to-run" ""
   write_distress_variable "cron-to-stop" ""
 }
@@ -426,19 +426,19 @@ run_distress_on_schedule() {
   chmod +x "$SCRIPT_DIR/utils/distress.sh"
   local cron_time_to_run=$(get_distress_variable 'cron-to-run')
   local cron_time_to_stop=$(get_distress_variable 'cron-to-stop')
-  crontab -l | grep -v 'distress_run' | crontab -
-  crontab -l | grep -v 'distress_stop' | crontab -
-  crontab -l | grep -v 'mhddos_run' | crontab -
-  crontab -l | grep -v 'mhddos_stop' | crontab -
-  crontab -l | grep -v 'x100_run' | crontab -
-  crontab -l | grep -v 'x100_stop' | crontab -
+  sudo crontab -l | grep -v 'distress_run' | sudo crontab -
+  sudo crontab -l | grep -v 'distress_stop' | sudo crontab -
+  sudo crontab -l | grep -v 'mhddos_run' | sudo crontab -
+  sudo crontab -l | grep -v 'mhddos_stop' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_run' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_stop' | sudo crontab -
 
   if [[ -n "$cron_time_to_run" ]]; then
-    (crontab -l 2>/dev/null; echo "$cron_time_to_run source $SCRIPT_DIR/utils/distress.sh && distress_run") | crontab -
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_run bash -c '. $SCRIPT_DIR/utils/distress.sh && distress_run'") | sudo crontab -
   fi
 
   if [[ -n "$cron_time_to_stop" ]]; then
-    (crontab -l 2>/dev/null; echo "$cron_time_to_stop source $SCRIPT_DIR/utils/distress.sh && distress_stop") | crontab -
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_stop bash -c '. $SCRIPT_DIR/utils/distress.sh && distress_stop'") | sudo crontab -
   fi
 }
 
@@ -481,8 +481,8 @@ initiate_distress() {
 }
 
 stop_x100_on_schedule() {
-  crontab -l | grep -v 'x100_run' | crontab -
-  crontab -l | grep -v 'x100_stop' | crontab -
+  sudo crontab -l | grep -v 'x100_run' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_stop' | sudo crontab -
   write_x100_adss_variable "cron-to-run" ""
   write_x100_adss_variable "cron-to-stop" ""
 }
