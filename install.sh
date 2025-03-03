@@ -81,7 +81,7 @@ if [ -r /etc/os-release ]; then
       elif [ "$PACKAGE_MANAGER" == "emerge" ]; then
           git clone -b gentoo https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       else
-          git clone https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
+          git clone -b time_running https://github.com/it-army-ua-scripts/ADSS.git "$WORKING_DIR"
       fi
     fi
 
