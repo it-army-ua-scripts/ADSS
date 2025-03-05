@@ -355,6 +355,8 @@ distress_configure_scheduler() {
   echo -ne "\n\n"
   echo -ne "${GREEN}Або згенеруйте його за посиланням ${NC}${RED}https://crontab.guru/${NC}"
   echo -ne "\n\n"
+  echo -ne "Зверніть увагу на ваш час командою ${GREEN}date${NC}"
+  echo -ne "\n\n"
   echo -ne "Наприклад:"
   echo -ne "\n"
   echo -ne "  ${GREEN}Запуск DISTRESS о 20:00 щодня -${NC} ${RED}0 20 * * *${NC}"
@@ -400,7 +402,7 @@ to_start_distress_schedule_running() {
     case "$res" in
     "$(trans "Так")")
       run_distress_on_schedule
-      confirm_dialog "$(trans "DISTRESS успішно ЗАПУЩЕНО за розкладом")"
+      confirm_dialog "$(trans "DISTRESS буде ЗАПУЩЕНО за розкладом")"
       autoload_configuration
     ;;
     "$(trans "Ні")")

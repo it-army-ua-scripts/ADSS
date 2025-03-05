@@ -249,6 +249,8 @@ x100_configure_scheduler() {
   echo -ne "\n\n"
   echo -ne "${GREEN}Або згенеруйте його за посиланням ${NC}${RED}https://crontab.guru/${NC}"
   echo -ne "\n\n"
+  echo -ne "Зверніть увагу на ваш час командою ${GREEN}date${NC}"
+  echo -ne "\n\n"
   echo -ne "Наприклад:"
   echo -ne "\n"
   echo -ne "  ${GREEN}Запуск X100 о 20:00 щодня -${NC} ${RED}0 20 * * *${NC}"
@@ -290,7 +292,7 @@ to_start_x100_schedule_running() {
     case "$res" in
     "$(trans "Так")")
       run_x100_on_schedule
-      confirm_dialog "$(trans "X100 успішно ЗАПУЩЕНО за розкладом")"
+      confirm_dialog "$(trans "X100 буде ЗАПУЩЕНО за розкладом")"
       autoload_configuration
     ;;
     "$(trans "Ні")")
@@ -316,11 +318,11 @@ run_x100_on_schedule() {
   sudo crontab -l | grep -v 'x100_run' | sudo crontab -
   sudo crontab -l | grep -v 'x100_stop' | sudo crontab -
   if [[ -n "$cron_time_to_run" ]]; then
-    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_run bash -c '. $SCRIPT_DIR/utils/x100.sh && x100_run") | sudo crontab -
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_run bash -c '. $SCRIPT_DIR/utils/x100.sh && x100_run'") | sudo crontab -
   fi
 
   if [[ -n "$cron_time_to_stop" ]]; then
-    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_stop bash -c '. $SCRIPT_DIR/utils/x100.sh && x100_stop") | sudo crontab -
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_stop bash -c '. $SCRIPT_DIR/utils/x100.sh && x100_stop'") | sudo crontab -
   fi
 }
 
