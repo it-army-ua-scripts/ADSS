@@ -74,7 +74,7 @@ autoload_configuration() {
     ;;
   "$(trans "Зупинити запуск MHDDOS за розкладом")")
       stop_mhddos_on_schedule
-      confirm_dialog "$(trans "Запуск MHDDOS за розкладом успішно ЗУПИНЕНО")"
+      confirm_dialog "$(trans "Запуск MHDDOS за розкладом успішно ПРИПИНЕНО")"
       autoload_configuration
     ;;
   "$(trans "Керування розкладом DISTRESS")")
@@ -82,7 +82,7 @@ autoload_configuration() {
     ;;
   "$(trans "Зупинити запуск DISTRESS за розкладом")")
     stop_distress_on_schedule
-    confirm_dialog "$(trans "Запуск DISTRESS за розкладом успішно ЗУПИНЕНО")"
+    confirm_dialog "$(trans "Запуск DISTRESS за розкладом успішно ПРИПИНЕНО")"
     autoload_configuration
   ;;
   "$(trans "Керування розкладом X100")")
@@ -90,7 +90,7 @@ autoload_configuration() {
     ;;
   "$(trans "Зупинити запуск X100 за розкладом")")
     stop_x100_on_schedule
-    confirm_dialog "$(trans "Запуск X100 за розкладом успішно ЗУПИНЕНО")"
+    confirm_dialog "$(trans "Запуск X100 за розкладом успішно ПРИПИНЕНО")"
     autoload_configuration
     ;;
   "$(trans "Вимкнути автозапуск MHDDOS")")

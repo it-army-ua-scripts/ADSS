@@ -238,28 +238,28 @@ install_x100() {
 
 x100_configure_scheduler() {
   clear
-  echo -ne "${GREEN}  .---------------- хвилина (0 - 59)
-  |  .------------- година (0 - 23)
-  |  |  .---------- день місяця (1 - 31)
-  |  |  |  .------- місяць (1 - 12)
-  |  |  |  |  .---- день тижня (0 - 6) (неділя=0 чи 7)
+  echo -ne "${GREEN}  .---------------- $(trans "хвилина") (0 - 59)
+  |  .------------- $(trans "година") (0 - 23)
+  |  |  .---------- $(trans "день місяця") (1 - 31)
+  |  |  |  .------- $(trans "місяць") (1 - 12)
+  |  |  |  |  .---- $(trans "день тижня") (0 - 6)
   |  |  |  |  |
   *  *  *  *  *${NC}"
 
   echo -ne "\n\n"
-  echo -ne "${GREEN}Або згенеруйте його за посиланням ${NC}${RED}https://crontab.guru/${NC}"
+  echo -ne "${GREEN}$(trans "Або згенеруйте його за посиланням") ${NC}${RED}https://crontab.guru/${NC}"
   echo -ne "\n\n"
-  echo -ne "Зверніть увагу на ваш час командою ${GREEN}date${NC}"
+  echo -ne "$(trans "Зверніть увагу на ваш час командою") ${GREEN}date${NC}"
   echo -ne "\n\n"
   echo -ne "Наприклад:"
   echo -ne "\n"
-  echo -ne "  ${GREEN}Запуск X100 о 20:00 щодня -${NC} ${RED}0 20 * * *${NC}"
+  echo -ne "  ${GREEN}$(trans "Запуск X100 о 20:00 щодня") -${NC} ${RED}0 20 * * *${NC}"
   echo -ne "\n"
-  echo -ne "  ${GREEN}Зупинка X100 о 08:00 щодня -${NC} ${RED}0 8 * * *${NC}"
+  echo -ne "  ${GREEN}$(trans "Зупинка X100 о 08:00 щодня") -${NC} ${RED}0 8 * * *${NC}"
   echo -ne "\n\n"
   read -e -p "$(trans "Введіть cron-час для ЗАПУСКУ (формат: * * * * *): ")" -i "$(get_x100_adss_variable 'cron-to-run')" cron_time_to_run
   echo -ne "\n"
-  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): " )"  -i "$(get_x100_adss_variable 'cron-to-stop')" cron_time_to_stop
+  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): ")"  -i "$(get_x100_adss_variable 'cron-to-stop')" cron_time_to_stop
 
 
   if [[ -n "$cron_time_to_run" ]]; then
@@ -327,5 +327,5 @@ run_x100_on_schedule() {
 }
 
 check_if_x100_running_on_schedule() {
-  ($(sudo crontab -l | grep -q 'x100_run') || $(sudo crontab -l | grep -q 'x100_stop'))  && return 0 || return 1
+  ($(sudo crontab -l | grep -q 'x100_run') || $(sudo crontab -l | grep -q 'x100_stop')) >/dev/null 2>&1  && return 0 || return 1
 }
