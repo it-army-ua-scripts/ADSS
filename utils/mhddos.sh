@@ -142,9 +142,9 @@ write_mhddos_variable() {
 }
 
 regenerate_mhddos_service_file() {
-  lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  local lines=$(sed -n "/\[mhddos\]/,/\[\/mhddos\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
 
-  start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
+  local start="ExecStart=${SCRIPT_DIR}/bin/mhddos_proxy_linux"
 
   while read -r line
   do
@@ -156,6 +156,9 @@ regenerate_mhddos_service_file() {
     fi
 
     if [[ "$key" == 'use-my-ip' && "$(get_mhddos_variable 'use-my-ip')" == 0 ]];then
+      continue
+    fi
+    if [[ "$key" == 'cron-to-run' || "$key" == 'cron-to-stop' ]];then
       continue
     fi
     if [[ "$value" ]]; then
@@ -173,7 +176,7 @@ mhddos_run() {
   sudo rm -rf /tmp/_MEI* >/dev/null 2>&1
   sudo systemctl stop distress.service >/dev/null 2>&1
   sudo systemctl stop db1000n.service >/dev/null 2>&1
-  x100_stop
+  sudo systemctl stop x100.service >/dev/null 2>&1
   sudo systemctl start mhddos.service >/dev/null 2>&1
 }
 
@@ -195,7 +198,7 @@ mhddos_enabled() {
 }
 
 mhddos_stop() {
-  create_symlink
+#  create_symlink
   sudo systemctl stop mhddos.service >/dev/null 2>&1
 }
 
@@ -228,6 +231,108 @@ is_not_arm_arch() {
   fi
 }
 
+mhddos_configure_scheduler() {
+  clear
+  echo -ne "${GREEN}  .---------------- $(trans "хвилина") (0 - 59)
+  |  .------------- $(trans "година") (0 - 23)
+  |  |  .---------- $(trans "день місяця") (1 - 31)
+  |  |  |  .------- $(trans "місяць") (1 - 12)
+  |  |  |  |  .---- $(trans "день тижня") (0 - 6)
+  |  |  |  |  |
+  *  *  *  *  *${NC}"
+
+  echo -ne "\n\n"
+  echo -ne "${GREEN}$(trans "Або згенеруйте його за посиланням") ${NC}${RED}https://crontab.guru/${NC}"
+  echo -ne "\n\n"
+  echo -ne "$(trans "Зверніть увагу на ваш час командою") ${GREEN}date${NC}"
+  echo -ne "\n\n"
+  echo -ne "$(trans "Наприклад:")"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}$(trans "Запуск MHDDOS о 20:00 щодня") -${NC} ${RED}0 20 * * *${NC}"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}$(trans "Зупинка MHDDOS о 08:00 щодня") -${NC} ${RED}0 8 * * *${NC}"
+  echo -ne "\n\n"
+  read -e -p "$(trans "Введіть cron-час для ЗАПУСКУ (формат: * * * * *): ")" -i "$(get_mhddos_variable 'cron-to-run')" cron_time_to_run
+  echo -ne "\n"
+  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): ")"  -i "$(get_mhddos_variable 'cron-to-stop')" cron_time_to_stop
+
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    write_mhddos_variable "cron-to-run" "$cron_time_to_run"
+  elif [[ "$cron_time_to_run" == "" ]]; then
+    sudo crontab -l | grep -v 'mhddos_run' | sudo crontab -
+    write_mhddos_variable "cron-to-run" ""
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    write_mhddos_variable "cron-to-stop" "$cron_time_to_stop"
+  elif [[ "$cron_time_to_stop" == "" ]]; then
+    sudo crontab -l | grep -v 'mhddos_stop' | sudo crontab -
+    write_mhddos_variable "cron-to-stop" ""
+  fi
+
+  if [[ "$cron_time_to_run" == "" ]] && [[ "$cron_time_to_stop" == "" ]]; then
+      confirm_dialog "$(trans "Запуск MHDDOS за розкладом припинено")"
+      autoload_configuration
+  elif [[ -n "$cron_time_to_run" ]] || [[ -n "$cron_time_to_stop" ]]; then
+    to_start_mhddos_schedule_running
+  else
+    autoload_configuration
+  fi
+}
+
+check_if_mhddos_running_on_schedule() {
+  ($(sudo crontab -l | grep -q 'mhddos_run') || $(sudo crontab -l | grep -q 'mhddos_stop')) >/dev/null 2>&1  && return 0 || return 1
+}
+
+to_start_mhddos_schedule_running() {
+    local menu_items=("$(trans "Так")" "$(trans "Ні")")
+    local res=$(display_menu "$(trans "Запустити MHDDOS за розкладом?")" "${menu_items[@]}")
+    case "$res" in
+    "$(trans "Так")")
+      run_mhddos_on_schedule
+      confirm_dialog "$(trans "MHDDOS буде ЗАПУЩЕНО за розкладом")"
+      autoload_configuration
+    ;;
+    "$(trans "Ні")")
+      autoload_configuration
+    ;;
+    esac
+}
+
+run_mhddos_on_schedule() {
+  sudo systemctl disable mhddos >/dev/null 2>&1
+  sudo systemctl disable distress >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
+  sudo systemctl disable db1000n >/dev/null 2>&1
+  create_symlink
+
+  chmod +x "$SCRIPT_DIR/utils/mhddos.sh"
+  local cron_time_to_run=$(get_mhddos_variable 'cron-to-run')
+  local cron_time_to_stop=$(get_mhddos_variable 'cron-to-stop')
+  sudo crontab -l | grep -v 'mhddos_run' | sudo crontab -
+  sudo crontab -l | grep -v 'mhddos_stop' | sudo crontab -
+  sudo crontab -l | grep -v 'distress_run' | sudo crontab -
+  sudo crontab -l | grep -v 'distress_stop' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_run' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_stop' | sudo crontab -
+  if [[ -n "$cron_time_to_run" ]]; then
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_run bash -c '. $SCRIPT_DIR/utils/mhddos.sh && mhddos_run'") | sudo crontab -
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_stop bash -c '. $SCRIPT_DIR/utils/mhddos.sh && mhddos_stop'") | sudo crontab -
+  fi
+}
+
+stop_mhddos_on_schedule() {
+  sudo crontab -l | grep -v 'mhddos_run' | sudo crontab -
+  sudo crontab -l | grep -v 'mhddos_stop' | sudo crontab -
+  write_mhddos_variable "cron-to-run" ""
+  write_mhddos_variable "cron-to-stop" ""
+}
+
+
 initiate_mhddos() {
   mhddos_installed
   if [[ $? == 1 ]]; then
@@ -235,12 +340,12 @@ initiate_mhddos() {
     ddos_tool_managment
   else
       if sudo systemctl is-active mhddos >/dev/null 2>&1; then
-        active_disactive="$(trans "Зупинка MHDDOS")"
+        local active_disactive="$(trans "Зупинка MHDDOS")"
       else
-        active_disactive="$(trans "Запуск MHDDOS")"
+        local active_disactive="$(trans "Запуск MHDDOS")"
       fi
-      menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
-      res=$(display_menu "MHDDOS" "${menu_items[@]}")
+      local menu_items=("$active_disactive" "$(trans "Налаштування MHDDOS")" "$(trans "Статус MHDDOS")" "$(trans "Повернутись назад")")
+      local res=$(display_menu "MHDDOS" "${menu_items[@]}")
 
       case "$res" in
         "$(trans "Зупинка MHDDOS")")

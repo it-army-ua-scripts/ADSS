@@ -1,9 +1,9 @@
 #!/bin/bash
 
 x100_run() {
-  db1000n_stop
-  distress_stop
-  mhddos_stop
+  sudo systemctl stop db1000n.service >/dev/null 2>&1
+  sudo systemctl stop distress.service >/dev/null 2>&1
+  sudo systemctl stop mhddos.service >/dev/null 2>&1
   sudo systemctl start x100.service >/dev/null 2>&1
 }
 
@@ -138,12 +138,12 @@ configure_x100() {
 
     sed -i -e "s/itArmyUserId=$(get_x100_variable 'itArmyUserId')/itArmyUserId=$user_id/g" "$configPath"
 
-    read -e -p "$(trans "Initial Distress Scale (10-1000): ")" -i "$(get_x100_variable 'initialDistressScale')"  scale
+    read -e -p "$(trans "Initial Distress Scale (10-40960): ")" -i "$(get_x100_variable 'initialDistressScale')"  scale
     if [[ -n "$scale" ]];then
-      while [[ $scale -lt 10 || $scale -gt 1000 ]]
+      while [[ $scale -lt 10 || $scale -gt 40960 ]]
       do
         echo "$(trans "Будь ласка введіть правильні значення")"
-        read -e -p "$(trans "Initial Distress Scale (10-1000): ")" -i "$(get_x100_variable 'initialDistressScale')" scale
+        read -e -p "$(trans "Initial Distress Scale (10-40960): ")" -i "$(get_x100_variable 'initialDistressScale')" scale
       done
     fi
     sed -i -e "s/initialDistressScale=$(get_x100_variable 'initialDistressScale')/initialDistressScale=$scale/g" "$configPath"
@@ -170,6 +170,16 @@ get_x100_variable() {
   local lines=$(cat $configPath)
   local variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
   echo "$variable"
+}
+
+get_x100_adss_variable() {
+  local lines=$(sed -n "/\[x100\]/,/\[\/x100\]/p" "${SCRIPT_DIR}"/services/EnvironmentFile)
+  local variable=$(echo "$lines" | grep "$1=" | cut -d '=' -f2)
+  echo "$variable"
+}
+
+write_x100_adss_variable() {
+  sed -i "/\[x100\]/,/\[\/x100\]/s/$1=.*/$1=$2/g" "${SCRIPT_DIR}"/services/EnvironmentFile
 }
 
 x100_installed() {
@@ -224,4 +234,98 @@ install_x100() {
 
     echo -e "${ORANGE}$(trans "Нажміть будь яку клавішу щоб продовжити")${NC}"
     read -s -n 1 key
+}
+
+x100_configure_scheduler() {
+  clear
+  echo -ne "${GREEN}  .---------------- $(trans "хвилина") (0 - 59)
+  |  .------------- $(trans "година") (0 - 23)
+  |  |  .---------- $(trans "день місяця") (1 - 31)
+  |  |  |  .------- $(trans "місяць") (1 - 12)
+  |  |  |  |  .---- $(trans "день тижня") (0 - 6)
+  |  |  |  |  |
+  *  *  *  *  *${NC}"
+
+  echo -ne "\n\n"
+  echo -ne "${GREEN}$(trans "Або згенеруйте його за посиланням") ${NC}${RED}https://crontab.guru/${NC}"
+  echo -ne "\n\n"
+  echo -ne "$(trans "Зверніть увагу на ваш час командою") ${GREEN}date${NC}"
+  echo -ne "\n\n"
+  echo -ne "Наприклад:"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}$(trans "Запуск X100 о 20:00 щодня") -${NC} ${RED}0 20 * * *${NC}"
+  echo -ne "\n"
+  echo -ne "  ${GREEN}$(trans "Зупинка X100 о 08:00 щодня") -${NC} ${RED}0 8 * * *${NC}"
+  echo -ne "\n\n"
+  read -e -p "$(trans "Введіть cron-час для ЗАПУСКУ (формат: * * * * *): ")" -i "$(get_x100_adss_variable 'cron-to-run')" cron_time_to_run
+  echo -ne "\n"
+  read -e -p "$(trans "Введіть cron-час для ЗУПИНКИ (формат: * * * * *): ")"  -i "$(get_x100_adss_variable 'cron-to-stop')" cron_time_to_stop
+
+
+  if [[ -n "$cron_time_to_run" ]]; then
+    write_x100_adss_variable "cron-to-run" "$cron_time_to_run"
+  elif [[ "$cron_time_to_run" == "" ]]; then
+    sudo crontab -l | grep -v 'x100_run' | sudo crontab -
+    write_x100_adss_variable "cron-to-run" ""
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    write_x100_adss_variable "cron-to-stop" "$cron_time_to_stop"
+  elif [[ "$cron_time_to_stop" == "" ]]; then
+    sudo crontab -l | grep -v 'x100_stop' | sudo crontab -
+    write_x100_adss_variable "cron-to-stop" ""
+  fi
+
+  if [[ "$cron_time_to_run" == "" ]] && [[ "$cron_time_to_stop" == "" ]]; then
+      confirm_dialog "$(trans "Запуск X100 за розкладом припинено")"
+      autoload_configuration
+  elif [[ -n "$cron_time_to_run" ]] || [[ -n "$cron_time_to_stop" ]]; then
+    to_start_x100_schedule_running
+  else
+    autoload_configuration
+  fi
+}
+
+to_start_x100_schedule_running() {
+    local menu_items=("$(trans "Так")" "$(trans "Ні")")
+    local res=$(display_menu "$(trans "Запустити X100 за розкладом?")" "${menu_items[@]}")
+    case "$res" in
+    "$(trans "Так")")
+      run_x100_on_schedule
+      confirm_dialog "$(trans "X100 буде ЗАПУЩЕНО за розкладом")"
+      autoload_configuration
+    ;;
+    "$(trans "Ні")")
+      autoload_configuration
+    ;;
+    esac
+}
+
+run_x100_on_schedule() {
+  sudo systemctl disable mhddos >/dev/null 2>&1
+  sudo systemctl disable distress >/dev/null 2>&1
+  sudo systemctl disable x100 >/dev/null 2>&1
+  sudo systemctl disable db1000n >/dev/null 2>&1
+  create_symlink
+
+  chmod +x "$SCRIPT_DIR/utils/x100.sh"
+  local cron_time_to_run=$(get_x100_adss_variable 'cron-to-run')
+  local cron_time_to_stop=$(get_x100_adss_variable 'cron-to-stop')
+  sudo crontab -l | grep -v 'mhddos_run' | sudo crontab -
+  sudo crontab -l | grep -v 'mhddos_stop' | sudo crontab -
+  sudo crontab -l | grep -v 'distress_run' | sudo crontab -
+  sudo crontab -l | grep -v 'distress_stop' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_run' | sudo crontab -
+  sudo crontab -l | grep -v 'x100_stop' | sudo crontab -
+  if [[ -n "$cron_time_to_run" ]]; then
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_run bash -c '. $SCRIPT_DIR/utils/x100.sh && x100_run'") | sudo crontab -
+  fi
+
+  if [[ -n "$cron_time_to_stop" ]]; then
+    (sudo crontab -l 2>/dev/null; echo "$cron_time_to_stop bash -c '. $SCRIPT_DIR/utils/x100.sh && x100_stop'") | sudo crontab -
+  fi
+}
+
+check_if_x100_running_on_schedule() {
+  ($(sudo crontab -l | grep -q 'x100_run') || $(sudo crontab -l | grep -q 'x100_stop')) >/dev/null 2>&1  && return 0 || return 1
 }

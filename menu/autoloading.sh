@@ -10,7 +10,13 @@ autoload_configuration() {
       else
         mhddos_item_menu="$(trans "Увімкнути автозапуск MHDDOS")"
       fi
-      menu_items+=("$mhddos_item_menu")
+      mhddos_scheduler="$(trans "Керування розкладом MHDDOS")"
+      menu_items+=("$mhddos_item_menu" "$mhddos_scheduler")
+      check_if_mhddos_running_on_schedule
+      if [[ $? == 0 ]]; then
+        mhddos_scheduler_stop="$(trans "Зупинити запуск MHDDOS за розкладом")"
+        menu_items+=("$mhddos_scheduler_stop")
+      fi
     fi
   fi
 
@@ -29,7 +35,13 @@ autoload_configuration() {
     else
       distress_item_menu="$(trans "Увімкнути автозапуск DISTRESS")"
     fi
-    menu_items+=("$distress_item_menu")
+    distress_scheduler="$(trans "Керування розкладом DISTRESS")"
+    menu_items+=("$distress_item_menu" "$distress_scheduler")
+    check_if_distress_running_on_schedule
+    if [[ $? == 0 ]]; then
+      distress_scheduler_stop="$(trans "Зупинити запуск DISTRESS за розкладом")"
+      menu_items+=("$distress_scheduler_stop")
+    fi
   fi
 
   if x100_installed; then
@@ -38,8 +50,15 @@ autoload_configuration() {
     else
       x100_item_menu="$(trans "Увімкнути автозапуск X100")"
     fi
-    menu_items+=("$x100_item_menu")
+    x100_scheduler="$(trans "Керування розкладом X100")"
+    menu_items+=("$x100_item_menu" "$x100_scheduler")
+    check_if_x100_running_on_schedule
+    if [[ $? == 0 ]]; then
+      x100_scheduler_stop="$(trans "Зупинити запуск X100 за розкладом")"
+      menu_items+=("$x100_scheduler_stop")
+    fi
   fi
+
   if [[ ${#menu_items[@]} -eq 0 ]]; then
         confirm_dialog "$(trans "ДДОС інструменти не встановлено")"
         ddos_tool_managment
@@ -50,6 +69,30 @@ autoload_configuration() {
   res=$(display_menu "$(trans "Налаштування автозапуску")" "${menu_items[@]}")
 
   case "$res" in
+  "$(trans "Керування розкладом MHDDOS")")
+      mhddos_configure_scheduler
+    ;;
+  "$(trans "Зупинити запуск MHDDOS за розкладом")")
+      stop_mhddos_on_schedule
+      confirm_dialog "$(trans "Запуск MHDDOS за розкладом успішно ПРИПИНЕНО")"
+      autoload_configuration
+    ;;
+  "$(trans "Керування розкладом DISTRESS")")
+      distress_configure_scheduler
+    ;;
+  "$(trans "Зупинити запуск DISTRESS за розкладом")")
+    stop_distress_on_schedule
+    confirm_dialog "$(trans "Запуск DISTRESS за розкладом успішно ПРИПИНЕНО")"
+    autoload_configuration
+  ;;
+  "$(trans "Керування розкладом X100")")
+    x100_configure_scheduler
+    ;;
+  "$(trans "Зупинити запуск X100 за розкладом")")
+    stop_x100_on_schedule
+    confirm_dialog "$(trans "Запуск X100 за розкладом успішно ПРИПИНЕНО")"
+    autoload_configuration
+    ;;
   "$(trans "Вимкнути автозапуск MHDDOS")")
     mhddos_auto_disable
     autoload_configuration
