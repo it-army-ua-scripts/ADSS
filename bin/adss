@@ -10,6 +10,16 @@ export SCRIPT_DIR="$(
     pwd
 )"
 OSARCH=$(uname -m)
+
+# Force a UTF-8 locale so dialog/menu text is rendered correctly.
+if locale -a 2>/dev/null | grep -qi '^C\.utf8$\|^C\.UTF-8$'; then
+  export LANG=C.UTF-8
+  export LC_ALL=C.UTF-8
+elif locale -a 2>/dev/null | grep -qi '^en_US\.utf8$\|^en_US\.UTF-8$'; then
+  export LANG=en_US.UTF-8
+  export LC_ALL=en_US.UTF-8
+fi
+
 source "$SCRIPT_DIR/utils/translate.sh"
 
 localization_file=$(apply_localization "$@")

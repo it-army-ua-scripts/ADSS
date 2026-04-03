@@ -1,15 +1,35 @@
+## WARNING! ⚠️
+
+IT ARMY utilities and the full intelligence team remain loyal patriots of Ukraine who work against the enemy every day.
+
+All intelligence members and utility developers who have worked with you for 4+ years remain united in this position, without exception.
+
+The information about our team being compromised is an initiative of the Telegram channel administrator who, citing unconfirmed ties to the Ministry of Digital Transformation, tried to obtain access to sensitive code and configuration under the guise of a necessary audit, although for many years he had not needed such an audit.
+
+Since this person did not confirm either the organization he represents or the purpose of his request, we had to refuse for security reasons.
+
+We are informing you through the utilities because we do not have access to the official channel.
+
+If you doubt the current targets, you can always check where the traffic is being directed.
+
+We ask you not to stop the servers, because the work continues and you will not receive truthful information from the Telegram channel administrator.
+
+Most likely, we will create a new channel. Expect new information through the utilities.
+
+Thank you for your trust. Glory to Ukraine!
+
 ## Automatic DDoS Server Starter from IT Army Ukraine (ADSS)
 
 ADSS is a Shell script that automatically updates itself and determines the version, bitness, and distribution of your Linux OS.
 
 Tested support for the current version :
 
-Ubuntu, Debian, Fedora, Centos, Arch Linux, Kali Linux, Parrot Security OS, Rocky Linux, AlmaLinux OS, Manjaro, Oracle Linux, Void Linux (х86,х64,arm)
+Ubuntu, Debian, Fedora, Centos, Arch Linux, Kali Linux, Parrot Security OS, Rocky Linux, AlmaLinux OS, Manjaro, Oracle Linux, Void Linux (x86, x64, arm)
 
-#### [Українська версія - нажміть сюди](/README.md)
-#### 💁 [Technical support](https://t.me/+H6PnjkydZX0xNDky)
+#### [Ukrainian version - click here](/README.md)
+#### [Technical support](https://t.me/+H6PnjkydZX0xNDky)
 
-### 💽 Installation
+### Installation
 
 Use this command for installation :
 
@@ -25,7 +45,7 @@ Working directory:
 
 `/opt/itarmy`
 
-### 🛠 Managing ADSS
+### Managing ADSS
 
 To launch ADSS : 
 
@@ -63,7 +83,7 @@ Uninstall ADSS :
 adss --uninstall
 ```
 
-### ✪ Menu items
+### Menu items
 <details>
 <summary>Expand</summary>
 
