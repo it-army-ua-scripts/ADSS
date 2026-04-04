@@ -1,6 +1,31 @@
 #!/bin/bash
 
-main_menu_notice() {
+main_menu_notice_compact() {
+  local notice
+  notice="$(cat <<EOF
+$(trans "УВАГА! ⚠️")
+$(trans "Є важливе повідомлення від команди.")
+$(trans "Повний текст доступний у README.")
+EOF
+)"
+
+  wrap_dialog_text "$notice"
+}
+
+show_main_menu_notice_if_needed() {
+  if ! is_compact_dialog_screen; then
+    return
+  fi
+
+  if [[ "$ADSS_MAIN_NOTICE_SHOWN" == "1" ]]; then
+    return
+  fi
+
+  display_scrollable_text "$(trans "Головне меню")" "$(main_menu_notice_full)"
+  ADSS_MAIN_NOTICE_SHOWN="1"
+}
+
+main_menu_notice_full() {
   local notice
   notice="$(cat <<EOF
 $(trans "УВАГА! ⚠️")
@@ -27,7 +52,13 @@ EOF
 
 main_menu() {
   menu_items=("$(trans "Статус атаки")" "$(trans "Розширення портів")" "DDOS" "$(trans "Налаштування безпеки")")
-  res=$(display_menu "$(trans "Головне меню")" --text "$(main_menu_notice)" "${menu_items[@]}")
+  show_main_menu_notice_if_needed
+
+  if is_compact_dialog_screen; then
+    res=$(display_menu "$(trans "Головне меню")" --text "$(main_menu_notice_compact)" "${menu_items[@]}")
+  else
+    res=$(display_menu "$(trans "Головне меню")" --text "$(main_menu_notice_full)" "${menu_items[@]}")
+  fi
 
   case "$res" in
     "$(trans "Статус атаки")")
