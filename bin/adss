@@ -22,6 +22,42 @@ fi
 
 source "$SCRIPT_DIR/utils/translate.sh"
 
+is_mobaxterm_environment() {
+  if env | grep -qi '^MOBAXTERM'; then
+    return 0
+  fi
+
+  case "${TERM_PROGRAM:-}" in
+    [Mm]oba[Xx]term*)
+      return 0
+      ;;
+  esac
+
+  case "${LC_TERMINAL:-}" in
+    [Mm]oba[Xx]term*)
+      return 0
+      ;;
+  esac
+
+  if [[ "${HOME:-}" == "/home/mobaxterm" || "${PWD:-}" == /home/mobaxterm* ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
+for arg in "$@"; do
+  if [[ "$arg" == "--plain-ui" ]]; then
+    export ADSS_FORCE_PLAIN_UI="1"
+    break
+  fi
+done
+
+if [[ -z "${ADSS_FORCE_PLAIN_UI:-}" ]] && is_mobaxterm_environment; then
+  export ADSS_FORCE_PLAIN_UI="1"
+  export ADSS_AUTO_PLAIN_UI="1"
+fi
+
 localization_file=$(apply_localization "$@")
 if [[ -n "$localization_file" ]]; then
   source "$localization_file"
