@@ -1,13 +1,5 @@
 #!/bin/bash
 
-use_plain_terminal_ui() {
-  [[ "$ADSS_FORCE_PLAIN_UI" == "1" ]]
-}
-
-mark_plain_terminal_ui() {
-  ADSS_FORCE_PLAIN_UI="1"
-}
-
 get_terminal_columns() {
   local columns="${COLUMNS:-}"
 
@@ -96,24 +88,6 @@ count_text_lines() {
   printf '%s\n' "$text" | awk 'END { print NR }'
 }
 
-print_console_block() {
-  local title="$1"
-  local text="$2"
-
-  clear 2>/dev/null || true
-  printf '=== %s ===\n\n' "$title"
-  printf '%s\n' "$text"
-  printf '\n'
-}
-
-display_scrollable_text_plain() {
-  local title="$1"
-  local text="$2"
-
-  print_console_block "$title" "$(wrap_dialog_text "$text")"
-  read -r -p "Press Enter to continue..." _
-}
-
 display_scrollable_text() {
   local title="$1"
   local text="$2"
@@ -122,12 +96,6 @@ display_scrollable_text() {
   local width
   local height
   local tmpfile
-  local dialog_status
-
-  if use_plain_terminal_ui; then
-    display_scrollable_text_plain "$title" "$text"
-    return
-  fi
 
   lines=$(get_terminal_lines)
   columns=$(get_terminal_columns)
@@ -149,14 +117,8 @@ display_scrollable_text() {
 
   dialog --ascii-lines --clear --title "$title" --ok-label "OK" \
     --no-collapse --scrollbar --textbox "$tmpfile" "$height" "$width"
-  dialog_status=$?
 
   rm -f "$tmpfile"
-
-  if [[ "$dialog_status" -ne 0 ]]; then
-    mark_plain_terminal_ui
-    display_scrollable_text_plain "$title" "$text"
-  fi
 }
 
 get_dialog_menu_dimensions() {
@@ -201,37 +163,6 @@ get_dialog_menu_dimensions() {
   echo "$height $width $menu_height"
 }
 
-display_menu_plain() {
-  local title="$1"
-  local prompt_text="$2"
-  shift 2
-  local options=("$@")
-  local choice
-  local index
-
-  while true; do
-    print_console_block "$title" "$prompt_text"
-
-    for index in "${!options[@]}"; do
-      printf '%s. %s\n' "$((index + 1))" "${options[index]}"
-    done
-
-    printf '\n0. %s\n\n' "$(trans "Вихід")"
-    read -r -p "> " choice
-
-    if [[ "$choice" == "0" || -z "$choice" ]]; then
-      clear 2>/dev/null || true
-      echo "Exiting..."
-      exit 0
-    fi
-
-    if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le "${#options[@]}" ]]; then
-      echo "${options[$((choice - 1))]}"
-      return
-    fi
-  done
-}
-
 display_menu() {
   title="$1"
   shift
@@ -249,31 +180,16 @@ display_menu() {
   local dialog_height
   local dialog_width
   local dialog_menu_height
-  local selection
-  local dialog_status
-
-  if use_plain_terminal_ui; then
-    display_menu_plain "$title" "$prompt_text" "${options[@]}"
-    return
-  fi
-
   read -r dialog_height dialog_width dialog_menu_height <<< "$(get_dialog_menu_dimensions "$prompt_text" "${#options[@]}")"
 
   for index in "${!options[@]}"; do
     dialog_args+=("${options[index]}" "")
   done
-  selection=$(dialog --ascii-lines --clear --stdout --cancel-label "$(trans "Вихід")" --title "$title" \
+  local selection=$(dialog --ascii-lines --clear --stdout --cancel-label "$(trans "Вихід")" --title "$title" \
     --no-collapse --menu "$prompt_text" "$dialog_height" "$dialog_width" "$dialog_menu_height" "${dialog_args[@]}")
-  dialog_status=$?
-
-  if [[ "$dialog_status" -ne 0 && -z "$selection" ]]; then
-    mark_plain_terminal_ui
-    display_menu_plain "$title" "$prompt_text" "${options[@]}"
-    return
-  fi
 
   if [[ -z "$selection" ]]; then
-    clear 2>/dev/null || true
+    clear >$(tty)
     echo "Exiting..."
     exit 0
   fi
