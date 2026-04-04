@@ -28,6 +28,9 @@ stop_services() {
   adss_dialog "$(trans "Зупиняємо атаку")"
   sudo systemctl stop distress.service >/dev/null
   sudo systemctl stop db1000n.service >/dev/null
+#Start Fix To stop x100 from ddos_tool_mamagemet menu (by Clarus)
+  sudo systemctl stop x100.service >/dev/null
+#End Fix To stop x100 from ddos_tool_mamagemet menu (by Clarus)
   sudo systemctl stop mhddos.service >/dev/null
   confirm_dialog "$(trans "Атака зупинена")"
   ddos_tool_managment
