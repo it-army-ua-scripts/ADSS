@@ -42,11 +42,32 @@ get_infobox_dimensions() {
 
 adss_dialog() {
   get_infobox_dimensions "$1"
-  dialog --ascii-lines --title "Execution Message" --no-collapse --infobox "$ADSS_INFOBOX_TEXT" "$ADSS_INFOBOX_HEIGHT" "$ADSS_INFOBOX_WIDTH"
+  if declare -F use_plain_terminal_ui >/dev/null 2>&1 && use_plain_terminal_ui; then
+    print_console_block "Execution Message" "$ADSS_INFOBOX_TEXT"
+    return
+  fi
+
+  dialog --ascii-lines --title "Execution Message" --no-collapse --infobox "$ADSS_INFOBOX_TEXT" "$ADSS_INFOBOX_HEIGHT" "$ADSS_INFOBOX_WIDTH" || {
+    if declare -F mark_plain_terminal_ui >/dev/null 2>&1; then
+      mark_plain_terminal_ui
+    fi
+    print_console_block "Execution Message" "$ADSS_INFOBOX_TEXT"
+  }
 }
 
 confirm_dialog() {
   get_infobox_dimensions "$1"
-  dialog --ascii-lines --title "Execution Message" --no-collapse --infobox "$ADSS_INFOBOX_TEXT" "$ADSS_INFOBOX_HEIGHT" "$ADSS_INFOBOX_WIDTH"
+  if declare -F use_plain_terminal_ui >/dev/null 2>&1 && use_plain_terminal_ui; then
+    print_console_block "Execution Message" "$ADSS_INFOBOX_TEXT"
+    sleep 2
+    return
+  fi
+
+  dialog --ascii-lines --title "Execution Message" --no-collapse --infobox "$ADSS_INFOBOX_TEXT" "$ADSS_INFOBOX_HEIGHT" "$ADSS_INFOBOX_WIDTH" || {
+    if declare -F mark_plain_terminal_ui >/dev/null 2>&1; then
+      mark_plain_terminal_ui
+    fi
+    print_console_block "Execution Message" "$ADSS_INFOBOX_TEXT"
+  }
   sleep 2
 }
