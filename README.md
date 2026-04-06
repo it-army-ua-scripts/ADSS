@@ -1,3 +1,25 @@
+Шановна спільното!
+
+На жаль, у відведений адміністрацією каналу час нам не вдалося знайти спільну мову. Наша позиція залишається незмінною: ми діємо відкрито, однак зобов'язані розуміти, кому саме передаємо конфіденційні дані. За наявності офіційного запиту ми готові надати всю необхідну інформацію та доступи відповідним уповноваженим особам.
+
+Разом із тим ми не можемо продовжувати роботу в умовах, що виходять за межі правового поля держави та створюють загрозу для всіх нас.
+
+У зв'язку з цим ми тимчасово призупиняємо роботу всіх інструментів, якими керуємо, до повного врегулювання ситуації.
+
+Дякуємо за розуміння.
+
+### English
+
+Dear community,
+
+Unfortunately, within the time allotted by the channel administration, we were unable to find common ground. Our position remains unchanged: we act openly, but we are obliged to understand exactly to whom we are handing over confidential data. If there is an official request, we are ready to provide all necessary information and access to the appropriate authorized persons.
+
+At the same time, we cannot continue working in conditions that fall outside the legal framework of the state and create a threat to all of us.
+
+In this regard, we are temporarily suspending the operation of all tools we manage until the situation is fully resolved.
+
+Thank you for your understanding.
+
 ## UPD 04.04.26
 
 Привіт Спільното!
